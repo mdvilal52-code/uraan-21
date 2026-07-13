@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #ffffff;
+  --ivory: #fbf8f1;
+  --cream: #f8f2e6;
+  --paper: #ffffff;
+  --ink: #1a1410;
+  --ink-2: #3a2f24;
+  --text: #2a221a;
+  --text-soft: #6b5d4c;
+  --text-mute: #9a8c75;
+  --gold: #b8893a;
+  --gold-light: #d4a857;
+  --gold-dark: #7a5a1f;
+  --gold-soft: #e8d49b;
+  --rose: #c89882;
+  --maroon: #7a2e2e;
+  --emerald: #3d6b5a;
+  --border: rgba(184, 137, 58, 0.18);
+  --border-2: rgba(184, 137, 58, 0.32);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  background: #ffffff;
+  color: var(--text);
+  font-family: 'Jost', sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  font-variant-numeric: lining-nums;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at top right, rgba(232, 212, 155, 0.18), transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(184, 137, 58, 0.06), transparent 60%),
+    #ffffff;
+  min-height: 100vh;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  user-select: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ivory);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-dark);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.serif {
+  font-family: 'Cormorant Garamond', serif;
+}
+.display {
+  font-family: 'Cinzel', serif;
+}
+
+.gold-text {
+  background: linear-gradient(135deg, #d4a857 0%, #b8893a 50%, #8c6726 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-tag-italic {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: #b8893a;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.section-heading {
+  font-family: 'Cinzel', serif;
+  text-align: center;
+  font-size: 22px;
+  letter-spacing: 5px;
+  color: #1a1410;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.luxury-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #b8893a;
+  margin: 24px 0;
+}
+
+.luxury-divider::before,
+.luxury-divider::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: #b8893a;
+  opacity: 0.5;
+}
+/* Weak mobile GPUs smear continuously animated layers into static bands
+   and ghost trails while scrolling; run every animation and transition
+   instantly on phones so the compositor has zero ongoing work. */
+@media (max-width: 767px) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Admin panel — premium typography
+   Scoped to .admin-ui (the admin <main>) so the storefront is untouched.
+   The headline change is tabular, lining figures everywhere, so every number
+   and column of numbers lines up perfectly — the hallmark of a premium dashboard.
+   ───────────────────────────────────────────────────────────────────────── */
+.admin-ui {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Page titles — elegant, controlled height */
+.admin-ui h1 {
+  line-height: 1.12;
+  letter-spacing: 0.01em;
+}
+
+/* KPI / stat numbers — large, tight, perfectly aligned figures */
+.admin-ui .stat-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(1.85rem, 1.5rem + 0.9vw, 2.35rem);
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* KPI / stat caption */
+.admin-ui .stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+/* Data tables — aligned figures + comfortable, even row height */
+.admin-ui table { font-variant-numeric: tabular-nums lining-nums; }
+.admin-ui thead th { letter-spacing: 0.14em; line-height: 1.5; }
+.admin-ui tbody td { line-height: 1.55; }
+
+/* Inline numeric helper for any stray number/amount */
+.admin-ui .num { font-variant-numeric: tabular-nums lining-nums; letter-spacing: -0.01em; }
+
+/* ── Uniform section text ──────────────────────────────────────────────────
+   Every page title, section title and sub-heading shares the same height,
+   tracking and rhythm so the panel reads as one consistent system. */
+.admin-ui h1 { font-weight: 500; color: var(--ink); }
+.admin-ui h2 { line-height: 1.18; letter-spacing: 0.005em; color: var(--ink); }
+.admin-ui h3 { line-height: 1.35; }
+/* The recurring uppercase "card eyebrow" title (display text-sm tracking-[2px]) */
+.admin-ui .display { line-height: 1.4; }
+/* Muted supporting copy under a heading keeps one tone everywhere. */
+.admin-ui p { line-height: 1.55; }
+
+/* ── Consistent form controls + colours ───────────────────────────────────
+   One gold focus ring and one muted placeholder tone for every input across
+   the admin, so forms feel finished rather than browser-default. */
+.admin-ui label { line-height: 1.45; }
+.admin-ui input,
+.admin-ui select,
+.admin-ui textarea { color: var(--ink); }
+.admin-ui input:focus,
+.admin-ui select:focus,
+.admin-ui textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184, 137, 58, 0.14);
+}
+.admin-ui ::placeholder { color: var(--text-mute); opacity: 1; }
