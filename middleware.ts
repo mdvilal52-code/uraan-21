@@ -27,9 +27,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 1) Legacy break-glass cookie.
+  // 1) Legacy break-glass cookie. adminSessionToken() returns null when
+  // break-glass is disabled (production without ADMIN_SESSION_SECRET set),
+  // which keeps a forged empty cookie from ever matching.
   const legacyToken = request.cookies.get(ADMIN_COOKIE)?.value;
-  const legacyAllowed = Boolean(legacyToken) && legacyToken === (await adminSessionToken());
+  const expected = await adminSessionToken();
+  const legacyAllowed = Boolean(legacyToken) && expected !== null && legacyToken === expected;
   if (legacyAllowed) {
     return NextResponse.next();
   }
