@@ -7,9 +7,12 @@ import { ADMIN_COOKIE, adminSessionToken } from './adminAuth';
 import { getCurrentAdmin } from './adminSession';
 
 export async function isAdminRequest(): Promise<boolean> {
-  // Fast path: legacy break-glass cookie (no network call).
+  // Fast path: legacy break-glass cookie (no network call). adminSessionToken()
+  // returns null when break-glass is disabled (production without
+  // ADMIN_SESSION_SECRET); guard so a forged empty-string cookie never wins.
   const token = cookies().get(ADMIN_COOKIE)?.value;
-  if (token && token === (await adminSessionToken())) return true;
+  const expected = await adminSessionToken();
+  if (token && expected && token === expected) return true;
 
   // Otherwise accept a valid Supabase Auth admin session.
   const admin = await getCurrentAdmin();

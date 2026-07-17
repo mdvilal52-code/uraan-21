@@ -11,7 +11,13 @@
 import crypto from 'crypto';
 
 export function razorpayKeyId(): string | undefined {
-  return process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+  // Read only the NEXT_PUBLIC_ variant: Razorpay's Key Id is meant to reach
+  // the browser (it's used by the Razorpay checkout script). Accepting a
+  // server-only RAZORPAY_KEY_ID as well used to silently break checkout —
+  // isRazorpayConfigured() would return true on the server, but the client
+  // checkout gate (which can only see NEXT_PUBLIC_ vars) would fall through
+  // to demo mode and place an unpaid order.
+  return process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 }
 
 export function isRazorpayConfigured(): boolean {

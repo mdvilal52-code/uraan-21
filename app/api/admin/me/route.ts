@@ -8,7 +8,8 @@ import { passwordAge } from '@/lib/security/passwordHistory';
 // break-glass login is treated as the Owner.
 export async function GET() {
   const token = cookies().get(ADMIN_COOKIE)?.value;
-  if (token && token === (await adminSessionToken())) {
+  const expected = await adminSessionToken();
+  if (token && expected && token === expected) {
     return NextResponse.json({ ok: true, admin: { email: ADMIN_EMAIL, role: 'owner', via: 'legacy' } });
   }
 

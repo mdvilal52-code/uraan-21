@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ADMIN_COOKIE, adminSessionToken, verifyAdmin } from '@/lib/adminAuth';
+import { ADMIN_COOKIE, adminSessionToken, isBreakGlassEnabled, verifyAdmin } from '@/lib/adminAuth';
 import { getClientIp, parseUserAgent, deviceFingerprint } from '@/lib/security/request';
 import { checkLockout, recordAttempt } from '@/lib/security/rateLimit';
 import { logAudit, logSecurityEvent } from '@/lib/audit';
@@ -25,6 +25,22 @@ export async function POST(request: Request) {
 
   const email = String(body.email || '').trim();
   const password = String(body.password || '');
+
+  // In production the recovery login is only enabled when
+  // ADMIN_SESSION_SECRET is set — otherwise its cookie hash is deterministic
+  // from public source and forging it would grant full admin. Point the
+  // operator to Supabase Auth instead of silently accepting a predictable
+  // session.
+  if (!isBreakGlassEnabled()) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error:
+          'Recovery login is disabled. Sign in with Supabase Auth, or set ADMIN_SESSION_SECRET in the server environment to re-enable it.',
+      },
+      { status: 503 }
+    );
+  }
 
   // Brute-force protection: refuse while the account is locked.
   const lock = await checkLockout(email);
@@ -85,8 +101,17 @@ export async function POST(request: Request) {
     await sendEmail(email, subject, html);
   }
 
-  const res = NextResponse.json({ ok: true });
   const sessionToken = await adminSessionToken();
+  if (!sessionToken) {
+    // isBreakGlassEnabled() was true at the top of this handler but flipped
+    // to false while we were running (unusual — env changed under us). Return
+    // an explicit error rather than issuing an empty-value cookie.
+    return NextResponse.json(
+      { ok: false, error: 'Recovery login is not available.' },
+      { status: 503 }
+    );
+  }
+  const res = NextResponse.json({ ok: true });
   res.cookies.set(ADMIN_COOKIE, sessionToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
