@@ -59,7 +59,7 @@ export const CATEGORY_IMAGES: Record<string, string> = {
 // different categories don't default to the exact same picture (the bug
 // this replaces: every category with no image fell back to the identical
 // hardcoded '/images/necklace.jpg').
-const FALLBACK_IMAGE_POOL = [
+export const FALLBACK_IMAGE_POOL = [
   '/images/gallery/necklace-3.jpg',
   '/images/gallery/necklace-5.jpg',
   '/images/gallery/necklace-7.jpg',
