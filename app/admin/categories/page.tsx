@@ -9,6 +9,7 @@ import {
   updateCategory,
   deleteCategory,
 } from '@/lib/categories';
+import { fallbackCategoryImage } from '@/lib/categoryStyles';
 import { invalidateCategoryCache } from '@/hooks/useCategories';
 
 const emptyForm = { name: '', description: '', image: '' };
@@ -230,7 +231,7 @@ export default function AdminCategoriesPage() {
               <div
                 className="w-16 h-16 rounded-full bg-cover bg-center bg-[#f8f2e6] flex-shrink-0"
                 style={{
-                  backgroundImage: `url(${c.image})`,
+                  backgroundImage: `url(${c.image || fallbackCategoryImage(c.name)})`,
                   boxShadow: 'inset 0 0 0 1px rgba(184,137,58,0.32)',
                 }}
               />
