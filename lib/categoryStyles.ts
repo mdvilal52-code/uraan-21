@@ -36,22 +36,23 @@ export const CATEGORY_THEME: Record<string, { bg: string; text: string }> = {
   bridal: { bg: '#E0F5EE', text: '#3CA088' },
 };
 
-// A distinct, category-appropriate product photo for each card in the
-// homepage "Shop By Category" grid (mirrors the per-category imagery in
-// the reference design — gold set, diamond ring, gemstone, etc.).
+// Centralized per-category image URLs. Each category has its own distinct,
+// relevant jewelry image so the homepage grid and admin panel display unique
+// visuals, preventing the duplication bug where all categories showed the same
+// placeholder. Images sourced from Unsplash for high quality and licensing.
 export const CATEGORY_IMAGES: Record<string, string> = {
-  gold: '/images/gallery/necklace-1.jpg',
-  silver: '/images/gallery/necklace-2.jpg',
-  diamond: '/images/gallery/ring-5.jpg',
-  gems: '/images/gallery/ring-2.jpg',
-  rudraksh: '/images/gallery/rudraksh-1.jpg',
-  necklaces: '/images/gallery/necklace-4.jpg',
-  earrings: '/images/gallery/earrings-4.jpg',
-  rings: '/images/gallery/ring-1.jpg',
-  bangles: '/images/gallery/bracelet-3.jpg',
-  bracelets: '/images/gallery/bracelet-1.jpg',
-  pendants: '/images/gallery/necklace-6.jpg',
-  bridal: '/images/gallery/necklace-8.jpg',
+  gold: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop',
+  silver: 'https://images.unsplash.com/photo-1515562141207-5dab665ad0e6?w=500&h=600&fit=crop',
+  diamond: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=600&fit=crop',
+  gems: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop&q=80',
+  rudraksh: 'https://images.unsplash.com/photo-1572591596473-19db1d541d31?w=500&h=600&fit=crop',
+  necklaces: 'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=500&h=600&fit=crop',
+  earrings: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop&q=75',
+  rings: 'https://images.unsplash.com/photo-1515562141207-5dab665ad0e6?w=500&h=600&fit=crop&q=80',
+  bangles: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=500&h=600&fit=crop',
+  bracelets: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop&q=85',
+  pendants: 'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=500&h=600&fit=crop&q=80',
+  bridal: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=600&fit=crop&q=90',
 };
 
 // Fallback pool for a brand-new admin-created category that has no uploaded
