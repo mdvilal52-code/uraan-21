@@ -56,6 +56,23 @@ export const CATEGORY_IMAGES: Record<string, string> = {
   bridal: '/images/categories/bridal.jpg',
 };
 
+// Admin panel display images — separate from CATEGORY_IMAGES so homepage
+// tiles are never affected when these are changed, and vice-versa.
+export const ADMIN_CATEGORY_IMAGES: Record<string, string> = {
+  gold: '/images/admin-categories/gold.jpg',
+  silver: '/images/admin-categories/silver.jpg',
+  diamond: '/images/admin-categories/diamond.jpg',
+  gems: '/images/admin-categories/gems.jpg',
+  rudraksh: '/images/gallery/rudraksh-1.jpg',
+  necklaces: '/images/admin-categories/necklaces.jpg',
+  earrings: '/images/admin-categories/earrings.jpg',
+  rings: '/images/admin-categories/rings.jpg',
+  bangles: '/images/admin-categories/bangles.jpg',
+  bracelets: '/images/admin-categories/bracelets.jpg',
+  pendants: '/images/admin-categories/pendants.jpg',
+  bridal: '/images/admin-categories/bridal.jpg',
+};
+
 // Fallback pool for a brand-new admin-created category that has no uploaded
 // photo yet. Picked deterministically from the category's own name so two
 // different categories don't default to the exact same picture (the bug
