@@ -4,10 +4,12 @@ import { dbGetAbandonedCarts, dbMarkReminded } from '@/lib/abandonedCartsDb';
 import { sendWhatsAppText } from '@/lib/whatsappServer';
 
 // GET → automatic WhatsApp recovery reminders for abandoned carts, invoked by
-// Vercel Cron (see vercel.json). Vercel signs its own cron requests with
-// `Authorization: Bearer $CRON_SECRET` when that env var is set — this route
-// requires it (fails closed) so it can't be triggered by an arbitrary public
-// GET request spamming customers or running up WhatsApp send volume.
+// the Netlify Scheduled Function at
+// netlify/functions/abandoned-cart-reminders-cron.ts (see its schedule in
+// netlify.toml). That function signs its request with
+// `Authorization: Bearer $CRON_SECRET` — this route requires it (fails
+// closed) so it can't be triggered by an arbitrary public GET request
+// spamming customers or running up WhatsApp send volume.
 //
 // Only reminds carts that are: unrecovered, have a phone number, are older
 // than REMIND_AFTER_MS, and have never been reminded before — one automatic
@@ -16,10 +18,9 @@ import { sendWhatsAppText } from '@/lib/whatsappServer';
 //
 // Requires (see .env.example): CRON_SECRET, plus the same WHATSAPP_TOKEN /
 // WHATSAPP_PHONE_NUMBER_ID this app already needs for any WhatsApp send.
-// Only fires on Vercel deployments — vercel.json's `crons` key has no effect
-// on other hosts, so self-hosted/other-platform deployments need their own
-// scheduler (e.g. a hosted cron hitting this same URL with the same header)
-// to get automatic reminders at all.
+// Deploying somewhere other than Netlify? Nothing calls this route
+// automatically — point any scheduler (a hosted cron, GitHub Actions, etc.)
+// at this same URL with the same header to get automatic reminders.
 
 const REMIND_AFTER_MS = 2 * 60 * 60 * 1000; // 2 hours
 

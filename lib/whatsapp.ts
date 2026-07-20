@@ -7,7 +7,7 @@
 import { normalizePhone } from './phone';
 
 // Business WhatsApp number in international format, digits only. Run through
-// normalizePhone() so a value hand-typed into Vercel's env var UI without its
+// normalizePhone() so a value hand-typed into the host's env var UI without its
 // country code (e.g. "8851911653" instead of "918851911653") still resolves
 // correctly; falls back to a bare digit-strip if normalization can't make
 // sense of the value, so an already-correct number never breaks.

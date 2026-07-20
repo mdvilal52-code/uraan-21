@@ -1,6 +1,7 @@
 // Per-request security context: client IP, browser/OS, and a coarse device
 // fingerprint. Reads only request headers, so it works in any route handler.
-// On Vercel the real client IP is the first entry of x-forwarded-for.
+// Behind Netlify's (or any) reverse proxy, the real client IP is the first
+// entry of x-forwarded-for.
 
 export type DeviceInfo = { browser: string; os: string; deviceType: 'Mobile' | 'Desktop' };
 

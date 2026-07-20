@@ -52,11 +52,11 @@ export async function GET() {
   let diagnosis: string;
   if (!env.SUPABASE_URL && !env.NEXT_PUBLIC_SUPABASE_URL) {
     diagnosis =
-      'Supabase URL missing. Add SUPABASE_URL (Project URL) in Vercel → Production → and redeploy.';
+      'Supabase URL missing. Add SUPABASE_URL (Project URL) in Netlify → Site configuration → Environment variables, then redeploy.';
   } else if (!env.SUPABASE_SERVICE_ROLE_KEY) {
     diagnosis =
       'Service key missing. Add SUPABASE_SERVICE_ROLE_KEY — the service_role key from ' +
-      'Supabase → Settings → API — in Vercel → Production → and redeploy.';
+      'Supabase → Settings → API — in Netlify → Site configuration → Environment variables, then redeploy.';
   } else if (!db.querySucceeded) {
     diagnosis =
       'Env vars are present but the DB query failed (' + (db.error || 'unknown') +

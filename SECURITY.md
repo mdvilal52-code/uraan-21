@@ -40,7 +40,7 @@ email/2FA steps.
 | 19 | Force logout all devices | Supabase global sign-out |
 | 20 | Session dashboard | `/admin/security` |
 | 21,22,23 | IP / device fingerprint / browser | captured per request + stored |
-| 24,25 | Location alerts / login emails | Vercel geo headers + Resend |
+| 24,25 | Location alerts / login emails | host edge geo headers + Resend |
 | 26,27 | Suspicious / risk-based auth | new-device + new-context step-up to email OTP |
 | 28 | CSRF | same-origin check on all `/api` mutations (middleware) |
 | 29 | XSS | React auto-escaping + CSP |
@@ -68,16 +68,16 @@ email/2FA steps.
   encrypted by Supabase (AES-256). Keep Point-in-Time Recovery on for your plan.
 - **Secret rotation (#49):** rotate on a schedule or after any suspected leak —
   - `ADMIN_SESSION_SECRET` — rotating it invalidates all recovery sessions.
-  - `SUPABASE_SERVICE_ROLE_KEY` / anon key — rotate in Supabase → API, update Vercel.
-  - `RESEND_API_KEY`, `RAZORPAY_KEY_SECRET` — rotate at the provider, update Vercel.
-  After rotating, redeploy. Never commit secrets; all live in Vercel env vars.
+  - `SUPABASE_SERVICE_ROLE_KEY` / anon key — rotate in Supabase → API, update Netlify.
+  - `RESEND_API_KEY`, `RAZORPAY_KEY_SECRET` — rotate at the provider, update Netlify.
+  After rotating, redeploy. Never commit secrets; all live in Netlify env vars.
 - **Lost authenticator / lockout:** sign in via **“Use recovery login”** with
   `ADMIN_EMAIL` / `ADMIN_PASSWORD`. To clear a permanent lock, delete the row
   from `account_locks` for that email.
 
 ## Single-threaded runtime note
 
-This app deploys to **Vercel** (`DEPLOYMENT.md` step 1), where each API route
+This app deploys to **Netlify** (`DEPLOYMENT.md` step 1), where each API route
 runs as an isolated serverless function invocation rather than one long-lived
 Node.js process. An unhandled error in one request does not take down other
 visitors' requests, so a PM2/cluster-manager-style guardrail (relevant for a

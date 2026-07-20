@@ -10,17 +10,27 @@ safe demo behaviour, so nothing ever breaks.
 
 ---
 
-## 1. Put the website live on Vercel (required)
+## 1. Put the website live on Netlify (required)
 
 1. Push this repo to GitHub (already done if you're reading this on GitHub).
-2. Go to **https://vercel.com** → sign in with GitHub → **Add New… → Project**.
-3. Pick this repository and click **Deploy**. That's it — your site is live at
-   `https://<your-project>.vercel.app`.
-4. To add a custom domain: Vercel → your project → **Settings → Domains**.
+2. Go to **https://app.netlify.com** → sign in with GitHub → **Add new site →
+   Import an existing project**.
+3. Pick this repository. Netlify auto-detects Next.js (via `netlify.toml`
+   and the `@netlify/plugin-nextjs` plugin already in this repo) — just click
+   **Deploy**. That's it — your site is live at
+   `https://<your-site-name>.netlify.app`.
+4. To add a custom domain: Netlify → your site → **Domain management → Add a
+   domain**.
 
 You change all the settings below in:
-**Vercel → your project → Settings → Environment Variables**
-(add each key + value, then **Redeploy** from the Deployments tab).
+**Netlify → your site → Site configuration → Environment variables**
+(add each key + value, then trigger **Deploys → Trigger deploy → Clear cache
+and deploy site**).
+
+This project also ships a Netlify Scheduled Function
+(`netlify/functions/abandoned-cart-reminders-cron.ts`) that runs the
+abandoned-cart WhatsApp reminders every 2 hours automatically once
+`CRON_SECRET` and the WhatsApp keys (step 5) are set — no extra setup needed.
 
 ---
 
@@ -54,7 +64,7 @@ device.
    - **Project URL** → set as `SUPABASE_URL`
    - **service_role** key (under "Project API keys") → set as
      `SUPABASE_SERVICE_ROLE_KEY`
-4. Add both to Vercel env vars and **Redeploy**.
+4. Add both to Netlify env vars and **redeploy**.
 
 Now the admin **Orders**, **CRM / Leads** and **Products** pages show a green
 **“Database”** badge and store live data. Without it, they show sample/bundled
@@ -77,7 +87,7 @@ Real card / UPI / netbanking / wallet payments at checkout.
 
 1. Create an account at **https://razorpay.com** and complete the KYC.
 2. **Dashboard → Settings → API Keys → Generate Key.**
-3. Add to Vercel env vars and **Redeploy**:
+3. Add to Netlify env vars and **redeploy**:
    - **Key Id** → `NEXT_PUBLIC_RAZORPAY_KEY_ID`
    - **Key Secret** → `RAZORPAY_KEY_SECRET`
 
@@ -121,7 +131,7 @@ and `NEXT_PUBLIC_INSTAGRAM_URL` for the "Follow" button.
 
 ## Quick checklist
 
-- [ ] Deployed on Vercel
+- [ ] Deployed on Netlify
 - [ ] Changed `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_SESSION_SECRET`
 - [ ] Ran `supabase/schema.sql` and added `SUPABASE_*` keys
 - [ ] Created the public `product-images` Storage bucket

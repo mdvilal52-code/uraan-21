@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 // Server-side Instagram feed. The access token stays on the server.
 // Set INSTAGRAM_ACCESS_TOKEN (a long-lived Instagram Graph API token) in
-// Vercel env vars. Without it, returns an empty list and the gallery
+// Netlify env vars. Without it, returns an empty list and the gallery
 // falls back to curated images. Cached for 1 hour.
 
 export const revalidate = 3600;

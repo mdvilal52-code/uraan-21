@@ -5,7 +5,7 @@
 // de-duplication by email. Falls back gracefully when not configured so
 // the site never breaks before credentials are added.
 //
-// Required env vars (set in Vercel → Project → Settings → Environment Variables):
+// Required env vars (set in Netlify → Site configuration → Environment variables):
 //   HUBSPOT_PORTAL_ID  — your HubSpot account/portal id
 //   HUBSPOT_FORM_GUID  — the guid of a HubSpot form with name/email/phone/message fields
 // To use Zoho instead, swap the fetch below for Zoho's Leads API; the

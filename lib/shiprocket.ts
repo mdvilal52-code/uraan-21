@@ -5,7 +5,7 @@
 // (see app/admin/orders/page.tsx) — the panel keeps working before this is
 // wired up, exactly like Razorpay/WhatsApp/Resend.
 //
-// Env vars (Vercel → Settings → Environment Variables):
+// Env vars (Netlify → Site configuration → Environment variables):
 //   SHIPROCKET_EMAIL     — the Shiprocket account email
 //   SHIPROCKET_PASSWORD  — the Shiprocket account password
 // Get an account at https://www.shiprocket.in — API docs:

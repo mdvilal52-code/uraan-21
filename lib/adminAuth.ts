@@ -1,6 +1,6 @@
 // Shared admin-auth helpers used by the login route and the middleware that
 // guards /admin. Credentials come from environment variables so they can be
-// changed in Vercel without code edits. The session cookie stores a SHA-256
+// changed in Netlify without code edits. The session cookie stores a SHA-256
 // token derived from the credentials plus a secret — the password itself is
 // never stored in the browser, and changing the password invalidates old
 // sessions. Uses only Web Crypto + TextEncoder, so it runs in both the Node

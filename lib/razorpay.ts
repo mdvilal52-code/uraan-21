@@ -3,7 +3,7 @@
 // degrades gracefully: when keys are missing, isRazorpayConfigured() is false
 // and checkout falls back to placing the order without an online payment.
 //
-// Env vars (Vercel → Settings → Environment Variables):
+// Env vars (Netlify → Site configuration → Environment variables):
 //   NEXT_PUBLIC_RAZORPAY_KEY_ID  — Razorpay Key Id (safe in the browser)
 //   RAZORPAY_KEY_SECRET          — Razorpay Key Secret (server only!)
 // Get them from https://dashboard.razorpay.com → Settings → API Keys.
