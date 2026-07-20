@@ -10,6 +10,7 @@ import {
   deleteCategory,
 } from '@/lib/categories';
 import { invalidateCategoryCache } from '@/hooks/useCategories';
+import { fallbackCategoryImage } from '@/lib/categoryStyles';
 
 const emptyForm = { name: '', description: '', image: '' };
 
@@ -224,13 +225,20 @@ export default function AdminCategoriesPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map((c) => (
+        {filtered.map((c) => {
+          // Admin dp uses the raw stored image (source of truth so the
+          // admin can see and edit what was actually uploaded). Only when
+          // the DB image is missing do we fall back to a deterministic
+          // per-name pool image — kept independent of the storefront's
+          // CATEGORY_IMAGES so home page changes don't affect this panel.
+          const displayImage = c.image || fallbackCategoryImage(c.name);
+          return (
           <div key={c.slug} className="bg-white border border-[rgba(184,137,58,0.18)] p-5 group hover:shadow-[0_12px_40px_rgba(122,90,31,0.12)] transition-all">
             <div className="flex items-start gap-4">
               <div
                 className="w-16 h-16 rounded-full bg-cover bg-center bg-[#f8f2e6] flex-shrink-0"
                 style={{
-                  backgroundImage: `url(${c.image})`,
+                  backgroundImage: `url(${displayImage})`,
                   boxShadow: 'inset 0 0 0 1px rgba(184,137,58,0.32)',
                 }}
               />
@@ -253,7 +261,8 @@ export default function AdminCategoriesPage() {
               </button>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {filtered.length === 0 && (

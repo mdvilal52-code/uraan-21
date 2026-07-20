@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Gem, ChevronRight, LayoutGrid } from 'lucide-react';
-import { CATEGORY_THEME, CATEGORY_IMAGES } from '@/lib/categoryStyles';
+import { CATEGORY_THEME, CATEGORY_IMAGES, fallbackCategoryImage } from '@/lib/categoryStyles';
 import { useCategories } from '@/hooks/useCategories';
 
 export default function Categories() {
@@ -18,7 +18,11 @@ export default function Categories() {
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 mt-8">
         {categories.slice(0, 12).map((cat) => {
           const theme = CATEGORY_THEME[cat.slug] ?? { bg: '#FFFFFF', text: '#1a1410' };
-          const image = cat.image || CATEGORY_IMAGES[cat.slug];
+          // Prefer the code's designated per-category photo for known slugs so
+          // the homepage grid always shows a distinct image per tile, even when
+          // the admin has (accidentally) uploaded the same picture for every
+          // category in the database.
+          const image = CATEGORY_IMAGES[cat.slug] || cat.image || fallbackCategoryImage(cat.name);
           return (
             <Link
               key={cat.slug}

@@ -3,7 +3,7 @@
 // in-browser store. Mirrors lib/leadsDb.ts.
 import { getSupabase } from './supabase';
 import type { Category } from './categories';
-import { fallbackCategoryImage } from './categoryStyles';
+import { fallbackCategoryImage, FALLBACK_IMAGE_POOL } from './categoryStyles';
 
 type Row = {
   slug: string;
@@ -35,7 +35,40 @@ export async function dbGetCategories(): Promise<Category[] | null> {
     console.error('[categoriesDb] list:', error.message);
     return null;
   }
-  return (data as Row[]).map(toCategory);
+  const rows = data as Row[];
+
+  // Guard against the "same photo uploaded for every category" data bug: any
+  // image URL shared by 3+ rows is almost certainly a bulk-upload mistake, so
+  // treat those rows as if the image were empty and let the per-name fallback
+  // fill in a distinct picture for each. Intentional 2-way sharing is left
+  // alone.
+  const counts = new Map<string, number>();
+  for (const r of rows) {
+    if (!r.image) continue;
+    counts.set(r.image, (counts.get(r.image) || 0) + 1);
+  }
+  const duplicates = new Set(
+    Array.from(counts.entries()).filter(([, n]) => n >= 3).map(([url]) => url),
+  );
+  const cleaned: Row[] = duplicates.size
+    ? rows.map((r) => (r.image && duplicates.has(r.image) ? { ...r, image: null } : r))
+    : rows;
+
+  const categories = cleaned.map(toCategory);
+
+  // Second pass: the deterministic per-name fallback pool has hash
+  // collisions, so nulled-out duplicates can end up mapped to the same
+  // pool image again. Walk the list and reassign any collision to the
+  // next unused pool entry so every card is guaranteed a distinct picture.
+  const used = new Set<string>();
+  for (const c of categories) {
+    if (!used.has(c.image)) { used.add(c.image); continue; }
+    for (let i = 0; i < FALLBACK_IMAGE_POOL.length; i++) {
+      const candidate = FALLBACK_IMAGE_POOL[i];
+      if (!used.has(candidate)) { c.image = candidate; used.add(candidate); break; }
+    }
+  }
+  return categories;
 }
 
 export async function dbInsertCategory(input: { name: string; description?: string; image?: string }): Promise<Category | null> {
