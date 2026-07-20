@@ -41,18 +41,18 @@ export const CATEGORY_THEME: Record<string, { bg: string; text: string }> = {
 // visuals, preventing the duplication bug where all categories showed the same
 // placeholder. Images sourced from Unsplash for high quality and licensing.
 export const CATEGORY_IMAGES: Record<string, string> = {
-  gold: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop',
-  silver: 'https://images.unsplash.com/photo-1515562141207-5dab665ad0e6?w=500&h=600&fit=crop',
-  diamond: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=600&fit=crop',
-  gems: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop&q=80',
-  rudraksh: 'https://images.unsplash.com/photo-1572591596473-19db1d541d31?w=500&h=600&fit=crop',
-  necklaces: 'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=500&h=600&fit=crop',
-  earrings: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop&q=75',
-  rings: 'https://images.unsplash.com/photo-1515562141207-5dab665ad0e6?w=500&h=600&fit=crop&q=80',
-  bangles: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=500&h=600&fit=crop',
-  bracelets: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop&q=85',
-  pendants: 'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=500&h=600&fit=crop&q=80',
-  bridal: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=600&fit=crop&q=90',
+  gold: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=500&h=600&fit=crop',
+  silver: 'https://images.unsplash.com/photo-1744822220368-c380740bfc7f?w=500&h=600&fit=crop',
+  diamond: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&h=600&fit=crop',
+  gems: 'https://images.unsplash.com/photo-1727784892009-f3cf06199b65?w=500&h=600&fit=crop',
+  rudraksh: 'https://images.unsplash.com/photo-1622993361118-b6365d859ab6?w=500&h=600&fit=crop',
+  necklaces: 'https://images.unsplash.com/photo-1676329945867-01c9975aa9d1?w=500&h=600&fit=crop',
+  earrings: 'https://images.unsplash.com/photo-1603974372039-adc49044b6bd?w=500&h=600&fit=crop',
+  rings: 'https://images.unsplash.com/photo-1629118639934-2b241503956c?w=500&h=600&fit=crop',
+  bangles: 'https://images.unsplash.com/photo-1611107683227-e9060eccd846?w=500&h=600&fit=crop',
+  bracelets: 'https://images.unsplash.com/photo-1676291055501-286c48bb186f?w=500&h=600&fit=crop',
+  pendants: 'https://images.unsplash.com/photo-1589128777073-263566ae5e4d?w=500&h=600&fit=crop',
+  bridal: 'https://images.unsplash.com/photo-1600685890506-593fdf55949b?w=500&h=600&fit=crop',
 };
 
 // Fallback pool for a brand-new admin-created category that has no uploaded

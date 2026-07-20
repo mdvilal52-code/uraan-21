@@ -74,18 +74,18 @@ export type Review = {
 };
 
 export const categories: Category[] = [
-  { slug: 'gold', name: 'Gold Jewellery', description: '916 Hallmarked Gold', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop', count: 124 },
-  { slug: 'silver', name: 'Silver Jewellery', description: '92.5% Pure Silver', image: 'https://images.unsplash.com/photo-1515562141207-5dab665ad0e6?w=500&h=600&fit=crop', count: 98 },
-  { slug: 'diamond', name: 'Diamond', description: 'Certified Diamonds', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=600&fit=crop', count: 56 },
-  { slug: 'gems', name: 'Precious Gems', description: 'Ruby, Emerald, Sapphire', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop&q=80', count: 42 },
-  { slug: 'rudraksh', name: 'Rudraksh', description: '1 to 21 Mukhi Certified', image: 'https://images.unsplash.com/photo-1572591596473-19db1d541d31?w=500&h=600&fit=crop', count: 38 },
-  { slug: 'necklaces', name: 'Necklaces', description: 'Statement & Daily Wear', image: 'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=500&h=600&fit=crop', count: 87 },
-  { slug: 'earrings', name: 'Earrings', description: 'Jhumkas, Studs, Chandbalis', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop&q=75', count: 112 },
-  { slug: 'rings', name: 'Rings', description: 'Engagement & Cocktail', image: 'https://images.unsplash.com/photo-1515562141207-5dab665ad0e6?w=500&h=600&fit=crop&q=80', count: 64 },
-  { slug: 'bangles', name: 'Bangles', description: 'Traditional & Modern', image: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=500&h=600&fit=crop', count: 78 },
-  { slug: 'bracelets', name: 'Bracelets', description: 'Chain & Charm', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop&q=85', count: 45 },
-  { slug: 'pendants', name: 'Pendants', description: 'Religious & Designer', image: 'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=500&h=600&fit=crop&q=80', count: 52 },
-  { slug: 'bridal', name: 'Bridal Sets', description: 'Complete Bridal', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=600&fit=crop&q=90', count: 28 },
+  { slug: 'gold', name: 'Gold Jewellery', description: '916 Hallmarked Gold', image: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=500&h=600&fit=crop', count: 124 },
+  { slug: 'silver', name: 'Silver Jewellery', description: '92.5% Pure Silver', image: 'https://images.unsplash.com/photo-1744822220368-c380740bfc7f?w=500&h=600&fit=crop', count: 98 },
+  { slug: 'diamond', name: 'Diamond', description: 'Certified Diamonds', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&h=600&fit=crop', count: 56 },
+  { slug: 'gems', name: 'Precious Gems', description: 'Ruby, Emerald, Sapphire', image: 'https://images.unsplash.com/photo-1727784892009-f3cf06199b65?w=500&h=600&fit=crop', count: 42 },
+  { slug: 'rudraksh', name: 'Rudraksh', description: '1 to 21 Mukhi Certified', image: 'https://images.unsplash.com/photo-1622993361118-b6365d859ab6?w=500&h=600&fit=crop', count: 38 },
+  { slug: 'necklaces', name: 'Necklaces', description: 'Statement & Daily Wear', image: 'https://images.unsplash.com/photo-1676329945867-01c9975aa9d1?w=500&h=600&fit=crop', count: 87 },
+  { slug: 'earrings', name: 'Earrings', description: 'Jhumkas, Studs, Chandbalis', image: 'https://images.unsplash.com/photo-1603974372039-adc49044b6bd?w=500&h=600&fit=crop', count: 112 },
+  { slug: 'rings', name: 'Rings', description: 'Engagement & Cocktail', image: 'https://images.unsplash.com/photo-1629118639934-2b241503956c?w=500&h=600&fit=crop', count: 64 },
+  { slug: 'bangles', name: 'Bangles', description: 'Traditional & Modern', image: 'https://images.unsplash.com/photo-1611107683227-e9060eccd846?w=500&h=600&fit=crop', count: 78 },
+  { slug: 'bracelets', name: 'Bracelets', description: 'Chain & Charm', image: 'https://images.unsplash.com/photo-1676291055501-286c48bb186f?w=500&h=600&fit=crop', count: 45 },
+  { slug: 'pendants', name: 'Pendants', description: 'Religious & Designer', image: 'https://images.unsplash.com/photo-1589128777073-263566ae5e4d?w=500&h=600&fit=crop', count: 52 },
+  { slug: 'bridal', name: 'Bridal Sets', description: 'Complete Bridal', image: 'https://images.unsplash.com/photo-1600685890506-593fdf55949b?w=500&h=600&fit=crop', count: 28 },
 ];
 
 export const products: Product[] = [
