@@ -138,5 +138,5 @@ export const instagramImages = [
 export const heroSlides = [
   { eyebrow: 'Timeless Elegance', title: 'Crafted to Make You', titleEm: 'Unforgettable', desc: 'Discover heirloom jewellery handcrafted by master artisans — for every milestone, every memory, every you.', cta: 'Explore Collections', href: '/collections', image: '/images/hero.jpg' },
   { eyebrow: 'Bridal Collection', title: 'Heritage', titleEm: 'In Gold', desc: 'Handcrafted bridal masterpieces — celebrating every sacred moment.', cta: 'Explore', href: '/collections?type=bridal', image: '/images/gallery/lifestyle-1.jpg' },
-  { eyebrow: 'Sacred Rudraksh', title: 'Wear the Divine,', titleEm: 'Every Day', desc: 'Certified, energised Rudraksh from the high forests of Nepal — for protection, prosperity, and inner peace.', cta: 'Shop Rudraksh', href: '/collections?type=rudraksh', image: '/images/luxury-bg.jpg' },
+  { eyebrow: 'Sacred Rudraksh', title: 'Wear the Divine,', titleEm: 'Every Day', desc: 'Certified, energised Rudraksh from the high forests of Nepal — for protection, prosperity, and inner peace.', cta: 'Shop Rudraksh', href: '/collections?type=rudraksh', image: '/images/gallery/rudraksh-1.jpg' },
 ];
