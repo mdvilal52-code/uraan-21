@@ -127,7 +127,7 @@ export default function BlogForm({ initialPost, mode = 'add' }: BlogFormProps) {
             value={form.author}
             onChange={(e) => setForm({ ...form, author: e.target.value })}
             className="luxury-input"
-            placeholder="e.g., Om Gauri Putra Team"
+            placeholder="e.g., Om Gauri Pooja Gems Team"
           />
         </div>
 

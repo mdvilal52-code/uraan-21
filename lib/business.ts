@@ -3,33 +3,30 @@
 // email templates and the site-wide LocalBusiness structured data. Override
 // any field with the matching NEXT_PUBLIC_BUSINESS_* env var to relocate the
 // store without touching component code.
-export const BUSINESS_NAME = process.env.NEXT_PUBLIC_BUSINESS_NAME || 'Om Gauri Putra';
+export const BUSINESS_NAME = process.env.NEXT_PUBLIC_BUSINESS_NAME || 'Om Gauri Pooja Gems Jewellery & Rudraksh';
 
 export const BUSINESS_ADDRESS = {
-  line1: process.env.NEXT_PUBLIC_BUSINESS_ADDRESS_LINE1 || 'Ground Floor, Plot No. G-6, KH No. 69/17/1',
-  line2: process.env.NEXT_PUBLIC_BUSINESS_ADDRESS_LINE2 || 'Veer Singh Colony, Budh Vihar Phase 2',
-  locality: process.env.NEXT_PUBLIC_BUSINESS_CITY || 'Rohini, New Delhi',
+  line1: process.env.NEXT_PUBLIC_BUSINESS_ADDRESS_LINE1 || 'Shop No. Ground Floor of Prop No. 2, KH No. 56/12/1 and 56/19',
+  line2: process.env.NEXT_PUBLIC_BUSINESS_ADDRESS_LINE2 || 'Block C-1, Shyam Colony, Budh Vihar Phase-2, Near Citizen Public School',
+  locality: process.env.NEXT_PUBLIC_BUSINESS_CITY || 'Delhi',
   region: process.env.NEXT_PUBLIC_BUSINESS_STATE || 'Delhi',
   postalCode: process.env.NEXT_PUBLIC_BUSINESS_PINCODE || '110086',
   country: process.env.NEXT_PUBLIC_BUSINESS_COUNTRY || 'India',
   countryCode: process.env.NEXT_PUBLIC_BUSINESS_COUNTRY_CODE || 'IN',
 };
 
-// Delhi has more than one locality named "Budh Vihar" (this one, in Rohini/
-// North West Delhi, and an unrelated one near Munirka), which regularly
-// confuses text-address geocoding and sends "Get Directions" to the wrong
-// part of the city. Pinning the store's verified exact GPS coordinates
-// sidesteps that ambiguity entirely — override with the matching env vars if
-// the store ever relocates.
-const BUSINESS_LAT = process.env.NEXT_PUBLIC_BUSINESS_LAT || '28.7192471';
-const BUSINESS_LNG = process.env.NEXT_PUBLIC_BUSINESS_LNG || '77.0945902';
-const BUSINESS_COORDS = { lat: BUSINESS_LAT, lng: BUSINESS_LNG };
+// Pinning the store's verified exact GPS coordinates sidesteps text-address
+// geocoding ambiguity — override with the matching env vars if the store
+// ever relocates.
+export const BUSINESS_LAT = process.env.NEXT_PUBLIC_BUSINESS_LAT || '28.71548864683306';
+export const BUSINESS_LNG = process.env.NEXT_PUBLIC_BUSINESS_LNG || '77.08962878652694';
+export const BUSINESS_COORDS = { lat: BUSINESS_LAT, lng: BUSINESS_LNG };
 
 /** Single-line address, e.g. for <address>, JSON-LD and map queries. */
 export const BUSINESS_ADDRESS_INLINE = [
   BUSINESS_ADDRESS.line1,
   BUSINESS_ADDRESS.line2,
-  `${BUSINESS_ADDRESS.locality}, ${BUSINESS_ADDRESS.region} – ${BUSINESS_ADDRESS.postalCode}`,
+  `${BUSINESS_ADDRESS.region} – ${BUSINESS_ADDRESS.postalCode}`,
   BUSINESS_ADDRESS.country,
 ].join(', ');
 
@@ -37,7 +34,7 @@ export const BUSINESS_ADDRESS_INLINE = [
 export const BUSINESS_ADDRESS_LINES = [
   BUSINESS_ADDRESS.line1,
   BUSINESS_ADDRESS.line2,
-  `${BUSINESS_ADDRESS.locality}, ${BUSINESS_ADDRESS.region} – ${BUSINESS_ADDRESS.postalCode}`,
+  `${BUSINESS_ADDRESS.region} – ${BUSINESS_ADDRESS.postalCode}`,
 ];
 
 const mapQuery = BUSINESS_COORDS

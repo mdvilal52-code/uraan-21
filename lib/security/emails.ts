@@ -27,7 +27,7 @@ export function loginAlertEmail(d: { device: string; location: string; ip: strin
 
 export function newDeviceEmail(d: { code: string; device: string; location: string }) {
   return {
-    subject: 'Approve a new device — Om Gauri Putra',
+    subject: `Approve a new device — ${BUSINESS_NAME}`,
     html: wrap(
       'Approve a new device',
       `<p>A sign-in from a new device needs approval:</p>

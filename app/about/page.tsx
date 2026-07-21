@@ -49,7 +49,7 @@ export default function AboutPage() {
               Crafting <em className="gold-text">Heirlooms</em> for Every Family
             </h2>
             <p className="text-sm text-[#6b5d4c] leading-relaxed mb-4">
-              Om Gauri Putra was founded with a single vision — to bring authentic,
+              Om Gauri Pooja Gems Jewellery & Rudraksh was founded with a single vision — to bring authentic,
               certified, and exquisitely crafted jewellery to every Indian family.
               Three generations later, we remain committed to the same values: purity,
               craftsmanship, and trust.

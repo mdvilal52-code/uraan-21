@@ -8,7 +8,7 @@ import { WishlistProvider } from '@/context/wishlistContext';
 import MobileBottomNav from '@/components/MobileBottomNav';
 import StorageWarningBanner from '@/components/StorageWarningBanner';
 import { SITE_URL } from '@/lib/site';
-import { BUSINESS_NAME, BUSINESS_ADDRESS } from '@/lib/business';
+import { BUSINESS_NAME, BUSINESS_ADDRESS, BUSINESS_LAT, BUSINESS_LNG } from '@/lib/business';
 
 const siteUrl = SITE_URL;
 
@@ -30,6 +30,11 @@ const localBusinessSchema = {
     addressRegion: BUSINESS_ADDRESS.region,
     postalCode: BUSINESS_ADDRESS.postalCode,
     addressCountry: BUSINESS_ADDRESS.countryCode,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: BUSINESS_LAT,
+    longitude: BUSINESS_LNG,
   },
   openingHoursSpecification: [
     {
@@ -56,11 +61,11 @@ export const metadata: Metadata = {
     ? { google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION }
     : undefined,
   title: {
-    default: 'Om Gauri Putra — Gold, Silver, Diamond & Rudraksh Jewellery Online',
-    template: '%s | Om Gauri Putra Jewellers',
+    default: 'Om Gauri Pooja Gems Jewellery & Rudraksh — Gold, Silver, Diamond & Rudraksh Online',
+    template: '%s | Om Gauri Pooja Gems Jewellery & Rudraksh',
   },
   description:
-    'Buy certified gold, 92.5 silver, diamond and authentic Nepal Rudraksh jewellery online at Om Gauri Putra. BIS hallmarked, bridal sets, necklaces, earrings & rings with free shipping above ₹1999. Three generations of trust in New Delhi.',
+    'Buy certified gold, 92.5 silver, diamond and authentic Nepal Rudraksh jewellery online at Om Gauri Pooja Gems Jewellery & Rudraksh. BIS hallmarked, bridal sets, necklaces, earrings & rings with free shipping above ₹1999. Located in Shyam Colony, Budh Vihar Phase-2, Delhi.',
   keywords: [
     'gold jewellery online',
     'silver jewellery',
@@ -74,30 +79,30 @@ export const metadata: Metadata = {
     'kundan necklace',
     'jhumka earrings',
     'gold rings india',
-    'jewellery shop Rohini Delhi',
+    'jewellery shop Shyam Colony Delhi',
     'jewellery shop Budh Vihar',
-    'jewellery shop Sector 24 Delhi',
-    'Om Gauri Putra',
+    'jewellery shop Budh Vihar Phase-2',
+    'Om Gauri Pooja Gems',
     'OMGP gems',
   ],
-  authors: [{ name: 'Om Gauri Putra Jewellers' }],
-  creator: 'Om Gauri Putra',
-  applicationName: 'Om Gauri Putra',
+  authors: [{ name: 'Om Gauri Pooja Gems Jewellery & Rudraksh' }],
+  creator: 'Om Gauri Pooja Gems Jewellery & Rudraksh',
+  applicationName: 'Om Gauri Pooja Gems Jewellery & Rudraksh',
   category: 'shopping',
   alternates: { canonical: siteUrl },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
     url: siteUrl,
-    siteName: 'Om Gauri Putra',
-    title: 'Om Gauri Putra — Gold, Silver, Diamond & Rudraksh Jewellery',
+    siteName: 'Om Gauri Pooja Gems Jewellery & Rudraksh',
+    title: 'Om Gauri Pooja Gems Jewellery & Rudraksh — Gold, Silver, Diamond & Rudraksh',
     description:
       'Certified gold, silver, diamond and authentic Rudraksh jewellery. BIS hallmarked, bridal collections, free shipping above ₹1999.',
-    images: [{ url: '/images/hero.jpg', width: 1200, height: 630, alt: 'Om Gauri Putra Jewellery' }],
+    images: [{ url: '/images/hero.jpg', width: 1200, height: 630, alt: 'Om Gauri Pooja Gems Jewellery & Rudraksh' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Om Gauri Putra — Fine Jewellery & Rudraksh',
+    title: 'Om Gauri Pooja Gems Jewellery & Rudraksh — Fine Jewellery',
     description: 'Certified gold, silver, diamond & authentic Rudraksh jewellery online.',
     images: ['/images/hero.jpg'],
   },

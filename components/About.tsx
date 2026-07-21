@@ -25,7 +25,7 @@ export default function About() {
             A Legacy of <em className="gold-text">Trust</em> Since Generations
           </h3>
           <p className="text-sm text-[#6b5d4c] leading-relaxed mb-4 max-w-xl mx-auto">
-            At Om Gauri Putra, every ornament tells a story — of devotion,
+            At Om Gauri Pooja Gems Jewellery & Rudraksh, every ornament tells a story — of devotion,
             of craftsmanship, of celebrations. Three generations of master
             artisans handcraft each piece with care, ensuring purity of
             gold, brilliance of gems, and authenticity of every Rudraksh bead.

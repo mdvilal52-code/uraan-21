@@ -287,9 +287,9 @@ export default function ContactPage() {
             <div className="border-t border-[rgba(184,137,58,0.18)] pt-4 mb-4">
               <div className="text-[10px] tracking-[1.5px] uppercase text-[#9a8c75] mb-2">How to Reach Us</div>
               <ul className="text-xs text-[#6b5d4c] space-y-1.5 leading-relaxed">
-                <li><span className="text-[#b8893a] font-semibold">By Metro:</span> Rithala (Red Line) is the nearest Metro station — a short auto or e-rickshaw ride to Budh Vihar, Phase 2</li>
-                <li><span className="text-[#b8893a] font-semibold">By Bus:</span> DTC &amp; cluster buses stop at Budh Vihar / Sector 24</li>
-                <li><span className="text-[#b8893a] font-semibold">By Road:</span> On Kanjhawala Road, Budh Vihar Phase-2 — well connected to Rohini &amp; the Outer Ring Road</li>
+                <li><span className="text-[#b8893a] font-semibold">By Metro:</span> Rithala (Red Line) is the nearest Metro station — a short auto or e-rickshaw ride to Shyam Colony, Budh Vihar Phase-2</li>
+                <li><span className="text-[#b8893a] font-semibold">By Bus:</span> DTC &amp; cluster buses stop at Budh Vihar Phase-2 — alight near Citizen Public School</li>
+                <li><span className="text-[#b8893a] font-semibold">By Road:</span> In Shyam Colony (Block C-1), Budh Vihar Phase-2, near Citizen Public School — well connected to Rohini &amp; the Outer Ring Road</li>
                 <li><span className="text-[#b8893a] font-semibold">Parking:</span> Street parking available near the store</li>
               </ul>
             </div>

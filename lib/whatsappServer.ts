@@ -144,7 +144,7 @@ export async function notifyAdminNewOrder(order: OrderNotification): Promise<Wha
     return sendWhatsAppTemplate(ADMIN_WHATSAPP_NUMBER, templateName, lang, params);
   }
 
-  const text = `🛍️ New Order — Om Gauri Putra\n\n${summaryLines.join('\n')}`;
+  const text = `🛍️ New Order — Om Gauri Pooja Gems Jewellery & Rudraksh\n\n${summaryLines.join('\n')}`;
   return sendWhatsAppText(ADMIN_WHATSAPP_NUMBER, text);
 }
 
@@ -160,7 +160,7 @@ export async function notifyCustomerOrderPlaced(
 ): Promise<WhatsAppResult> {
   const text =
     `Thank you for your order! 🙏\n\n` +
-    `Order ${orderId} for ₹${amount.toLocaleString('en-IN')} has been placed with Om Gauri Putra.\n` +
+    `Order ${orderId} for ₹${amount.toLocaleString('en-IN')} has been placed with Om Gauri Pooja Gems Jewellery & Rudraksh.\n` +
     `We'll notify you here as it ships.`;
   return sendWhatsAppText(phone, text);
 }
@@ -216,6 +216,6 @@ export async function notifyAdminNewLead(lead: LeadNotification): Promise<WhatsA
     return sendWhatsAppTemplate(ADMIN_WHATSAPP_NUMBER, templateName, lang, params);
   }
 
-  const text = `🔔 New lead — Om Gauri Putra\n\n${summaryLines.join('\n')}`;
+  const text = `🔔 New lead — Om Gauri Pooja Gems Jewellery & Rudraksh\n\n${summaryLines.join('\n')}`;
   return sendWhatsAppText(ADMIN_WHATSAPP_NUMBER, text);
 }

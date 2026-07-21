@@ -74,8 +74,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </button>
           <div className="flex items-center justify-center gap-2">
             <span className="w-1.5 h-1.5 bg-[#b8893a] rotate-45" />
-            <span className="display text-sm font-semibold tracking-[3px] text-[#1a1410]">
-              OM GAURI PUTRA
+            <span className="display text-[10px] font-semibold tracking-[2px] text-[#1a1410] uppercase">
+              Om Gauri Pooja Gems
             </span>
             <span className="w-1.5 h-1.5 bg-[#b8893a] rotate-45" />
           </div>
