@@ -9,8 +9,8 @@ import {
   updateCategory,
   deleteCategory,
 } from '@/lib/categories';
+import { fallbackCategoryImage } from '@/lib/categoryStyles';
 import { invalidateCategoryCache } from '@/hooks/useCategories';
-import { ADMIN_CATEGORY_IMAGES, fallbackCategoryImage } from '@/lib/categoryStyles';
 
 const emptyForm = { name: '', description: '', image: '' };
 
@@ -225,15 +225,13 @@ export default function AdminCategoriesPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map((c) => {
-          const displayImage = ADMIN_CATEGORY_IMAGES[c.slug] || c.image || fallbackCategoryImage(c.name);
-          return (
+        {filtered.map((c) => (
           <div key={c.slug} className="bg-white border border-[rgba(184,137,58,0.18)] p-5 group hover:shadow-[0_12px_40px_rgba(122,90,31,0.12)] transition-all">
             <div className="flex items-start gap-4">
               <div
                 className="w-16 h-16 rounded-full bg-cover bg-center bg-[#f8f2e6] flex-shrink-0"
                 style={{
-                  backgroundImage: `url(${displayImage})`,
+                  backgroundImage: `url(${c.image || fallbackCategoryImage(c.name)})`,
                   boxShadow: 'inset 0 0 0 1px rgba(184,137,58,0.32)',
                 }}
               />
@@ -256,8 +254,7 @@ export default function AdminCategoriesPage() {
               </button>
             </div>
           </div>
-          );
-        })}
+        ))}
       </div>
 
       {filtered.length === 0 && (

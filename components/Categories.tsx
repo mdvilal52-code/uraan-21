@@ -18,11 +18,12 @@ export default function Categories() {
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 mt-8">
         {categories.slice(0, 12).map((cat) => {
           const theme = CATEGORY_THEME[cat.slug] ?? { bg: '#FFFFFF', text: '#1a1410' };
-          // Prefer the code's designated per-category photo for known slugs so
-          // the homepage grid always shows a distinct image per tile, even when
-          // the admin has (accidentally) uploaded the same picture for every
-          // category in the database.
-          const image = CATEGORY_IMAGES[cat.slug] || cat.image || fallbackCategoryImage(cat.name);
+          // Third fallback: any admin-created category whose slug isn't one
+          // of the 12 seeded ones AND whose image field went empty would
+          // otherwise resolve to url(undefined) — rendering every such card
+          // as the same broken image. fallbackCategoryImage() picks a
+          // distinct picture from a pool by hashing the name.
+          const image = cat.image || CATEGORY_IMAGES[cat.slug] || fallbackCategoryImage(cat.name);
           return (
             <Link
               key={cat.slug}
