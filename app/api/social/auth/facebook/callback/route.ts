@@ -6,17 +6,31 @@ import { SITE_URL } from '@/lib/site';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const code  = searchParams.get('code');
-  const error = searchParams.get('error');
+  const code         = searchParams.get('code');
+  const returnedState = searchParams.get('state');
+  const error        = searchParams.get('error');
+
+  // Verify CSRF state
+  const savedState = req.cookies.get('fb_oauth_state')?.value;
+  if (!savedState || !returnedState || savedState !== returnedState) {
+    const res = NextResponse.redirect(`${SITE_URL}/admin/social?error=invalid_state`);
+    res.cookies.delete('fb_oauth_state');
+    return res;
+  }
+
+  const redirect = (path: string) => {
+    const res = NextResponse.redirect(`${SITE_URL}${path}`);
+    res.cookies.delete('fb_oauth_state');
+    return res;
+  };
 
   if (error || !code) {
-    return NextResponse.redirect(`${SITE_URL}/admin/social?error=facebook_denied`);
+    return redirect('/admin/social?error=facebook_denied');
   }
+
   try {
-    // Store Facebook token first
     await exchangeFacebookCode(code);
 
-    // Automatically try to link Instagram Business account
     const fbToken = await getToken('facebook');
     if (fbToken?.accessToken && fbToken.pageId) {
       try {
@@ -26,9 +40,9 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    return NextResponse.redirect(`${SITE_URL}/admin/social?connected=facebook`);
+    return redirect('/admin/social?connected=facebook');
   } catch (err) {
     const msg = encodeURIComponent(err instanceof Error ? err.message : 'Facebook connection failed');
-    return NextResponse.redirect(`${SITE_URL}/admin/social?error=${msg}`);
+    return redirect(`/admin/social?error=${msg}`);
   }
 }

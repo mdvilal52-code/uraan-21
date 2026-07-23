@@ -3,10 +3,14 @@
 
 import { type NextRequest, NextResponse } from 'next/server';
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
+import { requireRole } from '@/lib/security/guard';
 
 const MAX_SIZE = 500 * 1024 * 1024; // 500 MB
 
 export async function POST(req: NextRequest) {
+  const auth = await requireRole('staff');
+  if ('error' in auth) return auth.error;
+
   try {
     const form = await req.formData();
     const file = form.get('file') as File | null;
@@ -23,14 +27,16 @@ export async function POST(req: NextRequest) {
     const storagePath = `social-videos/${crypto.randomUUID()}.${ext}`;
 
     if (!isSupabaseConfigured()) {
-      // Dev fallback: return a mock response so UI works without Supabase
+      // Dev fallback: return a mock so UI works without Supabase.
+      // Note: this URL won't work for actual publishing — Supabase required.
       const mockId = crypto.randomUUID();
       return NextResponse.json({
         mediaId: mockId,
-        url: URL.createObjectURL(file),
+        url: `/api/social/mock-video/${mockId}/${encodeURIComponent(file.name)}`,
         fileName: file.name,
         fileSize: file.size,
         mimeType: file.type,
+        mock: true,
       });
     }
 

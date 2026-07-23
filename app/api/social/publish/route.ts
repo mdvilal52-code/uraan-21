@@ -3,11 +3,8 @@
 
 import { type NextRequest, NextResponse } from 'next/server';
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
-import { uploadToYouTube } from '@/lib/social/youtube.service';
-import { uploadToFacebook } from '@/lib/social/facebook.service';
-import { uploadToInstagram } from '@/lib/social/instagram.service';
-
-const MAX_RETRIES = 3;
+import { requireRole } from '@/lib/security/guard';
+import { runPublishJob, type SocialPlatform } from '@/lib/social/publishJob';
 
 interface PublishBody {
   mediaId: string;
@@ -15,12 +12,11 @@ interface PublishBody {
   title: string;
   caption: string;
   hashtags?: string[];
-  platforms: ('youtube' | 'facebook' | 'instagram')[];
+  platforms: SocialPlatform[];
   publishMode?: 'now' | 'scheduled' | 'draft';
   scheduledAt?: string;
   timezone?: string;
   thumbnailUrl?: string;
-  // YouTube-specific
   ytCategoryId?: string;
   ytVisibility?: 'public' | 'private' | 'unlisted';
   ytTags?: string[];
@@ -29,6 +25,9 @@ interface PublishBody {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireRole('staff');
+  if ('error' in auth) return auth.error;
+
   let body: PublishBody;
   try {
     body = await req.json();
@@ -36,8 +35,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const { mediaId, videoUrl, title, caption, hashtags = [], platforms, publishMode = 'now',
-    scheduledAt, timezone, thumbnailUrl, ytCategoryId, ytVisibility, ytTags, ytIsShorts, ytMadeForKids } = body;
+  const {
+    mediaId, videoUrl, title, caption, hashtags = [], platforms,
+    publishMode = 'now', scheduledAt, timezone, thumbnailUrl,
+    ytCategoryId, ytVisibility, ytTags, ytIsShorts, ytMadeForKids,
+  } = body;
 
   if (!videoUrl || !platforms?.length) {
     return NextResponse.json({ error: 'videoUrl and platforms are required' }, { status: 400 });
@@ -45,7 +47,6 @@ export async function POST(req: NextRequest) {
 
   const db = isSupabaseConfigured() ? getSupabase() : null;
 
-  // Create post record
   let postId: string = crypto.randomUUID();
   if (db) {
     const { data } = await db.from('social_posts').insert({
@@ -74,115 +75,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ postId, status: 'draft' });
   }
 
-  const hashtagString = hashtags.map((h) => (h.startsWith('#') ? h : `#${h}`)).join(' ');
-  const fullCaption = `${caption}\n\n${hashtagString}`.trim();
+  if (publishMode === 'scheduled' && scheduledAt) {
+    return NextResponse.json({ postId, status: 'scheduled' });
+  }
 
-  // Run uploads (fire & forget for long uploads — return postId immediately)
-  const doPublish = async () => {
-    const results: Record<string, unknown> = {};
-
-    if (platforms.includes('youtube')) {
-      let attempt = 0;
-      while (attempt < MAX_RETRIES) {
-        attempt++;
-        const r = await uploadToYouTube({
-          videoUrl, title, description: fullCaption,
-          tags: ytTags, categoryId: ytCategoryId, visibility: ytVisibility,
-          isShorts: ytIsShorts, madeForKids: ytMadeForKids, thumbnailUrl,
-        });
-        await log(db, postId, 'youtube', attempt, r.success ? 'published' : 'failed', r.error);
-        if (r.success) {
-          results.youtube = r;
-          await updateStatus(db, postId, 'yt', 'published', r.videoId, r.url);
-          break;
-        }
-        if (attempt >= MAX_RETRIES) {
-          results.youtube = r;
-          await updateStatus(db, postId, 'yt', 'failed', undefined, undefined, r.error);
-        } else {
-          await sleep(attempt * 5000);
-        }
-      }
-    }
-
-    if (platforms.includes('facebook')) {
-      let attempt = 0;
-      while (attempt < MAX_RETRIES) {
-        attempt++;
-        const r = await uploadToFacebook({ videoUrl, title, description: fullCaption });
-        await log(db, postId, 'facebook', attempt, r.success ? 'published' : 'failed', r.error);
-        if (r.success) {
-          results.facebook = r;
-          await updateStatus(db, postId, 'fb', 'published', r.postId, r.url);
-          break;
-        }
-        if (attempt >= MAX_RETRIES) {
-          results.facebook = r;
-          await updateStatus(db, postId, 'fb', 'failed', undefined, undefined, r.error);
-        } else {
-          await sleep(attempt * 5000);
-        }
-      }
-    }
-
-    if (platforms.includes('instagram')) {
-      let attempt = 0;
-      while (attempt < MAX_RETRIES) {
-        attempt++;
-        const r = await uploadToInstagram({ videoUrl, caption: fullCaption, coverImageUrl: thumbnailUrl });
-        await log(db, postId, 'instagram', attempt, r.success ? 'published' : 'failed', r.error);
-        if (r.success) {
-          results.instagram = r;
-          await updateStatus(db, postId, 'ig', 'published', r.mediaId, r.url);
-          break;
-        }
-        if (attempt >= MAX_RETRIES) {
-          results.instagram = r;
-          await updateStatus(db, postId, 'ig', 'failed', undefined, undefined, r.error);
-        } else {
-          await sleep(attempt * 5000);
-        }
-      }
-    }
-
-    if (db) {
-      await db.from('social_posts').update({ published_at: new Date().toISOString() }).eq('id', postId);
-    }
-  };
-
-  // Start publish in background
-  doPublish().catch((e) => console.error('[social/publish]', e));
+  runPublishJob({
+    postId, videoUrl, title, caption, hashtags, platforms, thumbnailUrl,
+    ytCategoryId, ytVisibility, ytTags, ytIsShorts, ytMadeForKids,
+  }).catch((e) => console.error('[social/publish]', e));
 
   return NextResponse.json({ postId, status: 'publishing' });
 }
-
-async function updateStatus(
-  db: ReturnType<typeof getSupabase>,
-  postId: string,
-  prefix: 'yt' | 'fb' | 'ig',
-  status: string,
-  id?: string,
-  url?: string,
-  error?: string
-) {
-  if (!db) return;
-  const update: Record<string, unknown> = { [`${prefix}_status`]: status };
-  if (id)    update[prefix === 'yt' ? 'yt_video_id' : prefix === 'fb' ? 'fb_post_id' : 'ig_media_id'] = id;
-  if (url)   update[`${prefix}_url`] = url;
-  if (error) update[`${prefix}_error`] = error;
-  await db.from('social_posts').update(update).eq('id', postId);
-}
-
-async function log(
-  db: ReturnType<typeof getSupabase>,
-  postId: string,
-  platform: string,
-  attempt: number,
-  status: string,
-  message?: string
-) {
-  if (!db) return;
-  await db.from('social_publish_logs').insert({ post_id: postId, platform, attempt, status, message: message ?? null });
-}
-
-function sleep(ms: number) { return new Promise((r) => setTimeout(r, ms)); }

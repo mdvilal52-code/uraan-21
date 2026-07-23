@@ -1,4 +1,4 @@
-// Instagram Graph API v18.0 — Reels upload service.
+// Instagram Graph API v21.0 — Reels upload service.
 // Instagram Business accounts are accessed via the same Facebook Page token.
 // Flow: Create media container → Poll until ready → Publish
 
@@ -24,7 +24,7 @@ export interface InstagramResult {
 export async function exchangeInstagramAccess(facebookPageToken: string, facebookPageId: string): Promise<void> {
   // Get the Instagram Business Account linked to the Facebook Page
   const igRes = await fetch(
-    `https://graph.facebook.com/v18.0/${facebookPageId}?fields=instagram_business_account&access_token=${facebookPageToken}`
+    `https://graph.facebook.com/v21.0/${facebookPageId}?fields=instagram_business_account&access_token=${facebookPageToken}`
   );
   const igData = await igRes.json();
   const igAccountId = igData?.instagram_business_account?.id;
@@ -32,7 +32,7 @@ export async function exchangeInstagramAccess(facebookPageToken: string, faceboo
 
   // Get Instagram profile info
   const profileRes = await fetch(
-    `https://graph.facebook.com/v18.0/${igAccountId}?fields=username,followers_count,profile_picture_url&access_token=${facebookPageToken}`
+    `https://graph.facebook.com/v21.0/${igAccountId}?fields=username,followers_count,profile_picture_url&access_token=${facebookPageToken}`
   );
   const profile = await profileRes.json();
 
@@ -72,7 +72,7 @@ export async function uploadToInstagram(opts: InstagramUploadOptions): Promise<I
     };
     if (opts.coverImageUrl) containerBody.cover_url = opts.coverImageUrl;
 
-    const containerRes = await fetch(`https://graph.facebook.com/v18.0/${igAccountId}/media`, {
+    const containerRes = await fetch(`https://graph.facebook.com/v21.0/${igAccountId}/media`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(containerBody),
@@ -88,7 +88,7 @@ export async function uploadToInstagram(opts: InstagramUploadOptions): Promise<I
     for (let i = 0; i < 20; i++) {
       await sleep(10000);
       const statusRes = await fetch(
-        `https://graph.facebook.com/v18.0/${containerId}?fields=status_code,status&access_token=${token.accessToken}`
+        `https://graph.facebook.com/v21.0/${containerId}?fields=status_code,status&access_token=${token.accessToken}`
       );
       const statusData = await statusRes.json();
       status = statusData.status_code;
@@ -98,7 +98,7 @@ export async function uploadToInstagram(opts: InstagramUploadOptions): Promise<I
     if (status !== 'FINISHED') throw new Error('Instagram video processing timed out (200s)');
 
     // Step 3: Publish
-    const publishRes = await fetch(`https://graph.facebook.com/v18.0/${igAccountId}/media_publish`, {
+    const publishRes = await fetch(`https://graph.facebook.com/v21.0/${igAccountId}/media_publish`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ creation_id: containerId, access_token: token.accessToken }),

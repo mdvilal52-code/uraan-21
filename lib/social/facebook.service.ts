@@ -1,4 +1,4 @@
-// Facebook Graph API v18.0 — video/reel upload service.
+// Facebook Graph API v21.0 — video/reel upload service.
 // Requires a Facebook Page access token (not a user token).
 
 import { getToken, saveToken, isTokenExpired, type PlatformToken } from './tokens';
@@ -40,13 +40,13 @@ export function getFacebookAuthUrl(state: string): string {
     ].join(','),
     response_type: 'code',
   });
-  return `https://www.facebook.com/v18.0/dialog/oauth?${params}`;
+  return `https://www.facebook.com/v21.0/dialog/oauth?${params}`;
 }
 
 export async function exchangeFacebookCode(code: string): Promise<void> {
   // Step 1: Exchange code for short-lived user token
   const tokenRes = await fetch(
-    `https://graph.facebook.com/v18.0/oauth/access_token?client_id=${APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&client_secret=${APP_SECRET}&code=${code}`
+    `https://graph.facebook.com/v21.0/oauth/access_token?client_id=${APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&client_secret=${APP_SECRET}&code=${code}`
   );
   const tokenData = await tokenRes.json();
   if (!tokenRes.ok) throw new Error(tokenData.error?.message || 'Facebook token exchange failed');
@@ -54,14 +54,14 @@ export async function exchangeFacebookCode(code: string): Promise<void> {
 
   // Step 2: Exchange for long-lived token
   const longRes = await fetch(
-    `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${APP_ID}&client_secret=${APP_SECRET}&fb_exchange_token=${userToken}`
+    `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${APP_ID}&client_secret=${APP_SECRET}&fb_exchange_token=${userToken}`
   );
   const longData = await longRes.json();
   const longToken = longData.access_token;
 
   // Step 3: Get managed pages
   const pagesRes = await fetch(
-    `https://graph.facebook.com/v18.0/me/accounts?access_token=${longToken}`
+    `https://graph.facebook.com/v21.0/me/accounts?access_token=${longToken}`
   );
   const pagesData = await pagesRes.json();
   const page = pagesData.data?.[0];
@@ -72,7 +72,7 @@ export async function exchangeFacebookCode(code: string): Promise<void> {
 
   // Get page follower count
   const pageInfoRes = await fetch(
-    `https://graph.facebook.com/v18.0/${page.id}?fields=fan_count,picture&access_token=${pageToken}`
+    `https://graph.facebook.com/v21.0/${page.id}?fields=fan_count,picture&access_token=${pageToken}`
   );
   const pageInfo = await pageInfoRes.json();
 
@@ -138,7 +138,7 @@ async function uploadFacebookVideo(
     body.append('published', 'true');
   }
 
-  const res = await fetch(`https://graph.facebook.com/v18.0/${pageId}/videos`, {
+  const res = await fetch(`https://graph.facebook.com/v21.0/${pageId}/videos`, {
     method: 'POST',
     body,
   });
@@ -160,7 +160,7 @@ async function uploadFacebookReel(
   opts: FacebookUploadOptions
 ): Promise<FacebookResult> {
   // Step 1: Init upload session
-  const initRes = await fetch(`https://graph.facebook.com/v18.0/${pageId}/video_reels`, {
+  const initRes = await fetch(`https://graph.facebook.com/v21.0/${pageId}/video_reels`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ upload_phase: 'start', access_token: token.accessToken }),
@@ -174,7 +174,7 @@ async function uploadFacebookReel(
   if (!videoRes.ok) throw new Error('Failed to download video');
   const videoBuffer = await videoRes.arrayBuffer();
 
-  await fetch(`https://rupload.facebook.com/video-upload/v18.0/${uploadSessionId}`, {
+  await fetch(`https://rupload.facebook.com/video-upload/v21.0/${uploadSessionId}`, {
     method: 'POST',
     headers: {
       Authorization: `OAuth ${token.accessToken}`,
@@ -186,7 +186,7 @@ async function uploadFacebookReel(
   });
 
   // Step 3: Publish
-  const publishRes = await fetch(`https://graph.facebook.com/v18.0/${pageId}/video_reels`, {
+  const publishRes = await fetch(`https://graph.facebook.com/v21.0/${pageId}/video_reels`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
