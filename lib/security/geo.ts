@@ -1,8 +1,10 @@
 // Approximate request location from the host's edge geo data (no external
-// service needed). Used for location-based login alerts (#24). Netlify's CDN
-// attaches a base64-encoded JSON blob (`x-nf-geo`) to every request; Vercel
-// instead sends separate `x-vercel-ip-*` headers — both are checked so this
-// keeps working if the site ever moves host again.
+// service needed). Used for location-based login alerts. Multiple CDN/hosting
+// providers are checked in order so the function works across any platform:
+//   - Netlify: x-nf-geo (base64 JSON blob)
+//   - Cloudflare: cf-ipcountry, cf-ipcity, cf-region
+//   - Vercel: x-vercel-ip-city / x-vercel-ip-country-region / x-vercel-ip-country
+//   - Generic: x-real-ip based (city/region not available, country only)
 export type GeoInfo = { city?: string; region?: string; country?: string };
 
 function fromNetlifyGeoHeader(h: Headers): GeoInfo | null {
@@ -20,10 +22,24 @@ function fromNetlifyGeoHeader(h: Headers): GeoInfo | null {
   }
 }
 
+function fromCloudflareHeaders(h: Headers): GeoInfo | null {
+  const country = h.get('cf-ipcountry');
+  if (!country || country === 'XX') return null;
+  return {
+    city: h.get('cf-ipcity') || undefined,
+    region: h.get('cf-region') || undefined,
+    country,
+  };
+}
+
 export function getGeo(req: Request): GeoInfo {
   const h = req.headers;
+
   const netlify = fromNetlifyGeoHeader(h);
   if (netlify) return netlify;
+
+  const cloudflare = fromCloudflareHeaders(h);
+  if (cloudflare) return cloudflare;
 
   const dec = (v: string | null) => {
     if (!v) return undefined;
@@ -33,11 +49,15 @@ export function getGeo(req: Request): GeoInfo {
       return v;
     }
   };
-  return {
-    city: dec(h.get('x-vercel-ip-city')),
-    region: dec(h.get('x-vercel-ip-country-region')),
-    country: h.get('x-vercel-ip-country') || undefined,
-  };
+
+  const vercelCity = dec(h.get('x-vercel-ip-city'));
+  const vercelRegion = dec(h.get('x-vercel-ip-country-region'));
+  const vercelCountry = h.get('x-vercel-ip-country') || undefined;
+  if (vercelCity || vercelCountry) {
+    return { city: vercelCity, region: vercelRegion, country: vercelCountry };
+  }
+
+  return {};
 }
 
 export function geoLabel(g: GeoInfo): string {

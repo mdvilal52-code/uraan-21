@@ -10,31 +10,108 @@ safe demo behaviour, so nothing ever breaks.
 
 ---
 
-## 1. Put the website live on Netlify (required)
+## 1. Put the website live (pick any host)
 
-1. Push this repo to GitHub (already done if you're reading this on GitHub).
-2. Go to **https://app.netlify.com** → sign in with GitHub → **Add new site →
-   Import an existing project**.
-3. Pick this repository. Netlify auto-detects Next.js (via `netlify.toml`
-   and the `@netlify/plugin-nextjs` plugin already in this repo) — just click
-   **Deploy**. That's it — your site is live at
-   `https://<your-site-name>.netlify.app`.
-4. To add a custom domain: Netlify → your site → **Domain management → Add a
-   domain**.
+This is a standard Next.js application. It runs on any hosting platform that
+supports Node.js. Choose the option that suits you:
 
-You change all the settings below in:
-**Netlify → your site → Site configuration → Environment variables**
-(add each key + value, then trigger **Deploys → Trigger deploy → Clear cache
-and deploy site**).
+### Option A — Managed platforms (zero server admin)
 
-This project also ships a Netlify Scheduled Function
-(`netlify/functions/abandoned-cart-reminders-cron.ts`) that runs the
-abandoned-cart WhatsApp reminders every 2 hours automatically once
-`CRON_SECRET` and the WhatsApp keys (step 5) are set — no extra setup needed.
+| Platform | Steps |
+|----------|-------|
+| **Railway** | Push repo to GitHub → New Project → Deploy from GitHub → pick repo → done |
+| **Render** | New Web Service → Connect repo → Build: `npm run build` → Start: `npm start` |
+| **Coolify** | Add resource → Public/Private repo → build pack: Nixpacks or Docker → deploy |
+| **DigitalOcean App Platform** | Create App → GitHub repo → auto-detect Next.js → deploy |
+
+### Option B — VPS / Docker (full control)
+
+```bash
+# 1. Clone and install
+git clone <your-repo-url> app && cd app
+npm ci
+
+# 2. Create your env file
+cp .env.example .env.local
+# Edit .env.local and fill in your values
+
+# 3. Build
+npm run build
+
+# 4. Start (keep alive with PM2)
+npm install -g pm2
+pm2 start "npm start" --name om-gauri-putra
+pm2 save && pm2 startup
+```
+
+Reverse-proxy with **Nginx** (recommended):
+
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+Then obtain TLS with `certbot --nginx -d yourdomain.com`.
+
+### Option C — Docker
+
+```dockerfile
+# Dockerfile (place at repo root)
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY . .
+RUN npm ci && npm run build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+```bash
+docker build -t om-gauri-putra .
+docker run -p 3000:3000 --env-file .env.local om-gauri-putra
+```
+
+### Option D — Hostinger VPS / cPanel
+
+1. SSH into your VPS and run the same steps as **Option B** above.
+2. Use the Nginx config above as a virtual host.
+3. Alternatively, use Hostinger's Node.js app manager if available.
 
 ---
 
-## 2. Secure the admin panel (do this before going live)
+## 2. Set your environment variables
+
+Copy `.env.example` to `.env.local` (development) or configure the same keys
+in your host's environment variable panel. All variables are listed in
+[`.env.example`](./.env.example) with explanations.
+
+**Required at minimum:**
+- `NEXT_PUBLIC_SITE_URL` — your live domain (e.g. `https://yourdomain.com`)
+- `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_SESSION_SECRET` — change before going live
+
+---
+
+## 3. Secure the admin panel (do this before going live)
 
 The admin panel lives at `/admin` and is protected by a login. Set your own
 credentials:
@@ -52,7 +129,7 @@ Log in at `https://<your-site>/admin/login`.
 
 ---
 
-## 3. Turn on the database (Supabase) — real orders & leads
+## 4. Turn on the database (Supabase) — real orders & leads
 
 This makes orders and CRM leads save permanently and show in the admin from any
 device.
@@ -64,14 +141,14 @@ device.
    - **Project URL** → set as `SUPABASE_URL`
    - **service_role** key (under "Project API keys") → set as
      `SUPABASE_SERVICE_ROLE_KEY`
-4. Add both to Netlify env vars and **redeploy**.
+4. Add both to your environment variables and redeploy.
 
 Now the admin **Orders**, **CRM / Leads** and **Products** pages show a green
-**“Database”** badge and store live data. Without it, they show sample/bundled
+**"Database"** badge and store live data. Without it, they show sample/bundled
 data.
 
 **Load your catalogue:** open **Admin → Products**. The first time, click
-**“Import catalogue”** to copy the bundled demo products into your database.
+**"Import catalogue"** to copy the bundled demo products into your database.
 After that, any product you **add / edit / delete** in the admin shows on the
 live website for all visitors.
 
@@ -81,13 +158,13 @@ the product form works.
 
 ---
 
-## 4. Payments (Razorpay) — take real money
+## 5. Payments (Razorpay) — take real money
 
 Real card / UPI / netbanking / wallet payments at checkout.
 
 1. Create an account at **https://razorpay.com** and complete the KYC.
 2. **Dashboard → Settings → API Keys → Generate Key.**
-3. Add to Netlify env vars and **redeploy**:
+3. Add to your environment variables and redeploy:
    - **Key Id** → `NEXT_PUBLIC_RAZORPAY_KEY_ID`
    - **Key Secret** → `RAZORPAY_KEY_SECRET`
 
@@ -97,7 +174,7 @@ taking an online payment (handy for testing and Cash-on-Delivery).
 
 ---
 
-## 5. WhatsApp
+## 6. WhatsApp
 
 - **Chat button (works now):** set `NEXT_PUBLIC_WHATSAPP_NUMBER` to your number
   in international format, digits only (e.g. `9188519XXXXX`). All "Chat on
@@ -114,15 +191,36 @@ taking an online payment (handy for testing and Cash-on-Delivery).
 
 ---
 
-## 6. CRM (HubSpot, optional)
+## 7. Abandoned-cart reminders (scheduled cron)
 
-Website enquiries already save to your Supabase database (step 3) and show in
+The route `GET /api/cron/abandoned-cart-reminders` sends WhatsApp nudges to
+customers who left items in their cart. You need to call it on a schedule
+(every 2 hours is recommended) with an `Authorization: Bearer <CRON_SECRET>`
+header.
+
+Set `CRON_SECRET` to any long random string, then schedule a recurring HTTP
+request using whichever tool fits your stack:
+
+| Tool | Example |
+|------|---------|
+| **GitHub Actions** | `schedule: cron: '0 */2 * * *'` + a `curl` step |
+| **VPS crontab** | `0 */2 * * * curl -H "Authorization: Bearer $CRON_SECRET" https://yourdomain.com/api/cron/abandoned-cart-reminders` |
+| **Railway / Render / Coolify** | Built-in cron job UI pointing to the same URL |
+| **EasyCron / cron-job.org** | Add the URL + Authorization header |
+
+Also requires `WHATSAPP_TOKEN` and `WHATSAPP_PHONE_NUMBER_ID` to be set.
+
+---
+
+## 8. CRM (HubSpot, optional)
+
+Website enquiries already save to your Supabase database (step 4) and show in
 **CRM / Leads**. To *also* push them to HubSpot, set `HUBSPOT_PORTAL_ID` and
 `HUBSPOT_FORM_GUID` (see `.env.example`).
 
 ---
 
-## 7. Instagram feed (optional)
+## 9. Instagram feed (optional)
 
 Set `INSTAGRAM_ACCESS_TOKEN` to show your live Instagram grid on the homepage,
 and `NEXT_PUBLIC_INSTAGRAM_URL` for the "Follow" button.
@@ -131,18 +229,20 @@ and `NEXT_PUBLIC_INSTAGRAM_URL` for the "Follow" button.
 
 ## Quick checklist
 
-- [ ] Deployed on Netlify
+- [ ] Deployed (VPS / Docker / Railway / Render / Coolify / DigitalOcean / etc.)
+- [ ] Set `NEXT_PUBLIC_SITE_URL` to your live domain
 - [ ] Changed `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_SESSION_SECRET`
 - [ ] Ran `supabase/schema.sql` and added `SUPABASE_*` keys
 - [ ] Created the public `product-images` Storage bucket
 - [ ] Imported the catalogue (Admin → Products → Import)
 - [ ] Added Razorpay keys (`NEXT_PUBLIC_RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET`)
 - [ ] Set `NEXT_PUBLIC_WHATSAPP_NUMBER`
+- [ ] (optional) Set `CRON_SECRET` + configure a scheduler for abandoned-cart reminders
 - [ ] (optional) WhatsApp Cloud API, HubSpot, Instagram keys
 
 All variable names and hints live in [`.env.example`](./.env.example).
 
 > **Product catalogue:** with the database connected and the catalogue imported
-> (step 3), products are fully managed from **Admin → Products** — add, edit and
+> (step 4), products are fully managed from **Admin → Products** — add, edit and
 > delete show on the live site for everyone. Until then the site serves the
 > bundled demo catalogue so it's never empty.

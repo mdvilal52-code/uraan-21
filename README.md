@@ -1,38 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Om Gauri Putra — Jewellery Store
 
-## Getting Started
+A full-featured Next.js e-commerce storefront with admin panel, CRM, WhatsApp
+integration, Razorpay payments, and Supabase database.
 
-First, run the development server:
+## Getting Started (local development)
 
 ```bash
+npm install
+cp .env.example .env.local   # fill in your values
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the site.
+Admin panel is at [http://localhost:3000/admin](http://localhost:3000/admin).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This is a standard Next.js app — deploy it on **any** Node.js-capable host:
 
-## Learn More
+- **VPS / Linux server:** `npm ci && npm run build && npm start` (use PM2 + Nginx)
+- **Docker:** see `Dockerfile` example in [`DEPLOYMENT.md`](./DEPLOYMENT.md)
+- **Railway / Render / Coolify / DigitalOcean App Platform:** connect GitHub repo and deploy
 
-To learn more about Next.js, take a look at the following resources:
+Full step-by-step instructions (including Supabase, Razorpay, WhatsApp, and
+scheduled cron setup) are in [`DEPLOYMENT.md`](./DEPLOYMENT.md).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework:** Next.js 14 (App Router)
+- **Database:** Supabase (PostgreSQL)
+- **Payments:** Razorpay
+- **Styling:** Tailwind CSS
+- **Auth:** Supabase Auth + cookie-based admin sessions
+- **Notifications:** WhatsApp Business Cloud API + Resend (email)
+- **Shipping:** Shiprocket integration
 
-## Deploy on Netlify
+## Environment Variables
 
-This repo is already configured for Netlify (`netlify.toml` + the official
-`@netlify/plugin-nextjs` runtime). See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for
-the full step-by-step guide — the short version is: sign in to
-[app.netlify.com](https://app.netlify.com) with GitHub, **Add new site →
-Import an existing project**, pick this repo, and deploy.
+All required and optional variables are documented in [`.env.example`](./.env.example).
