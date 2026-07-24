@@ -38,6 +38,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   poweredByHeader: false, // hide the X-Powered-By: Next.js fingerprint
   images: {
