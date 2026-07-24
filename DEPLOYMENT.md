@@ -10,108 +10,70 @@ safe demo behaviour, so nothing ever breaks.
 
 ---
 
-## 1. Put the website live (pick any host)
+## 1. Put the website live (required)
 
-This is a standard Next.js application. It runs on any hosting platform that
-supports Node.js. Choose the option that suits you:
+This app is **hosting-agnostic** — it builds to a self-contained Node server
+and runs identically on any Ubuntu VPS, Docker host, DigitalOcean, AWS, Azure,
+GCP, Hostinger, Coolify, etc. There is no platform lock-in and no adapter to
+install. Pick whichever of the three below fits you.
 
-### Option A — Managed platforms (zero server admin)
+Set your configuration (the keys from the sections below) in the environment
+however your host does it: a `.env` file next to the app, your VPS shell
+profile, your container's `--env-file`, or your panel's "Environment
+variables" screen. `NEXT_PUBLIC_SITE_URL` should be your public origin, e.g.
+`https://www.omgauriputra.com`.
 
-| Platform | Steps |
-|----------|-------|
-| **Railway** | Push repo to GitHub → New Project → Deploy from GitHub → pick repo → done |
-| **Render** | New Web Service → Connect repo → Build: `npm run build` → Start: `npm start` |
-| **Coolify** | Add resource → Public/Private repo → build pack: Nixpacks or Docker → deploy |
-| **DigitalOcean App Platform** | Create App → GitHub repo → auto-detect Next.js → deploy |
-
-### Option B — VPS / Docker (full control)
+**Option A — Node + PM2 on a VPS (recommended for a plain server)**
 
 ```bash
-# 1. Clone and install
-git clone <your-repo-url> app && cd app
 npm ci
-
-# 2. Create your env file
-cp .env.example .env.local
-# Edit .env.local and fill in your values
-
-# 3. Build
 npm run build
-
-# 4. Start (keep alive with PM2)
-npm install -g pm2
-pm2 start "npm start" --name om-gauri-putra
-pm2 save && pm2 startup
+# copy the static assets next to the standalone server (once per build)
+cp -r .next/static  .next/standalone/.next/static
+cp -r public        .next/standalone/public
+pm2 start ecosystem.config.js && pm2 save     # uses the bundled config
 ```
 
-Reverse-proxy with **Nginx** (recommended):
+Then put Nginx (or Apache) in front as a reverse proxy to `127.0.0.1:3000`:
 
 ```nginx
 server {
-    listen 80;
-    server_name yourdomain.com;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
+  listen 80;
+  server_name www.omgauriputra.com;
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
 }
 ```
 
-Then obtain TLS with `certbot --nginx -d yourdomain.com`.
+(Add HTTPS with `certbot --nginx`.)
 
-### Option C — Docker
-
-```dockerfile
-# Dockerfile (place at repo root)
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY . .
-RUN npm ci && npm run build
-
-FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
-EXPOSE 3000
-CMD ["node", "server.js"]
-```
+**Option B — Docker**
 
 ```bash
 docker build -t om-gauri-putra .
-docker run -p 3000:3000 --env-file .env.local om-gauri-putra
+docker run -d -p 3000:3000 --env-file .env om-gauri-putra
 ```
 
-### Option D — Hostinger VPS / cPanel
+**Option C — any Node host** — run `npm run build`, then start the standalone
+server with `node .next/standalone/server.js` (after copying `.next/static`
+and `public` as in Option A). `npm start` also works for non-standalone hosts.
 
-1. SSH into your VPS and run the same steps as **Option B** above.
-2. Use the Nginx config above as a virtual host.
-3. Alternatively, use Hostinger's Node.js app manager if available.
+**Automatic abandoned-cart reminders:** point any scheduler at the reminder
+endpoint once `CRON_SECRET` and the WhatsApp keys (step 5) are set — e.g. a
+system crontab entry every 2 hours:
 
----
-
-## 2. Set your environment variables
-
-Copy `.env.example` to `.env.local` (development) or configure the same keys
-in your host's environment variable panel. All variables are listed in
-[`.env.example`](./.env.example) with explanations.
-
-**Required at minimum:**
-- `NEXT_PUBLIC_SITE_URL` — your live domain (e.g. `https://yourdomain.com`)
-- `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_SESSION_SECRET` — change before going live
+```cron
+0 */2 * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://your-domain.com/api/cron/abandoned-cart-reminders
+```
 
 ---
 
-## 3. Secure the admin panel (do this before going live)
+## 2. Secure the admin panel (do this before going live)
 
 The admin panel lives at `/admin` and is protected by a login. Set your own
 credentials:
@@ -129,7 +91,7 @@ Log in at `https://<your-site>/admin/login`.
 
 ---
 
-## 4. Turn on the database (Supabase) — real orders & leads
+## 3. Turn on the database (Supabase) — real orders & leads
 
 This makes orders and CRM leads save permanently and show in the admin from any
 device.
@@ -141,14 +103,14 @@ device.
    - **Project URL** → set as `SUPABASE_URL`
    - **service_role** key (under "Project API keys") → set as
      `SUPABASE_SERVICE_ROLE_KEY`
-4. Add both to your environment variables and redeploy.
+4. Add both to your environment (see step 1) and **restart / redeploy**.
 
 Now the admin **Orders**, **CRM / Leads** and **Products** pages show a green
-**"Database"** badge and store live data. Without it, they show sample/bundled
+**“Database”** badge and store live data. Without it, they show sample/bundled
 data.
 
 **Load your catalogue:** open **Admin → Products**. The first time, click
-**"Import catalogue"** to copy the bundled demo products into your database.
+**“Import catalogue”** to copy the bundled demo products into your database.
 After that, any product you **add / edit / delete** in the admin shows on the
 live website for all visitors.
 
@@ -158,13 +120,13 @@ the product form works.
 
 ---
 
-## 5. Payments (Razorpay) — take real money
+## 4. Payments (Razorpay) — take real money
 
 Real card / UPI / netbanking / wallet payments at checkout.
 
 1. Create an account at **https://razorpay.com** and complete the KYC.
 2. **Dashboard → Settings → API Keys → Generate Key.**
-3. Add to your environment variables and redeploy:
+3. Add to your environment (see step 1) and **restart / redeploy**:
    - **Key Id** → `NEXT_PUBLIC_RAZORPAY_KEY_ID`
    - **Key Secret** → `RAZORPAY_KEY_SECRET`
 
@@ -174,7 +136,7 @@ taking an online payment (handy for testing and Cash-on-Delivery).
 
 ---
 
-## 6. WhatsApp
+## 5. WhatsApp
 
 - **Chat button (works now):** set `NEXT_PUBLIC_WHATSAPP_NUMBER` to your number
   in international format, digits only (e.g. `9188519XXXXX`). All "Chat on
@@ -191,36 +153,15 @@ taking an online payment (handy for testing and Cash-on-Delivery).
 
 ---
 
-## 7. Abandoned-cart reminders (scheduled cron)
+## 6. CRM (HubSpot, optional)
 
-The route `GET /api/cron/abandoned-cart-reminders` sends WhatsApp nudges to
-customers who left items in their cart. You need to call it on a schedule
-(every 2 hours is recommended) with an `Authorization: Bearer <CRON_SECRET>`
-header.
-
-Set `CRON_SECRET` to any long random string, then schedule a recurring HTTP
-request using whichever tool fits your stack:
-
-| Tool | Example |
-|------|---------|
-| **GitHub Actions** | `schedule: cron: '0 */2 * * *'` + a `curl` step |
-| **VPS crontab** | `0 */2 * * * curl -H "Authorization: Bearer $CRON_SECRET" https://yourdomain.com/api/cron/abandoned-cart-reminders` |
-| **Railway / Render / Coolify** | Built-in cron job UI pointing to the same URL |
-| **EasyCron / cron-job.org** | Add the URL + Authorization header |
-
-Also requires `WHATSAPP_TOKEN` and `WHATSAPP_PHONE_NUMBER_ID` to be set.
-
----
-
-## 8. CRM (HubSpot, optional)
-
-Website enquiries already save to your Supabase database (step 4) and show in
+Website enquiries already save to your Supabase database (step 3) and show in
 **CRM / Leads**. To *also* push them to HubSpot, set `HUBSPOT_PORTAL_ID` and
 `HUBSPOT_FORM_GUID` (see `.env.example`).
 
 ---
 
-## 9. Instagram feed (optional)
+## 7. Instagram feed (optional)
 
 Set `INSTAGRAM_ACCESS_TOKEN` to show your live Instagram grid on the homepage,
 and `NEXT_PUBLIC_INSTAGRAM_URL` for the "Follow" button.
@@ -229,20 +170,18 @@ and `NEXT_PUBLIC_INSTAGRAM_URL` for the "Follow" button.
 
 ## Quick checklist
 
-- [ ] Deployed (VPS / Docker / Railway / Render / Coolify / DigitalOcean / etc.)
-- [ ] Set `NEXT_PUBLIC_SITE_URL` to your live domain
+- [ ] Deployed (VPS + PM2, Docker, or any Node host — see step 1)
 - [ ] Changed `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_SESSION_SECRET`
 - [ ] Ran `supabase/schema.sql` and added `SUPABASE_*` keys
 - [ ] Created the public `product-images` Storage bucket
 - [ ] Imported the catalogue (Admin → Products → Import)
 - [ ] Added Razorpay keys (`NEXT_PUBLIC_RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET`)
 - [ ] Set `NEXT_PUBLIC_WHATSAPP_NUMBER`
-- [ ] (optional) Set `CRON_SECRET` + configure a scheduler for abandoned-cart reminders
 - [ ] (optional) WhatsApp Cloud API, HubSpot, Instagram keys
 
 All variable names and hints live in [`.env.example`](./.env.example).
 
 > **Product catalogue:** with the database connected and the catalogue imported
-> (step 4), products are fully managed from **Admin → Products** — add, edit and
+> (step 3), products are fully managed from **Admin → Products** — add, edit and
 > delete show on the live site for everyone. Until then the site serves the
 > bundled demo catalogue so it's never empty.

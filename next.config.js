@@ -37,7 +37,29 @@ const securityHeaders = [
   { key: 'Content-Security-Policy-Report-Only', value: cspReportOnly },
 ];
 
+// Only allow the Image Optimizer to fetch from our own Supabase storage bucket
+// — never an arbitrary attacker-supplied host. A wildcard `**` remotePattern
+// turns the optimizer into an open image proxy (SSRF + a DoS amplifier that can
+// exhaust CPU/disk optimizing hostile payloads). `**.supabase.co` covers every
+// Supabase project; the exact project host is also derived from the env var so
+// the allow-list is as tight as possible on a configured deployment.
+const imageRemotePatterns = [{ protocol: 'https', hostname: '**.supabase.co' }];
+try {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (supabaseUrl) {
+    const host = new URL(supabaseUrl).hostname;
+    if (!imageRemotePatterns.some((p) => p.hostname === host)) {
+      imageRemotePatterns.push({ protocol: 'https', hostname: host });
+    }
+  }
+} catch {
+  // Malformed NEXT_PUBLIC_SUPABASE_URL — fall back to the wildcard subdomain rule.
+}
+
 const nextConfig = {
+  // Self-contained build: bundles a minimal server + traced node_modules into
+  // .next/standalone so the app runs anywhere (Ubuntu VPS, Docker, PM2, behind
+  // Nginx/Apache) with plain `node server.js` — no platform adapter required.
   output: 'standalone',
   reactStrictMode: true,
   poweredByHeader: false,
@@ -48,12 +70,9 @@ const nextConfig = {
   output: 'standalone',
 
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    // Serve modern formats when the browser advertises support.
+    formats: ['image/avif', 'image/webp'],
+    remotePatterns: imageRemotePatterns,
   },
 
   async headers() {

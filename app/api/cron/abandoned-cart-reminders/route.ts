@@ -3,15 +3,15 @@ import { isSupabaseConfigured } from '@/lib/supabase';
 import { dbGetAbandonedCarts, dbMarkReminded } from '@/lib/abandonedCartsDb';
 import { sendWhatsAppText } from '@/lib/whatsappServer';
 
-// GET → automatic WhatsApp recovery reminders for abandoned carts.
-// Trigger this route every 2 hours via any external scheduler (GitHub Actions,
-// a hosted cron, a VPS crontab, Coolify task, Railway cron, etc.) with:
-//   GET /api/cron/abandoned-cart-reminders
-//   Authorization: Bearer <CRON_SECRET>
-//
-// The Authorization header is required so the route can't be triggered by an
-// arbitrary public GET request, which would spam customers or run up WhatsApp
-// send volume. Set CRON_SECRET to any long random string in your .env.
+// GET → automatic WhatsApp recovery reminders for abandoned carts. This route
+// is hosting-agnostic: point any scheduler at it on whatever cadence you want
+// (a system crontab on a VPS, `pm2 start ... --cron`, GitHub Actions, or a
+// hosted cron service). The caller must sign the request with
+// `Authorization: Bearer $CRON_SECRET` — this route requires it (fails closed)
+// so it can't be triggered by an arbitrary public GET request spamming
+// customers or running up WhatsApp send volume. Example crontab entry:
+//   0 */2 * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" \
+//     https://your-domain.com/api/cron/abandoned-cart-reminders
 //
 // Only reminds carts that are: unrecovered, have a phone number, are older
 // than REMIND_AFTER_MS, and have never been reminded before — one automatic

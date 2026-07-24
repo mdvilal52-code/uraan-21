@@ -34,7 +34,7 @@ html,
 body {
   background: #ffffff;
   color: var(--text);
-  font-family: 'Jost', sans-serif;
+  font-family: var(--font-sans), sans-serif;
   overflow-x: hidden;
   scroll-behavior: smooth;
   font-variant-numeric: lining-nums;
@@ -98,10 +98,10 @@ textarea {
 }
 
 .serif {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif), serif;
 }
 .display {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-display), serif;
 }
 
 .gold-text {
@@ -112,7 +112,7 @@ textarea {
 }
 
 .section-tag-italic {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif), serif;
   font-style: italic;
   font-size: 14px;
   color: #b8893a;
@@ -122,7 +122,7 @@ textarea {
 }
 
 .section-heading {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-display), serif;
   text-align: center;
   font-size: 22px;
   letter-spacing: 5px;
@@ -183,7 +183,7 @@ textarea {
 
 /* KPI / stat numbers — large, tight, perfectly aligned figures */
 .admin-ui .stat-value {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif), serif;
   font-weight: 600;
   font-size: clamp(1.85rem, 1.5rem + 0.9vw, 2.35rem);
   line-height: 1.05;

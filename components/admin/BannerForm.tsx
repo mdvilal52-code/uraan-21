@@ -127,6 +127,12 @@ export default function BannerForm({
           {form.image && (
             <div className="mt-3 aspect-video w-full max-w-md bg-[#f8f2e6] border border-[rgba(184,137,58,0.18)] overflow-hidden relative">
               {!imageError ? (
+                // Admin-only preview of an arbitrary, operator-supplied image
+                // URL. next/image can't be used here: it rejects hosts outside
+                // `images.remotePatterns`, which would break previewing a
+                // pasted URL from any other origin. A plain <img> with an
+                // onError fallback is the correct tool for this case.
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   key={form.image}
                   src={form.image}
