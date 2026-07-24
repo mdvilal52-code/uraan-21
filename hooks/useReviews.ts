@@ -78,13 +78,20 @@ export function useReviews(): { reviews: Review[]; loaded: boolean } {
   useEffect(() => {
     let active = true;
     const sync = () => {
-      if (active) setReviews(cached || getStoredReviews());
+      if (!active) return;
+      const next = cached || getStoredReviews();
+      setReviews((prev) =>
+        JSON.stringify(prev) === JSON.stringify(next) ? prev : next
+      );
     };
     listeners.add(sync);
     loadReviews().then((list) => {
       if (!active) return;
       if (list && list.length) cached = list;
-      setReviews(cached || getStoredReviews());
+      const next = cached || getStoredReviews();
+      setReviews((prev) =>
+        JSON.stringify(prev) === JSON.stringify(next) ? prev : next
+      );
       setLoaded(true);
     });
     return () => {

@@ -50,7 +50,11 @@ export function useProducts(): { products: Product[]; loaded: boolean } {
     let active = true;
     loadProducts().then((list) => {
       if (!active) return;
-      if (list && list.length) setProducts(list);
+      if (list && list.length) {
+        setProducts((prev) =>
+          JSON.stringify(prev) === JSON.stringify(list) ? prev : list
+        );
+      }
       setLoaded(true);
     });
     return () => {
