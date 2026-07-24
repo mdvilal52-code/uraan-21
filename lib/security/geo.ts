@@ -1,12 +1,7 @@
-// Approximate request location from whatever edge/proxy geo data the host
-// provides (no external service needed). Used for location-based login alerts
-// (#24). Different fronts expose geo differently, so several conventions are
-// checked and the app degrades gracefully to "Unknown location" when none are
-// present (e.g. a bare Node server behind Nginx with no GeoIP module):
-//   • Cloudflare      → `cf-ipcountry` (country code)
-//   • Netlify CDN     → base64 JSON blob in `x-nf-geo`
-//   • Vercel          → discrete `x-vercel-ip-*` headers
-// This keeps working regardless of where the site is hosted.
+// Approximate request location from the host's edge geo data (no external
+// service needed). Used for location-based login alerts (#24).
+// Supports Cloudflare (cf-ipcountry), Netlify (x-nf-geo), and Vercel
+// (x-vercel-ip-*) headers so the site keeps working across hosting providers.
 export type GeoInfo = { city?: string; region?: string; country?: string };
 
 function fromNetlifyGeoHeader(h: Headers): GeoInfo | null {
@@ -27,9 +22,11 @@ function fromNetlifyGeoHeader(h: Headers): GeoInfo | null {
 export function getGeo(req: Request): GeoInfo {
   const h = req.headers;
 
+  // Netlify: base64-encoded JSON blob
   const netlify = fromNetlifyGeoHeader(h);
   if (netlify) return netlify;
 
+  // Vercel: separate headers
   const dec = (v: string | null) => {
     if (!v) return undefined;
     try {
@@ -38,17 +35,18 @@ export function getGeo(req: Request): GeoInfo {
       return v;
     }
   };
+  const vercelCity = dec(h.get('x-vercel-ip-city'));
+  const vercelRegion = dec(h.get('x-vercel-ip-country-region'));
+  const vercelCountry = h.get('x-vercel-ip-country') || undefined;
+  if (vercelCity || vercelRegion || vercelCountry) {
+    return { city: vercelCity, region: vercelRegion, country: vercelCountry };
+  }
 
-  const vercel: GeoInfo = {
-    city: dec(h.get('x-vercel-ip-city')),
-    region: dec(h.get('x-vercel-ip-country-region')),
-    country: h.get('x-vercel-ip-country') || undefined,
-  };
-  if (vercel.city || vercel.region || vercel.country) return vercel;
-
-  // Cloudflare (and many CDNs) expose at least the country code.
-  const cfCountry = h.get('cf-ipcountry');
-  if (cfCountry && cfCountry !== 'XX') return { country: cfCountry };
+  // Cloudflare: two-letter country code only
+  const cfCountry = h.get('cf-ipcountry') || undefined;
+  if (cfCountry && cfCountry !== 'XX') {
+    return { country: cfCountry };
+  }
 
   return {};
 }

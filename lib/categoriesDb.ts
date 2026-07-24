@@ -3,7 +3,7 @@
 // in-browser store. Mirrors lib/leadsDb.ts.
 import { getSupabase } from './supabase';
 import type { Category } from './categories';
-import { fallbackCategoryImage, FALLBACK_IMAGE_POOL } from './categoryStyles';
+import { fallbackCategoryImage, FALLBACK_IMAGE_POOL, CATEGORY_IMAGES } from './categoryStyles';
 
 type Row = {
   slug: string;
@@ -18,7 +18,7 @@ function toCategory(r: Row): Category {
     slug: r.slug,
     name: r.name,
     description: r.description || '',
-    image: r.image || fallbackCategoryImage(r.name),
+    image: r.image || CATEGORY_IMAGES[r.slug] || fallbackCategoryImage(r.name),
     count: r.count ?? 0,
   };
 }
@@ -88,7 +88,7 @@ export async function dbInsertCategory(input: { name: string; description?: stri
       slug,
       name: input.name.trim() || 'Untitled',
       description: input.description?.trim() || null,
-      image: input.image?.trim() || fallbackCategoryImage(input.name.trim() || base),
+      image: input.image?.trim() || CATEGORY_IMAGES[slug] || fallbackCategoryImage(input.name.trim() || base),
       count: 0,
     })
     .select()

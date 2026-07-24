@@ -57,12 +57,12 @@ try {
 }
 
 const nextConfig = {
-  reactStrictMode: true,
-  poweredByHeader: false, // hide the X-Powered-By: Next.js fingerprint
   // Self-contained build: bundles a minimal server + traced node_modules into
   // .next/standalone so the app runs anywhere (Ubuntu VPS, Docker, PM2, behind
   // Nginx/Apache) with plain `node server.js` — no platform adapter required.
   output: 'standalone',
+  reactStrictMode: true,
+  poweredByHeader: false, // hide the X-Powered-By: Next.js fingerprint
   images: {
     // Serve modern formats when the browser advertises support.
     formats: ['image/avif', 'image/webp'],
