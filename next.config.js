@@ -39,7 +39,13 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  poweredByHeader: false, // hide the X-Powered-By: Next.js fingerprint
+  poweredByHeader: false,
+
+  // 'standalone' bundles only the files needed to run in production.
+  // The output lives in .next/standalone/ and is started with `node server.js`.
+  // This is the recommended mode for Docker, VPS, PM2, and systemd deployments.
+  output: 'standalone',
+
   images: {
     remotePatterns: [
       {
@@ -48,6 +54,7 @@ const nextConfig = {
       },
     ],
   },
+
   async headers() {
     return [
       {

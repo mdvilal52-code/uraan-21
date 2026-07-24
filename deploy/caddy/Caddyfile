@@ -1,0 +1,51 @@
+# ── Caddy reverse proxy for Next.js ──────────────────────────────────────────
+# Caddy handles TLS automatically via Let's Encrypt — no manual certificate
+# management needed.
+#
+# Instructions:
+#   1. Replace "yourdomain.com" with your actual domain.
+#   2. Copy to /etc/caddy/Caddyfile  (or /usr/local/etc/caddy/Caddyfile on macOS)
+#   3. Reload: systemctl reload caddy
+#
+# Caddy docs: https://caddyserver.com/docs
+
+yourdomain.com, www.yourdomain.com {
+    # Automatic TLS from Let's Encrypt
+    tls {
+        protocols tls1.2 tls1.3
+    }
+
+    # Pass real client IP to the app
+    header_up X-Real-IP        {remote_host}
+    header_up X-Forwarded-For  {remote_host}
+    header_up X-Forwarded-Proto {scheme}
+
+    # Cache immutable Next.js static assets
+    @static {
+        path /_next/static/*
+    }
+    header @static Cache-Control "public, max-age=31536000, immutable"
+
+    # All requests → Next.js
+    reverse_proxy localhost:3000 {
+        transport http {
+            dial_timeout 10s
+            response_header_timeout 120s
+        }
+        health_uri    /api/admin/health
+        health_interval 30s
+        health_timeout  10s
+    }
+
+    # Compression
+    encode gzip zstd
+
+    # Access logs
+    log {
+        output file /var/log/caddy/om-gauri-putra.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+        format json
+    }
+}

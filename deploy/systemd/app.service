@@ -1,0 +1,61 @@
+# ── systemd unit for Next.js (standalone) ────────────────────────────────────
+# Works on Ubuntu, Debian, CentOS, Rocky Linux, AlmaLinux, Fedora, etc.
+#
+# Instructions:
+#   1. Replace APP_DIR, APP_USER, and your environment variables below.
+#   2. Copy to /etc/systemd/system/om-gauri-putra.service
+#   3. systemctl daemon-reload
+#   4. systemctl enable --now om-gauri-putra
+#   5. systemctl status om-gauri-putra
+
+[Unit]
+Description=Om Gauri Putra Next.js Application
+Documentation=https://nextjs.org
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+
+WorkingDirectory=/home/deploy/om-gauri-putra
+
+# The standalone build exposes a single Node.js entry point
+ExecStart=/usr/bin/node .next/standalone/server.js
+
+# Graceful shutdown
+ExecStop=/bin/kill -SIGTERM $MAINPID
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+Restart=on-failure
+RestartSec=5
+StartLimitInterval=200
+StartLimitBurst=5
+
+# ── Environment variables ─────────────────────────────────────────────────────
+# Load secrets from a file not tracked in git (chmod 600 /home/deploy/om-gauri-putra/.env.local)
+EnvironmentFile=-/home/deploy/om-gauri-putra/.env.local
+
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=127.0.0.1
+Environment=NEXT_TELEMETRY_DISABLED=1
+
+# ── Security hardening ────────────────────────────────────────────────────────
+# Run with minimal privileges; uncomment and tune as needed
+# NoNewPrivileges=true
+# PrivateTmp=true
+# ProtectSystem=strict
+# ReadWritePaths=/home/deploy/om-gauri-putra/logs
+# AmbientCapabilities=
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+# Logs go to journald; view with: journalctl -u om-gauri-putra -f
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=om-gauri-putra
+
+[Install]
+WantedBy=multi-user.target

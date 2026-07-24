@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: om-gauri-putra:latest
+    container_name: om-gauri-putra
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env.local          # create from .env.example; never commit this file
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:3000/api/admin/health']
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+    # Optional: mount a local uploads directory for persistent file storage
+    # volumes:
+    #   - ./uploads:/app/uploads
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
