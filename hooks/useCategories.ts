@@ -48,7 +48,11 @@ export function useCategories(): { categories: Category[]; loaded: boolean } {
     let active = true;
     loadCategories().then((list) => {
       if (!active) return;
-      if (list && list.length) setCategories(list);
+      if (list && list.length) {
+        setCategories((prev) =>
+          JSON.stringify(prev) === JSON.stringify(list) ? prev : list
+        );
+      }
       setLoaded(true);
     });
     return () => {
