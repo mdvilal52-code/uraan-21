@@ -1,8 +1,12 @@
-// Approximate request location from the host's edge geo data (no external
-// service needed). Used for location-based login alerts (#24). Netlify's CDN
-// attaches a base64-encoded JSON blob (`x-nf-geo`) to every request; Vercel
-// instead sends separate `x-vercel-ip-*` headers — both are checked so this
-// keeps working if the site ever moves host again.
+// Approximate request location from whatever edge/proxy geo data the host
+// provides (no external service needed). Used for location-based login alerts
+// (#24). Different fronts expose geo differently, so several conventions are
+// checked and the app degrades gracefully to "Unknown location" when none are
+// present (e.g. a bare Node server behind Nginx with no GeoIP module):
+//   • Cloudflare      → `cf-ipcountry` (country code)
+//   • Netlify CDN     → base64 JSON blob in `x-nf-geo`
+//   • Vercel          → discrete `x-vercel-ip-*` headers
+// This keeps working regardless of where the site is hosted.
 export type GeoInfo = { city?: string; region?: string; country?: string };
 
 function fromNetlifyGeoHeader(h: Headers): GeoInfo | null {
@@ -22,6 +26,7 @@ function fromNetlifyGeoHeader(h: Headers): GeoInfo | null {
 
 export function getGeo(req: Request): GeoInfo {
   const h = req.headers;
+
   const netlify = fromNetlifyGeoHeader(h);
   if (netlify) return netlify;
 
@@ -33,11 +38,19 @@ export function getGeo(req: Request): GeoInfo {
       return v;
     }
   };
-  return {
+
+  const vercel: GeoInfo = {
     city: dec(h.get('x-vercel-ip-city')),
     region: dec(h.get('x-vercel-ip-country-region')),
     country: h.get('x-vercel-ip-country') || undefined,
   };
+  if (vercel.city || vercel.region || vercel.country) return vercel;
+
+  // Cloudflare (and many CDNs) expose at least the country code.
+  const cfCountry = h.get('cf-ipcountry');
+  if (cfCountry && cfCountry !== 'XX') return { country: cfCountry };
+
+  return {};
 }
 
 export function geoLabel(g: GeoInfo): string {

@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     } else if (!waResult.configured) {
       console.warn(
         '[lead] WhatsApp admin notify skipped — Cloud API not configured ' +
-          '(set WHATSAPP_TOKEN and WHATSAPP_PHONE_NUMBER_ID in Netlify).'
+          '(set WHATSAPP_TOKEN and WHATSAPP_PHONE_NUMBER_ID in your environment).'
       );
     } else {
       console.log('[lead] WhatsApp admin notify sent OK');

@@ -68,22 +68,24 @@ email/2FA steps.
   encrypted by Supabase (AES-256). Keep Point-in-Time Recovery on for your plan.
 - **Secret rotation (#49):** rotate on a schedule or after any suspected leak —
   - `ADMIN_SESSION_SECRET` — rotating it invalidates all recovery sessions.
-  - `SUPABASE_SERVICE_ROLE_KEY` / anon key — rotate in Supabase → API, update Netlify.
-  - `RESEND_API_KEY`, `RAZORPAY_KEY_SECRET` — rotate at the provider, update Netlify.
-  After rotating, redeploy. Never commit secrets; all live in Netlify env vars.
+  - `SUPABASE_SERVICE_ROLE_KEY` / anon key — rotate in Supabase → API, update your env.
+  - `RESEND_API_KEY`, `RAZORPAY_KEY_SECRET` — rotate at the provider, update your env.
+  After rotating, restart / redeploy. Never commit secrets; all live in
+  environment variables (`.env` / your host's env store).
 - **Lost authenticator / lockout:** sign in via **“Use recovery login”** with
   `ADMIN_EMAIL` / `ADMIN_PASSWORD`. To clear a permanent lock, delete the row
   from `account_locks` for that email.
 
-## Single-threaded runtime note
+## Process resilience note
 
-This app deploys to **Netlify** (`DEPLOYMENT.md` step 1), where each API route
-runs as an isolated serverless function invocation rather than one long-lived
-Node.js process. An unhandled error in one request does not take down other
-visitors' requests, so a PM2/cluster-manager-style guardrail (relevant for a
-traditional always-on Node server) is not needed here. If this app is ever
-self-hosted on a persistent Node process instead, run it under PM2 or an
-auto-restarting process manager.
+This app runs as a persistent Node.js server (Next.js standalone output — see
+`DEPLOYMENT.md` step 1). To keep a single unhandled error from taking the whole
+site down, run it under a process manager that restarts workers automatically.
+The bundled PM2 config (`ecosystem.config.js`) does this: it runs in `cluster`
+mode (one worker per CPU core, so a crash in one worker never drops every
+visitor's request) and restarts any worker that exceeds its memory ceiling
+(`max_memory_restart`). Docker deployments should set a restart policy
+(`--restart unless-stopped` or `restart: unless-stopped` in compose).
 
 ## Reporting
 

@@ -1,38 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Om Gauri Putra
+
+Production storefront + admin panel for the **Om Gauri Putra** jewellery store,
+built with [Next.js](https://nextjs.org) (App Router), Supabase and Tailwind CSS.
+It is **hosting-agnostic** — it builds to a self-contained Node server and runs
+identically on any VPS, Docker host or Node platform, with no vendor lock-in.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the site. Edit
+`app/page.tsx` (or any file) and the page hot-reloads.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The site works immediately with bundled demo data. Every integration
+(Supabase, Razorpay, WhatsApp, Instagram, …) activates only once you add its
+keys and stays dormant otherwise, so nothing breaks before it is configured.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the dev server with hot reload |
+| `npm run build` | Production build (emits the standalone server) |
+| `npm start` | Start the production server |
+| `npm run lint` | ESLint |
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The production build uses Next.js [standalone output](https://nextjs.org/docs/app/api-reference/next-config-js/output),
+so it runs on any Ubuntu VPS, Docker, PM2 + Nginx, DigitalOcean, AWS, Azure,
+GCP, Hostinger or Coolify without a platform adapter. A `Dockerfile` and a PM2
+`ecosystem.config.js` are included.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Netlify
-
-This repo is already configured for Netlify (`netlify.toml` + the official
-`@netlify/plugin-nextjs` runtime). See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for
-the full step-by-step guide — the short version is: sign in to
-[app.netlify.com](https://app.netlify.com) with GitHub, **Add new site →
-Import an existing project**, pick this repo, and deploy.
+See **[`DEPLOYMENT.md`](./DEPLOYMENT.md)** for the full step-by-step guide
+(Node/PM2, Docker, environment variables, database, payments and WhatsApp).

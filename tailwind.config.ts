@@ -30,9 +30,9 @@ const config: Config = {
         emerald: '#3d6b5a',
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', 'serif'],
-        display: ['"Cinzel"', 'serif'],
-        sans: ['"Jost"', 'sans-serif'],
+        serif: ['var(--font-serif)', 'serif'],
+        display: ['var(--font-display)', 'serif'],
+        sans: ['var(--font-sans)', 'sans-serif'],
       },
       animation: {
         'fade-up': 'fadeUp 0.6s ease-out',

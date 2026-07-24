@@ -1,11 +1,10 @@
 // Canonical public site URL — used for SEO metadata, the sitemap and robots.
-// Netlify sets URL (and DEPLOY_PRIME_URL for deploy previews) automatically,
-// so this resolves correctly out of the box; override with
-// NEXT_PUBLIC_SITE_URL once you connect a custom domain (e.g.
-// https://www.omgauriputra.com).
+// Hosting-agnostic: set NEXT_PUBLIC_SITE_URL (preferred — it is also available
+// in the browser) or SITE_URL to your production origin, e.g.
+// https://www.omgauriputra.com. Falls back to localhost for local dev so a
+// fresh checkout with no env configured still runs.
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ||
-  process.env.URL ||
-  process.env.DEPLOY_PRIME_URL ||
-  'https://your-site.netlify.app'
+  process.env.SITE_URL ||
+  'http://localhost:3000'
 ).replace(/\/+$/, '');

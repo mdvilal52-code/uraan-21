@@ -1,0 +1,16 @@
+node_modules
+.next
+out
+build
+coverage
+.git
+.gitignore
+*.md
+.env*
+!.env.example
+.claude
+.DS_Store
+npm-debug.log*
+*.tsbuildinfo
+Dockerfile
+.dockerignore

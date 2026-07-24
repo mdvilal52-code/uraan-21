@@ -4,7 +4,7 @@
 // env vars are absent, isSupabaseConfigured() is false and callers fall back to
 // the bundled demo data, so the site keeps working before the DB is set up.
 //
-// Required env vars (Netlify → Site configuration → Environment variables):
+// Required env vars (set in your host's environment / .env):
 //   SUPABASE_URL                — https://<project>.supabase.co
 //   SUPABASE_SERVICE_ROLE_KEY   — Project Settings → API → service_role key
 

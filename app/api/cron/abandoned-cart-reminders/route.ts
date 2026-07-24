@@ -3,13 +3,15 @@ import { isSupabaseConfigured } from '@/lib/supabase';
 import { dbGetAbandonedCarts, dbMarkReminded } from '@/lib/abandonedCartsDb';
 import { sendWhatsAppText } from '@/lib/whatsappServer';
 
-// GET → automatic WhatsApp recovery reminders for abandoned carts, invoked by
-// the Netlify Scheduled Function at
-// netlify/functions/abandoned-cart-reminders-cron.ts (see its schedule in
-// netlify.toml). That function signs its request with
-// `Authorization: Bearer $CRON_SECRET` — this route requires it (fails
-// closed) so it can't be triggered by an arbitrary public GET request
-// spamming customers or running up WhatsApp send volume.
+// GET → automatic WhatsApp recovery reminders for abandoned carts. This route
+// is hosting-agnostic: point any scheduler at it on whatever cadence you want
+// (a system crontab on a VPS, `pm2 start ... --cron`, GitHub Actions, or a
+// hosted cron service). The caller must sign the request with
+// `Authorization: Bearer $CRON_SECRET` — this route requires it (fails closed)
+// so it can't be triggered by an arbitrary public GET request spamming
+// customers or running up WhatsApp send volume. Example crontab entry:
+//   0 */2 * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" \
+//     https://your-domain.com/api/cron/abandoned-cart-reminders
 //
 // Only reminds carts that are: unrecovered, have a phone number, are older
 // than REMIND_AFTER_MS, and have never been reminded before — one automatic
@@ -18,9 +20,6 @@ import { sendWhatsAppText } from '@/lib/whatsappServer';
 //
 // Requires (see .env.example): CRON_SECRET, plus the same WHATSAPP_TOKEN /
 // WHATSAPP_PHONE_NUMBER_ID this app already needs for any WhatsApp send.
-// Deploying somewhere other than Netlify? Nothing calls this route
-// automatically — point any scheduler (a hosted cron, GitHub Actions, etc.)
-// at this same URL with the same header to get automatic reminders.
 
 const REMIND_AFTER_MS = 2 * 60 * 60 * 1000; // 2 hours
 
