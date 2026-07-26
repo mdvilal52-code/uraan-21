@@ -29,7 +29,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-black/[0.06] bg-white">
+      <header className="sticky top-0 z-50 border-b border-[#0B1E42]/10 bg-[#87CEEB]">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-3 py-2.5 md:gap-6 md:px-8 md:py-4">
           {/* Left: hamburger — mobile only */}
           <button
@@ -57,8 +57,8 @@ export default function Header() {
                 <span className="font-display text-base font-bold tracking-wide text-[#0B1E42] md:text-2xl">
                   OMGPGEMS
                 </span>
-                <span className="truncate text-[8.5px] text-[#8a8a8a] md:text-xs">
-                  Original Wastik Gems Jewellery and Rudraksh
+                <span className="truncate text-[8.5px] font-medium text-[#0B1E42] md:text-xs">
+                  Om Gauri Putra Jewellery &amp; Rudraksha
                 </span>
               </span>
             </Link>

@@ -15,14 +15,14 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="bg-white px-4 py-3 md:hidden">
+    <div className="bg-[#87CEEB] px-4 py-3 md:hidden">
       <form onSubmit={handleSubmit} className="relative mx-auto max-w-7xl md:max-w-2xl">
         <input
           ref={inputRef}
           type="search"
           placeholder="Search for products, categories, jewellery..."
           aria-label="Search products"
-          className="h-12 w-full rounded-full bg-[#F0F0F0] pl-5 pr-14 font-poppins text-sm text-[#1a1410] placeholder-[#8a8a8a] outline-none"
+          className="h-12 w-full rounded-full border border-white/70 bg-white pl-5 pr-14 font-poppins text-sm text-[#1a1410] placeholder-[#6b6b6b] outline-none"
         />
         <button
           type="submit"
