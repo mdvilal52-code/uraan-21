@@ -21,20 +21,20 @@ export default function CartDrawer() {
 
       {/* Drawer */}
       <aside
-        className={`fixed top-0 right-0 bottom-0 w-[90%] max-w-[400px] bg-white z-[201] transition-transform duration-300 flex flex-col ${
+        className={`fixed top-0 right-0 bottom-0 w-[90%] max-w-[400px] bg-[#0B1E42] z-[201] transition-transform duration-300 flex flex-col ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
-        <div className="px-5 py-5 border-b border-[rgba(184,137,58,0.18)] flex items-center justify-between">
+        <div className="px-5 py-5 border-b border-white/10 flex items-center justify-between">
           <div>
-            <h3 className="display text-sm tracking-[3px] uppercase text-[#1a1410]">Your Cart</h3>
-            <p className="text-[10px] text-[#9a8c75] mt-0.5">{totalItems} item{totalItems !== 1 ? 's' : ''}</p>
+            <h3 className="display text-sm tracking-[3px] uppercase text-white">Your Cart</h3>
+            <p className="text-[10px] text-white/50 mt-0.5">{totalItems} item{totalItems !== 1 ? 's' : ''}</p>
           </div>
           <button
             onClick={closeCart}
             aria-label="Close cart"
-            className="w-8 h-8 grid place-items-center hover:text-[#b8893a]"
+            className="w-8 h-8 grid place-items-center text-white/70 hover:text-[#C9A24A]"
           >
             <X size={18} />
           </button>
@@ -43,15 +43,15 @@ export default function CartDrawer() {
         {/* Body */}
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
-            <ShoppingBag className="text-[#b8893a] mb-4" size={48} />
-            <p className="serif text-2xl text-[#1a1410] mb-2">Your cart is empty</p>
-            <p className="text-xs text-[#6b5d4c] mb-6">
+            <ShoppingBag className="text-[#C9A24A] mb-4" size={48} />
+            <p className="serif text-2xl text-white mb-2">Your cart is empty</p>
+            <p className="text-xs text-white/60 mb-6">
               Add some beautiful pieces to your cart.
             </p>
             <Link
               href="/collections"
               onClick={closeCart}
-              className="inline-flex items-center gap-2 px-7 py-3 bg-[#1a1410] text-[#e8d49b] text-[10px] tracking-[3px] uppercase font-semibold hover:bg-[#b8893a] hover:text-[#1a1410]"
+              className="inline-flex items-center gap-2 px-7 py-3 bg-[#C9A24A] text-[#0B1E42] text-[10px] tracking-[3px] uppercase font-semibold hover:bg-[#b8893a] hover:text-white"
             >
               Shop Now <ChevronRight size={12} />
             </Link>
@@ -63,7 +63,7 @@ export default function CartDrawer() {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center gap-4 bg-[#fbf8f1] border border-[rgba(184,137,58,0.18)] p-3 rounded-md"
+                    className="flex items-center gap-4 bg-white/10 border border-white/10 p-3 rounded-md"
                   >
                     <div className="relative w-[72px] h-[72px] flex-shrink-0 rounded overflow-hidden bg-[#f8f2e6]">
                       {item.image ? (
@@ -107,7 +107,7 @@ export default function CartDrawer() {
                         <button
                           onClick={() => removeFromCart(item.id)}
                           aria-label={`Remove ${item.name}`}
-                          className="w-9 h-9 grid place-items-center text-[#9a8c75] hover:text-[#7a2e2e]"
+                          className="w-9 h-9 grid place-items-center text-white/50 hover:text-red-400"
                         >
                           <Trash2 size={15} />
                         </button>
@@ -119,9 +119,9 @@ export default function CartDrawer() {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-[rgba(184,137,58,0.18)] p-5 bg-[#fbf8f1]">
+            <div className="border-t border-white/10 p-5 bg-[#0a1835]">
               <div className="flex justify-between items-baseline mb-4">
-                <span className="display text-xs tracking-[2px] uppercase text-[#1a1410]">
+                <span className="display text-xs tracking-[2px] uppercase text-white">
                   Subtotal
                 </span>
                 <PriceDisplay
@@ -130,7 +130,7 @@ export default function CartDrawer() {
                   priceStyle={{ fontSize: 'clamp(26px, 5vw, 32px)' }}
                 />
               </div>
-              <p className="text-[10px] text-[#6b5d4c] mb-4 italic">
+              <p className="text-[10px] text-white/50 mb-4 italic">
                 Taxes & shipping calculated at checkout
               </p>
 
@@ -138,21 +138,21 @@ export default function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={closeCart}
-                  className="block w-full bg-[#1a1410] text-[#e8d49b] py-3 text-[11px] tracking-[3px] uppercase font-semibold hover:bg-[#b8893a] hover:text-[#1a1410] text-center transition-all"
+                  className="block w-full bg-[#C9A24A] text-[#0B1E42] py-3 text-[11px] tracking-[3px] uppercase font-semibold hover:bg-[#b8893a] hover:text-white text-center transition-all"
                 >
                   Checkout
                 </Link>
                 <Link
                   href="/cart"
                   onClick={closeCart}
-                  className="block w-full border border-[#1a1410] text-[#1a1410] py-3 text-[11px] tracking-[3px] uppercase font-semibold hover:bg-[#1a1410] hover:text-[#e8d49b] text-center transition-all"
+                  className="block w-full border border-[#C9A24A] text-[#C9A24A] py-3 text-[11px] tracking-[3px] uppercase font-semibold hover:bg-[#C9A24A] hover:text-[#0B1E42] text-center transition-all"
                 >
                   View Cart
                 </Link>
               </div>
 
-              <div className="mt-3 flex items-center justify-center gap-1.5 text-[10px] text-[#6b5d4c]">
-                <ShieldCheck size={11} className="text-[#3d6b5a]" />
+              <div className="mt-3 flex items-center justify-center gap-1.5 text-[10px] text-white/50">
+                <ShieldCheck size={11} className="text-[#C9A24A]" />
                 <span>Secure Checkout</span>
               </div>
             </div>
