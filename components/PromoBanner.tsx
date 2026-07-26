@@ -1,45 +1,108 @@
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 
-export default function PromoBanner() {
-  return (
-    <section id="promo-banner" className="px-3 py-4 md:px-8">
-      <div className="relative mx-auto aspect-[4/3] w-full max-w-7xl overflow-hidden rounded-2xl sm:aspect-[16/9] md:aspect-[21/9]">
-        {/* Warm bronze-toned photo of a woman wearing gold jewellery, looking
-            to the side. */}
-        <Image
-          src="/images/model.jpg"
-          alt="Woman wearing heirloom gold jewellery"
-          fill
-          sizes="100vw"
-          className="object-cover object-[72%_18%]"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent" />
+// Auto-rotating hero carousel — three slides that cross-fade every 5s, with
+// clickable progress-bar indicators. Mirrors the omgpgems.com hero: same
+// copy, imagery, gold accents and button styling.
+const SLIDES = [
+  {
+    image: '/images/hero.jpg',
+    eyebrow: 'Timeless Elegance',
+    titleTop: 'Crafted to Make You',
+    titleEm: 'Unforgettable',
+    text: 'Discover heirloom jewellery handcrafted by master artisans — for every milestone, every memory, every you.',
+    cta: 'Explore Collections',
+    href: '/collections',
+  },
+  {
+    image: '/images/gallery/lifestyle-1.jpg',
+    eyebrow: 'Bridal Collection',
+    titleTop: 'Heritage',
+    titleEm: 'In Gold',
+    text: 'Handcrafted bridal masterpieces — celebrating every sacred moment.',
+    cta: 'Explore',
+    href: '/collections?type=bridal',
+  },
+  {
+    image: '/images/gallery/rudraksh-1.jpg',
+    eyebrow: 'Sacred Rudraksh',
+    titleTop: 'Wear the Divine,',
+    titleEm: 'Every Day',
+    text: 'Certified, energised Rudraksh from the high forests of Nepal — for protection, prosperity, and inner peace.',
+    cta: 'Shop Rudraksh',
+    href: '/collections?type=rudraksh',
+  },
+];
 
-        <div className="absolute inset-0 flex flex-col justify-center px-6 py-5 sm:px-10 md:px-16">
-          <p className="font-poppins text-[11px] font-semibold uppercase leading-relaxed tracking-[0.3em] text-[#D9A441] sm:text-xs">
-            Timeless
-            <br />
-            Elegance
-          </p>
-          <h2 className="mt-2.5 font-serif text-2xl leading-[1.12] text-white sm:mt-4 sm:text-5xl">
-            Crafted to Make
-            <br />
-            You <em className="font-serif italic text-[#D9A441]">Unforgettable</em>
-          </h2>
-          <p className="mt-2.5 max-w-[260px] font-poppins text-[12px] leading-snug text-[#EDEDED] sm:mt-4 sm:max-w-sm sm:text-[15px] sm:leading-relaxed">
-            Discover heirloom jewellery handcrafted by master artisans — for every
-            milestone, every memory, every you.
-          </p>
-          <Link
-            href="/collections"
-            className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-md bg-[#D9A441] px-5 py-2.5 font-poppins text-[11px] font-bold uppercase tracking-[0.15em] text-[#0B1E42] transition-colors hover:bg-[#c99532] sm:mt-6 sm:px-6 sm:py-3 sm:text-xs"
-          >
-            Explore Collections <ChevronRight size={14} strokeWidth={2.5} />
-          </Link>
+export default function PromoBanner() {
+  const [active, setActive] = useState(0);
+
+  const go = useCallback((i: number) => setActive(((i % SLIDES.length) + SLIDES.length) % SLIDES.length), []);
+
+  useEffect(() => {
+    const id = setInterval(() => setActive((a) => (a + 1) % SLIDES.length), 5000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <section
+      id="promo-banner"
+      aria-label="Featured collections"
+      className="relative h-[480px] md:h-[600px] overflow-hidden bg-[#f8f2e6]"
+    >
+      {SLIDES.map((s, i) => (
+        <div
+          key={i}
+          aria-hidden={i !== active}
+          className={`absolute inset-0 transition-opacity duration-1000 ${
+            i === active ? 'opacity-100 z-10' : 'opacity-0 z-0'
+          }`}
+        >
+          <div
+            className="absolute inset-0 bg-cover bg-right md:bg-center"
+            style={{ backgroundImage: `url(${s.image})` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent md:from-black/45 md:via-black/15" />
+          <div className="absolute inset-0 flex items-center px-6 md:px-16 lg:px-24">
+            <div className="max-w-md">
+              <p className="serif italic text-[#b8893a] text-sm md:text-base tracking-[3px] mb-3 uppercase animate-fade-up max-w-[140px] leading-tight">
+                {s.eyebrow}
+              </p>
+              <h1 className="serif text-5xl md:text-7xl font-normal text-white leading-none mb-4 mt-3 animate-slide-in">
+                {s.titleTop}
+                <br />
+                <em className="gold-text font-medium">{s.titleEm}</em>
+              </h1>
+              <p className="text-sm md:text-base text-white/85 leading-relaxed mb-6 max-w-xs animate-fade-up">
+                {s.text}
+              </p>
+              <Link
+                href={s.href}
+                className="inline-flex items-center gap-3 px-8 py-3 bg-[#b8893a] text-[#1a1410] text-[11px] tracking-[3px] uppercase font-medium hover:bg-[#e8d49b] hover:text-[#1a1410] transition-all"
+              >
+                {s.cta}{' '}
+                <ChevronRight size={14} strokeWidth={2} />
+              </Link>
+            </div>
+          </div>
         </div>
+      ))}
+
+      {/* Slide indicators */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+        {SLIDES.map((_, i) => (
+          <button
+            key={i}
+            aria-label={`Go to slide ${i + 1}`}
+            onClick={() => go(i)}
+            className={`h-[2px] transition-all duration-300 ${
+              i === active ? 'w-10 bg-[#b8893a]' : 'w-6 bg-white/40'
+            }`}
+          />
+        ))}
       </div>
     </section>
   );
