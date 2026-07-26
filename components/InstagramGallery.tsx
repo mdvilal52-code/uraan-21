@@ -35,7 +35,7 @@ export default function InstagramGallery() {
   }, []);
 
   return (
-    <section className="py-14 px-4 max-w-7xl mx-auto">
+    <section className="py-8 md:py-14 px-4 max-w-7xl mx-auto">
       <p className="section-tag-italic">Follow Our Journey</p>
       <h2 className="section-heading">@omgauriputra</h2>
       <div className="luxury-divider">

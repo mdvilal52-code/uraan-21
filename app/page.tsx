@@ -232,7 +232,7 @@ export default function HomePage() {
 
       {/* 4. SIGNATURE COLLECTION VIDEO */}
       <section className="relative">
-        <div className="relative h-[560px] md:h-[680px] overflow-hidden bg-[#1a1410]">
+        <div className="relative h-[380px] md:h-[560px] overflow-hidden bg-[#1a1410]">
           {/* Decorative background reel. WebM (VP9) is listed first so capable
               browsers pick the sharper, more efficient stream; MP4 is the H.264
               fallback. preload="auto" buffers enough to keep HD playback smooth
@@ -301,7 +301,7 @@ export default function HomePage() {
       <Trending />
 
       {/* 6. SHOP BY BUDGET */}
-      <section className="gpu-layer relative overflow-hidden py-12 px-4 bg-gradient-to-br from-[#fdf6ea] via-[#fbf3e3] to-[#f5e8d3]">
+      <section className="gpu-layer relative overflow-hidden py-8 md:py-12 px-4 bg-gradient-to-br from-[#fdf6ea] via-[#fbf3e3] to-[#f5e8d3]">
         <LeafBranch className="pointer-events-none select-none absolute top-0 left-0 w-24 md:w-40 opacity-50" />
         <LeafBranch className="pointer-events-none select-none absolute top-0 right-0 w-24 md:w-40 opacity-50 -scale-x-100" />
 
@@ -342,7 +342,7 @@ export default function HomePage() {
                   Budget
                   <span className="h-px w-3 md:w-4 opacity-50" style={{ backgroundColor: b.accent }} />
                 </div>
-                <div className="serif lining-nums text-lg md:text-2xl text-[#1a1410] font-normal mb-3 whitespace-nowrap">
+                <div className="serif lining-nums text-xs sm:text-lg md:text-2xl text-[#1a1410] font-normal mb-3 leading-tight">
                   {b.label}
                 </div>
                 <div className="flex items-center gap-2 w-full mb-3">
@@ -367,7 +367,7 @@ export default function HomePage() {
       <section className="px-4 md:px-8">
         <div className="gpu-layer max-w-7xl mx-auto rounded-2xl bg-gradient-to-br from-[#3b2a17] via-[#2c1f11] to-[#1d140a] text-[#e8d49b] py-8 md:py-12 px-6 md:px-12 text-center relative overflow-hidden shadow-[0_14px_30px_rgba(43,31,18,0.28)]">
           <div
-            className="absolute top-1/2 -translate-y-1/2 -right-6 md:right-6 text-[240px] md:text-[360px] text-[#c89043] opacity-[0.15] font-serif leading-none"
+            className="absolute top-1/2 -translate-y-1/2 right-[-20px] md:right-6 text-[160px] md:text-[360px] text-[#c89043] opacity-[0.15] font-serif leading-none"
             aria-hidden="true"
           >
             ॐ
@@ -394,7 +394,7 @@ export default function HomePage() {
       </section>
 
       {/* 9. TRENDING NOW (sale products) */}
-      <section className="pt-6 pb-8 px-4 max-w-7xl mx-auto">
+      <section className="pt-4 md:pt-6 pb-6 md:pb-8 px-4 max-w-7xl mx-auto">
         <div className="flex items-center justify-center gap-2.5 mb-1.5">
           <span className="flex items-center gap-1.5" aria-hidden="true">
             <span className="h-px w-7 md:w-10 bg-[#b8893a]/50" />
@@ -420,7 +420,7 @@ export default function HomePage() {
       </section>
 
       {/* 10. HOW TO STYLE */}
-      <section className="pt-10 pb-12 px-4 bg-[#f9f3e8]">
+      <section className="pt-8 pb-10 md:pt-10 md:pb-12 px-4 bg-[#f9f3e8]">
         <div className="max-w-5xl mx-auto">
           <FleurOrnament className="w-7 h-4 mx-auto text-[#c9a24a] mb-2" />
           <div className="flex items-center justify-center gap-3 md:gap-5">

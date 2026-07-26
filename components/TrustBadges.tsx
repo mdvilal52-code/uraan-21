@@ -10,23 +10,33 @@ const BADGES = [
 export default function TrustBadges() {
   return (
     <section id="trust-badges" className="px-3 py-2 md:px-8">
-      <div className="mx-auto grid max-w-7xl grid-cols-4 divide-x divide-[#e7dcc4] rounded-2xl border border-[#ece3d0] bg-[#FBF8F1]">
-        {BADGES.map((badge) => (
-          <div
-            key={badge.title}
-            className="flex flex-col items-center gap-1.5 px-1.5 py-4 text-center sm:py-6"
-          >
-            <badge.icon className="text-[#C9A24A]" size={22} strokeWidth={1.5} />
-            <div className="font-poppins text-[8.5px] font-bold uppercase leading-tight tracking-[0.08em] text-[#0B1E42] sm:text-[11px]">
-              {badge.title}
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl border border-[#ece3d0] bg-[#FBF8F1]">
+        <div className="grid grid-cols-2 md:grid-cols-4">
+          {BADGES.map((badge, i) => (
+            <div
+              key={badge.title}
+              className={[
+                'flex flex-col items-center gap-1.5 px-3 py-5 text-center sm:py-6',
+                i % 2 !== 0 ? 'border-l border-[#e7dcc4]' : '',
+                i >= 2 ? 'border-t border-[#e7dcc4]' : '',
+                i > 0 ? 'md:border-l' : '',
+                'md:border-t-0',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              <badge.icon className="text-[#C9A24A]" size={22} strokeWidth={1.5} />
+              <div className="font-poppins text-[9px] font-bold uppercase leading-tight tracking-[0.08em] text-[#0B1E42] sm:text-[11px]">
+                {badge.title}
+              </div>
+              <div className="font-poppins text-[8px] leading-tight text-[#6b5d4c] sm:text-[10px]">
+                {badge.l1}
+                <br />
+                {badge.l2}
+              </div>
             </div>
-            <div className="font-poppins text-[7.5px] leading-tight text-[#6b5d4c] sm:text-[10px]">
-              {badge.l1}
-              <br />
-              {badge.l2}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
