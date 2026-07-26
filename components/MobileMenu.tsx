@@ -86,7 +86,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto py-2 bg-[#007FFF]">
+        <div className="flex-1 overflow-y-auto py-2 bg-[#191970]">
           {/* Main Links */}
           <div className="text-[9px] tracking-[2.5px] uppercase text-white/60 px-6 pt-4 pb-2 font-semibold">
             Browse

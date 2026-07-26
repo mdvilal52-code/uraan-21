@@ -14,7 +14,7 @@ export default function WishlistPage() {
   const { items, totalItems, removeFromWishlist, clearWishlist } = useWishlist();
 
   return (
-    <main className="min-h-screen bg-[#007FFF]">
+    <main className="min-h-screen bg-[#191970]">
       <Navbar />
       <CartDrawer />
 
