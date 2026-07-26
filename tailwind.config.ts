@@ -33,6 +33,9 @@ const config: Config = {
         serif: ['"Cormorant Garamond"', 'serif'],
         display: ['"Cinzel"', 'serif'],
         sans: ['"Jost"', 'sans-serif'],
+        poppins: ['"Poppins"', 'sans-serif'],
+        devanagari: ['"Noto Sans Devanagari"', 'sans-serif'],
+        'devanagari-display': ['"Rozha One"', '"Noto Sans Devanagari"', 'serif'],
       },
       animation: {
         'fade-up': 'fadeUp 0.6s ease-out',

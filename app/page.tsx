@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
-import Hero from '@/components/hero';
+import HeroCarousel from '@/components/HeroCarousel';
+import PromoBanner from '@/components/PromoBanner';
+import TrustBadges from '@/components/TrustBadges';
 import Categories from '@/components/Categories';
 import PromoBanners from '@/components/PromoBanners';
 import Bestseller from '@/components/Bestseller';
@@ -20,10 +22,7 @@ import ProductCard from '@/components/ProductCard';
 import { getSaleProducts } from '@/lib/products';
 import { useProducts } from '@/hooks/useProducts';
 import {
-  Truck,
   ShieldCheck,
-  RotateCw,
-  Lock,
   ChevronRight,
   Sparkles,
   MessageCircle,
@@ -215,92 +214,13 @@ export default function HomePage() {
       <FloatingActions />
 
       {/* 1. HERO SLIDER */}
-      <Hero />
+      <HeroCarousel />
 
-      {/* 2. TIMELESS ELEGANCE — Promo Banner
-          Full-bleed image banner that appears immediately after the hero slider,
-          matching the Reference 1 layout: text on left, model on right,
-          dark warm-gold gradient background. */}
-      <section
-        className="relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #2c1a0f 0%, #3d2512 45%, #4a2e18 70%, #3a2110 100%)',
-        }}
-      >
-        <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-center min-h-[340px] md:min-h-[420px]">
-          {/* Text side */}
-          <div className="flex-1 px-7 md:px-14 py-10 md:py-14 z-10 flex flex-col justify-center order-2 md:order-1">
-            <p
-              className="text-[#C9A24A] text-[11px] md:text-xs tracking-[4px] uppercase mb-3 font-medium"
-              style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic' }}
-            >
-              Timeless Elegance
-            </p>
-            <h2
-              className="text-white leading-[1.1] mb-4"
-              style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(28px,4.5vw,52px)' }}
-            >
-              Crafted to Make You{' '}
-              <em className="not-italic" style={{ color: '#C9A24A' }}>Unforgettable</em>
-            </h2>
-            <p className="text-white/75 text-[13px] md:text-[15px] leading-relaxed mb-7 max-w-sm">
-              Discover heirloom jewellery handcrafted by master artisans — for every
-              milestone, every memory, every you.
-            </p>
-            <Link
-              href="/collections"
-              className="self-start inline-flex items-center gap-2 px-7 py-3 border border-[#C9A24A] text-[#C9A24A]
-                text-[10px] md:text-[11px] tracking-[3px] uppercase font-semibold
-                hover:bg-[#C9A24A] hover:text-[#1a1410] transition-all duration-300"
-            >
-              Explore Collections <ChevronRight size={13} />
-            </Link>
-          </div>
-
-          {/* Image side */}
-          <div
-            className="w-full md:w-[48%] order-1 md:order-2 flex-shrink-0 relative overflow-hidden"
-            style={{ minHeight: 'clamp(220px, 40vw, 420px)' }}
-          >
-            <div
-              className="absolute inset-0 bg-cover bg-[center_top]"
-              style={{ backgroundImage: "url('/images/hero.jpg')" }}
-              role="img"
-              aria-label="Woman wearing heirloom gold jewellery"
-            />
-            {/* Gradient fade on left to blend with text area */}
-            <div
-              className="absolute inset-y-0 left-0 w-1/3"
-              style={{
-                background: 'linear-gradient(to right, #3d2512, transparent)',
-              }}
-            />
-          </div>
-        </div>
-      </section>
+      {/* 2. TIMELESS ELEGANCE — Promo Banner */}
+      <PromoBanner />
 
       {/* 3. TRUST STRIP */}
-      <section className="bg-[#2e2318] border-y border-[rgba(184,137,58,0.14)]">
-        <div className="max-w-7xl mx-auto grid grid-cols-4 divide-x divide-[rgba(184,137,58,0.14)]">
-          {[
-            { icon: Truck, title: 'Free Shipping', sub: 'Complimentary Above ₹1,999' },
-            { icon: ShieldCheck, title: 'Certified', sub: 'BIS Hallmarked Purity' },
-            { icon: RotateCw, title: 'Easy Returns', sub: '7-Day Hassle-Free' },
-            { icon: Lock, title: 'Secure Pay', sub: '256-bit SSL Encrypted' },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-center text-center py-5 md:py-7 px-2 md:px-5"
-            >
-              <item.icon className="text-[#C9A24A] mb-2.5" size={22} strokeWidth={1.6} />
-              <div className="text-[8px] md:text-[10px] font-bold tracking-[1.5px] md:tracking-[2px] uppercase text-[#e8d49b]">
-                {item.title}
-              </div>
-              <div className="text-[8px] md:text-[10px] text-[#e8d49b]/55 mt-1 leading-snug">{item.sub}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <TrustBadges />
 
       {/* 3. SHOP BY CATEGORY */}
       <Categories />
