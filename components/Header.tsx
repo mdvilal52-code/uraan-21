@@ -43,13 +43,13 @@ export default function Header() {
           {/* Logo lockup (+ desktop nav links beneath) */}
           <div className="flex min-w-0 flex-col">
             <Link href="/" aria-label="OMGPGEMS Home" className="flex min-w-0 items-center gap-2 md:gap-3">
-              <span className="relative h-11 w-11 shrink-0 rounded-full bg-white p-1 shadow-[0_1px_4px_rgba(11,30,66,0.25)] ring-1 ring-[#0B1E42]/10 md:h-[68px] md:w-[68px] md:p-1.5">
+              <span className="relative h-11 w-11 shrink-0 md:h-[68px] md:w-[68px]">
                 <Image
                   src="/images/logo-mark.png"
                   alt="OMGPGEMS logo mark"
                   fill
                   sizes="68px"
-                  className="object-contain p-0.5"
+                  className="object-contain drop-shadow-[0_1px_3px_rgba(11,30,66,0.55)]"
                   priority
                 />
               </span>
