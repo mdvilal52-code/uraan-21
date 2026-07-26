@@ -1,24 +1,74 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
+import { useEffect, useState, useCallback } from 'react';
+
+const SLIDES = [
+  {
+    src: '/images/model.jpg',
+    alt: 'Woman wearing heirloom gold jewellery',
+    objectPos: 'object-[72%_18%]',
+  },
+  {
+    src: '/images/bridal-set.jpg',
+    alt: 'Bridal jewellery set',
+    objectPos: 'object-center',
+  },
+  {
+    src: '/images/style-model.jpg',
+    alt: 'Model wearing luxury jewellery',
+    objectPos: 'object-[50%_20%]',
+  },
+];
+
+const AUTOPLAY_MS = 4500;
 
 export default function PromoBanner() {
-  return (
-    <section id="promo-banner" className="px-3 py-4 md:px-8">
-      <div className="relative mx-auto aspect-[4/3] w-full max-w-7xl overflow-hidden rounded-2xl sm:aspect-[16/9] md:aspect-[21/9]">
-        {/* Warm bronze-toned photo of a woman wearing gold jewellery, looking
-            to the side. */}
-        <Image
-          src="/images/model.jpg"
-          alt="Woman wearing heirloom gold jewellery"
-          fill
-          sizes="100vw"
-          className="object-cover object-[72%_18%]"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent" />
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
 
-        <div className="absolute inset-0 flex flex-col justify-center px-6 py-5 sm:px-10 md:px-16">
+  const next = useCallback(() => setCurrent((c) => (c + 1) % SLIDES.length), []);
+  const goTo = (i: number) => setCurrent(i);
+
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(next, AUTOPLAY_MS);
+    return () => clearInterval(id);
+  }, [paused, next]);
+
+  return (
+    <section
+      id="promo-banner"
+      className="px-3 py-4 md:px-8"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="relative mx-auto aspect-[4/3] w-full max-w-7xl overflow-hidden rounded-2xl sm:aspect-[16/9] md:aspect-[21/9]">
+        {/* Slides */}
+        {SLIDES.map((slide, i) => (
+          <div
+            key={slide.src}
+            className="absolute inset-0 transition-opacity duration-700"
+            style={{ opacity: i === current ? 1 : 0, zIndex: i === current ? 1 : 0 }}
+          >
+            <Image
+              src={slide.src}
+              alt={slide.alt}
+              fill
+              sizes="100vw"
+              className={`object-cover ${slide.objectPos}`}
+              priority={i === 0}
+            />
+          </div>
+        ))}
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent" style={{ zIndex: 2 }} />
+
+        {/* Text content */}
+        <div className="absolute inset-0 flex flex-col justify-center px-6 py-5 sm:px-10 md:px-16" style={{ zIndex: 3 }}>
           <p className="font-poppins text-[11px] font-semibold uppercase leading-relaxed tracking-[0.3em] text-[#D9A441] sm:text-xs">
             Timeless
             <br />
@@ -39,6 +89,20 @@ export default function PromoBanner() {
           >
             Explore Collections <ChevronRight size={14} strokeWidth={2.5} />
           </Link>
+        </div>
+
+        {/* Dot indicators */}
+        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5 sm:bottom-5" style={{ zIndex: 4 }}>
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === current ? 'w-5 bg-[#D9A441]' : 'w-1.5 bg-white/60'
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>
