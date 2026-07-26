@@ -4,9 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
 const SLIDES = [
-  { src: '/images/banner.jpg', alt: 'OM Gauri Putra – Gems Jewellery and Rudraksha' },
-  { src: '/images/collection1.jpg', alt: 'Signature Jewellery Collection' },
-  { src: '/images/collection2.jpg', alt: 'Authentic Rudraksha and Gemstone Collection' },
+  { src: '/images/banner.jpg', alt: 'OM Gauri Putra – Gems Jewellery and Rudraksha', width: 1536, height: 456 },
+  { src: '/images/collection1.jpg', alt: 'Signature Jewellery Collection', width: 1080, height: 1350 },
+  { src: '/images/collection2.jpg', alt: 'Authentic Rudraksha and Gemstone Collection', width: 1080, height: 1350 },
 ];
 
 const SLIDE_COUNT = SLIDES.length;
@@ -56,8 +56,8 @@ export default function HeroCarousel() {
                 <Image
                   src={slide.src}
                   alt={slide.alt}
-                  width={736}
-                  height={1308}
+                  width={slide.width}
+                  height={slide.height}
                   priority={i === 0}
                   className="w-full h-auto block"
                   sizes="100vw"
