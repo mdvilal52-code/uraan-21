@@ -19,6 +19,7 @@ import CartDrawer from '@/components/CartDrawer';
 import FloatingActions from '@/components/FloatingActions';
 import PaymentOptions from '@/components/PaymentOptions';
 import { whatsappLink } from '@/lib/whatsapp';
+import { SOCIAL_URLS } from '@/lib/business';
 import ProductCard from '@/components/ProductCard';
 import { getSaleProducts } from '@/lib/products';
 import { useProducts } from '@/hooks/useProducts';
@@ -480,9 +481,9 @@ export default function HomePage() {
       <section className="bg-[#fbf8f1] py-8 px-4 border-t border-[rgba(184,137,58,0.18)]">
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-6 md:gap-10 text-center">
           {[
-            { icon: FaInstagram, label: 'Instagram', href: 'https://instagram.com' },
-            { icon: FaFacebook, label: 'Facebook', href: 'https://facebook.com' },
-            { icon: FaYoutube, label: 'YouTube', href: 'https://youtube.com' },
+            { icon: FaInstagram, label: 'Instagram', href: SOCIAL_URLS.instagram },
+            { icon: FaFacebook, label: 'Facebook', href: SOCIAL_URLS.facebook },
+            { icon: FaYoutube, label: 'YouTube', href: SOCIAL_URLS.youtube },
             { icon: MessageCircle, label: 'WhatsApp', href: whatsappLink() },
           ].map((s, i) => (
             <a

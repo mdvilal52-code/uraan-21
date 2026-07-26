@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { X, ShoppingBag, Plus, Minus, Trash2, ChevronRight, ShieldCheck } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import PriceDisplay from '@/components/ui/PriceDisplay';
@@ -64,10 +65,19 @@ export default function CartDrawer() {
                     key={item.id}
                     className="flex items-center gap-4 bg-[#fbf8f1] border border-[rgba(184,137,58,0.18)] p-3 rounded-md"
                   >
-                    <div
-                      className="w-[72px] h-[72px] bg-[#f8f2e6] bg-cover bg-center rounded flex-shrink-0"
-                      style={{ backgroundImage: `url(${item.image})` }}
-                    />
+                    <div className="relative w-[72px] h-[72px] flex-shrink-0 rounded overflow-hidden bg-[#f8f2e6]">
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          sizes="72px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <ShoppingBag className="absolute inset-0 m-auto text-[#b8893a]/40" size={28} />
+                      )}
+                    </div>
                     <div className="flex-1 min-w-0 flex flex-col gap-2">
                       <div className="t-product-title-sm">
                         {item.name}

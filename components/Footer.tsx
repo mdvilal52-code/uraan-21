@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { whatsappLink } from '@/lib/whatsapp';
-import { BUSINESS_NAME, BUSINESS_ADDRESS_LINES, MAPS_DIRECTIONS_URL } from '@/lib/business';
+import { BUSINESS_NAME, BUSINESS_ADDRESS_LINES, MAPS_DIRECTIONS_URL, SOCIAL_URLS } from '@/lib/business';
 import CopyAddressButton from '@/components/CopyAddressButton';
 import {
   Phone,
@@ -38,9 +38,9 @@ export default function Footer() {
           </p>
           <div className="flex gap-3">
             {[
-              { icon: FaInstagram, href: 'https://instagram.com', label: 'Instagram' },
-              { icon: FaFacebook, href: 'https://facebook.com', label: 'Facebook' },
-              { icon: FaYoutube, href: 'https://youtube.com', label: 'YouTube' },
+              { icon: FaInstagram, href: SOCIAL_URLS.instagram, label: 'Instagram' },
+              { icon: FaFacebook, href: SOCIAL_URLS.facebook, label: 'Facebook' },
+              { icon: FaYoutube, href: SOCIAL_URLS.youtube, label: 'YouTube' },
               { icon: MessageCircle, href: whatsappLink(), label: 'WhatsApp' },
             ].map((s, i) => (
               <a

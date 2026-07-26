@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { categories } from '@/data/jewelleryData';
 import { CATEGORY_ICONS } from '@/lib/categoryStyles';
+import { BUSINESS_PHONE_PRIMARY } from '@/lib/business';
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -154,8 +155,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         {/* Footer */}
         <div className="px-6 py-4 border-t border-[rgba(184,137,58,0.18)] text-center">
           <div className="text-[10px] tracking-[1.5px] text-[#6b5d4c]">Need Help?</div>
-          <a href="tel:+919876543210" className="text-sm font-semibold text-[#b8893a] mt-1 inline-flex items-center gap-2">
-            <Phone size={12} /> +91 98765 43210
+          <a href={`tel:${BUSINESS_PHONE_PRIMARY}`} className="text-sm font-semibold text-[#b8893a] mt-1 inline-flex items-center gap-2">
+            <Phone size={12} /> +91 88519 11653
           </a>
         </div>
       </aside>

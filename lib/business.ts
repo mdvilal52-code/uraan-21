@@ -56,3 +56,12 @@ export const BUSINESS_HOURS = {
   weekdays: 'Monday - Saturday: 10AM - 8PM',
   sunday: 'Sunday: 11AM - 6PM',
 };
+
+export const BUSINESS_PHONE_PRIMARY = process.env.NEXT_PUBLIC_BUSINESS_PHONE || '+918851911653';
+export const BUSINESS_PHONE_SECONDARY = process.env.NEXT_PUBLIC_BUSINESS_PHONE_2 || '+919811810235';
+
+export const SOCIAL_URLS = {
+  instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://instagram.com/omgauriputra',
+  facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL || 'https://www.facebook.com/omgauriputra',
+  youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL || 'https://www.youtube.com/@omgauriputra',
+};

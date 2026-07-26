@@ -134,17 +134,21 @@ function HeroSlideContent() {
 
 export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
+  const [resetKey, setResetKey] = useState(0);
   const touchStartX = useRef<number | null>(null);
 
   const goTo = useCallback(
-    (i: number) => setCurrent(((i % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT),
+    (i: number) => {
+      setCurrent(((i % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT);
+      setResetKey((k) => k + 1);
+    },
     [],
   );
 
   useEffect(() => {
     const id = setInterval(() => setCurrent((c) => (c + 1) % SLIDE_COUNT), AUTOPLAY_MS);
     return () => clearInterval(id);
-  }, []);
+  }, [resetKey]);
 
   function onTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
