@@ -356,7 +356,7 @@ export default function CheckoutPage() {
 
   if (!authChecked && step !== 'success') {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-[#C4E7F5]">
         <Navbar />
         <div className="py-32 text-center text-sm text-[#9a8c75] tracking-[2px] uppercase">
           Loading checkout…
@@ -367,7 +367,7 @@ export default function CheckoutPage() {
 
   if (items.length === 0 && step !== 'success') {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-[#C4E7F5]">
         <Navbar />
         <div className="max-w-2xl mx-auto px-4 py-20 text-center">
           <h1 className="serif text-3xl text-[#1a1410] mb-3">Your cart is empty</h1>
@@ -383,7 +383,7 @@ export default function CheckoutPage() {
 
   if (step === 'success') {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-[#C4E7F5]">
         <Navbar />
         <div className="max-w-2xl mx-auto px-4 py-16 text-center">
           <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-[#3d6b5a]/10 grid place-items-center">
@@ -451,7 +451,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#C4E7F5]">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-[#9a8c75]">
