@@ -38,7 +38,7 @@ export default function BlogListPage() {
       </div>
 
       <section className="text-center px-4 pt-6 pb-10 max-w-3xl mx-auto">
-        <p className="serif italic text-[#b8893a] text-sm tracking-[2px] mb-2">— The Om Gauri Pooja Gems Journal —</p>
+        <p className="serif italic text-[#b8893a] text-sm tracking-[2px] mb-2">— The Om Gauri Putra Gems Journal —</p>
         <h1 className="serif text-4xl md:text-6xl text-[#1a1410] mb-4">
           Stories in <em className="gold-text">Gold &amp; Stone</em>
         </h1>

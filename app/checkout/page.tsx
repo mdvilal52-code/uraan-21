@@ -321,7 +321,7 @@ export default function CheckoutPage() {
         key: data.keyId,
         amount: data.amount,
         currency: data.currency || 'INR',
-        name: 'Om Gauri Pooja Gems Jewellery & Rudraksh',
+        name: 'Om Gauri Putra Gems Jewellery & Rudraksh',
         description: 'Jewellery order',
         order_id: data.orderId,
         prefill: { name: form.name, email: form.email, contact: form.phone },

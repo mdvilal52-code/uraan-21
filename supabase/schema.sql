@@ -1,4 +1,4 @@
--- Om Gauri Pooja Gems Jewellery & Rudraksh — database schema
+-- Om Gauri Putra Gems Jewellery & Rudraksh — database schema
 -- Run this once in Supabase → SQL Editor (New query → paste → Run).
 -- After running, add SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to your
 -- environment variables and the admin panel starts using the database.
@@ -177,7 +177,7 @@ alter table public.reviews add column if not exists reported boolean not null de
 -- $$...$$ dollar-quoting lets the review text contain apostrophes safely.
 insert into public.reviews (id, name, city, avatar, rating, "text", product, "date", verified) values
   ('r1','Priya Sharma','Mumbai','/images/model.jpg',5,$$I wore this necklace at my daughter's wedding and received more compliments than the bride! The craftsmanship is extraordinary — it looks even more beautiful in person. Worth every rupee.$$,'Diamond Floral Necklace','2024-11-15',true),
-  ('r2','Anjali Mehta','Delhi','/images/model.jpg',5,$$Three generations of my family shop only at Om Gauri Pooja Gems. The quality never wavers. This temple necklace is exactly what heirloom jewellery should feel like — heavy, impeccable, timeless.$$,'Gold Temple Necklace','2024-12-02',true),
+  ('r2','Anjali Mehta','Delhi','/images/model.jpg',5,$$Three generations of my family shop only at Om Gauri Putra Gems. The quality never wavers. This temple necklace is exactly what heirloom jewellery should feel like — heavy, impeccable, timeless.$$,'Gold Temple Necklace','2024-12-02',true),
   ('r3','Sunita Reddy','Hyderabad','/images/model.jpg',5,$$My bridal set was custom-designed here. The team was patient, professional and the final piece brought me to tears. Every bride deserves jewellery this special.$$,'Kundan Bridal Necklace','2024-10-20',true),
   ('r4','Kavitha Nair','Chennai','/images/model.jpg',5,$$I have bought jhumkas from many shops but these are in a different league. The weight is perfect, the sound when they move is music, and the 22K gold colour is stunning.$$,'Gold Jhumka Earrings','2024-09-18',true),
   ('r5','Meera Patel','Ahmedabad','/images/model.jpg',5,$$My husband proposed with this ring and I said yes before he finished the sentence. The diamond is breathtaking. Every time I look at it I fall in love again.$$,'Solitaire Diamond Ring','2024-11-30',true),

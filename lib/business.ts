@@ -3,7 +3,7 @@
 // email templates and the site-wide LocalBusiness structured data. Override
 // any field with the matching NEXT_PUBLIC_BUSINESS_* env var to relocate the
 // store without touching component code.
-export const BUSINESS_NAME = process.env.NEXT_PUBLIC_BUSINESS_NAME || 'Om Gauri Pooja Gems Jewellery & Rudraksh';
+export const BUSINESS_NAME = process.env.NEXT_PUBLIC_BUSINESS_NAME || 'Om Gauri Putra Gems Jewellery & Rudraksh';
 
 export const BUSINESS_ADDRESS = {
   line1: process.env.NEXT_PUBLIC_BUSINESS_ADDRESS_LINE1 || 'Shop No. Ground Floor of Prop No. 2, KH No. 56/12/1 and 56/19',

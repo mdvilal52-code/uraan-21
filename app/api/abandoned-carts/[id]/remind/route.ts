@@ -30,7 +30,7 @@ export async function POST(_request: Request, { params }: { params: { id: string
   const itemCount = cart.items.reduce((sum, i) => sum + (i.quantity || 1), 0);
   const message =
     `Namaste ${cart.name || 'there'}, you left ${itemCount} item(s) worth ₹${cart.total.toLocaleString('en-IN')} ` +
-    `in your cart at Om Gauri Pooja Gems Jewellery & Rudraksh. Complete your order now before it's gone — we're here if you have any questions!`;
+    `in your cart at Om Gauri Putra Gems Jewellery & Rudraksh. Complete your order now before it's gone — we're here if you have any questions!`;
 
   const result = await sendWhatsAppText(cart.phone, message);
   // `sendWhatsAppText` reports ok:true even when WhatsApp isn't configured
