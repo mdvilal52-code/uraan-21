@@ -471,7 +471,7 @@ export default function HomePage() {
       <Newsletter />
 
       {/* 16. SOCIAL CONTACT STRIP */}
-      <section className="bg-[#C4E7F5] py-8 px-4 border-t border-[#0B1E42]/10">
+      <section className="bg-[#fbf8f1] py-8 px-4 border-t border-[rgba(184,137,58,0.18)]">
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-6 md:gap-10 text-center">
           {[
             { icon: FaInstagram, label: 'Instagram', href: SOCIAL_URLS.instagram },

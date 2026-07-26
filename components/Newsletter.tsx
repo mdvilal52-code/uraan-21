@@ -50,7 +50,7 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="px-4 py-14 bg-[#C4E7F5]">
+    <section className="px-4 py-14 bg-[#f8f2e6]">
       <div className="max-w-2xl mx-auto text-center">
         <p className="section-tag-italic">Stay in the Glow</p>
         <h2 className="serif text-3xl md:text-4xl text-[#1a1410] mb-3">
