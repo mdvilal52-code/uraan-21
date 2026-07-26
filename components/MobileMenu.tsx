@@ -65,28 +65,28 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         }`}
       >
         {/* Header */}
-        <div className="bg-[#f8f2e6] px-6 py-7 border-b border-[rgba(184,137,58,0.18)] text-center relative">
+        <div className="bg-[#0B1E42] px-6 py-7 border-b border-white/10 text-center relative">
           <button
             onClick={onClose}
             aria-label="Close menu"
-            className="absolute top-3 right-3 w-8 h-8 grid place-items-center text-[#6b5d4c]"
+            className="absolute top-3 right-3 w-8 h-8 grid place-items-center text-white/80"
           >
             <X size={18} />
           </button>
           <div className="flex items-center justify-center gap-2">
-            <span className="w-1.5 h-1.5 bg-[#b8893a] rotate-45" />
-            <span className="display text-[10px] font-semibold tracking-[2px] text-[#1a1410] uppercase">
-              Om Gauri Pooja Gems
+            <span className="w-1.5 h-1.5 bg-[#C9A24A] rotate-45" />
+            <span className="display text-[10px] font-semibold tracking-[2px] text-white uppercase">
+              Om Gauri Putra Gems
             </span>
-            <span className="w-1.5 h-1.5 bg-[#b8893a] rotate-45" />
+            <span className="w-1.5 h-1.5 bg-[#C9A24A] rotate-45" />
           </div>
-          <div className="text-[8px] tracking-[3px] text-[#9a8c75] mt-2 uppercase">
-            Gems · Jewellery · Rudraksh
+          <div className="text-[8px] tracking-[3px] text-[#C4E7F5]/80 mt-2 uppercase">
+            Jewellery &amp; Rudraksha
           </div>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto py-2">
+        <div className="flex-1 overflow-y-auto py-2 bg-[#E8F5FB]">
           {/* Main Links */}
           <div className="text-[9px] tracking-[2.5px] uppercase text-[#9a8c75] px-6 pt-4 pb-2 font-semibold">
             Browse

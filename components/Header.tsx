@@ -9,6 +9,7 @@ import { useCart } from '@/context/CartContext';
 import MobileMenu from './MobileMenu';
 
 const NAV_LINKS = [
+  { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
   { label: 'Register', href: '/register' },

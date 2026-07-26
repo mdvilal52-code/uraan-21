@@ -232,12 +232,7 @@ export default function HomePage() {
 
       {/* 4. SIGNATURE COLLECTION VIDEO */}
       <section className="relative">
-        <div className="relative h-[560px] md:h-[680px] overflow-hidden bg-[#1a1410]">
-          {/* Decorative background reel. WebM (VP9) is listed first so capable
-              browsers pick the sharper, more efficient stream; MP4 is the H.264
-              fallback. preload="auto" buffers enough to keep HD playback smooth
-              without re-buffering, and PiP/remote playback are disabled so the
-              full-resolution frame is never downscaled to a cast/picture window. */}
+        <div className="relative h-[480px] md:h-[700px] overflow-hidden bg-[#1a1410]">
           <video
             autoPlay
             loop
@@ -248,10 +243,8 @@ export default function HomePage() {
             disableRemotePlayback
             aria-hidden="true"
             tabIndex={-1}
-            poster="/videos/signature-collection-poster.jpg"
             className="absolute inset-0 w-full h-full object-cover object-center"
           >
-            <source src="/videos/signature-collection.webm" type="video/webm" />
             <source src="/videos/signature-collection.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-black/75" />
@@ -478,7 +471,7 @@ export default function HomePage() {
       <Newsletter />
 
       {/* 16. SOCIAL CONTACT STRIP */}
-      <section className="bg-[#fbf8f1] py-8 px-4 border-t border-[rgba(184,137,58,0.18)]">
+      <section className="bg-[#C4E7F5] py-8 px-4 border-t border-[#0B1E42]/10">
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-6 md:gap-10 text-center">
           {[
             { icon: FaInstagram, label: 'Instagram', href: SOCIAL_URLS.instagram },

@@ -27,7 +27,7 @@ export default function CartPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#C4E7F5]">
       <Navbar />
       <CartDrawer />
 
