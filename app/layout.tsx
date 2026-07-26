@@ -1,6 +1,13 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { Cormorant_Garamond, Cinzel, Jost } from 'next/font/google';
+import {
+  Cormorant_Garamond,
+  Cinzel,
+  Jost,
+  Poppins,
+  Noto_Sans_Devanagari,
+  Rozha_One,
+} from 'next/font/google';
 import './globals.css';
 import '../styles/luxury.css';
 import '../styles/animations.css';
@@ -34,6 +41,24 @@ const fontSans = Jost({
   weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
   variable: '--font-sans',
+});
+const fontPoppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-poppins',
+});
+const fontDevanagari = Noto_Sans_Devanagari({
+  subsets: ['devanagari'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-devanagari',
+});
+const fontDevanagariDisplay = Rozha_One({
+  subsets: ['devanagari'],
+  weight: ['400'],
+  display: 'swap',
+  variable: '--font-devanagari-display',
 });
 
 const siteUrl = SITE_URL;
@@ -157,7 +182,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSerif.variable} ${fontDisplay.variable} ${fontSans.variable}`}
+      className={`${fontSerif.variable} ${fontDisplay.variable} ${fontSans.variable} ${fontPoppins.variable} ${fontDevanagari.variable} ${fontDevanagariDisplay.variable}`}
     >
       <head />
       <body className="pb-14 md:pb-0">

@@ -1,0 +1,37 @@
+'use client';
+
+import { useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { Search } from 'lucide-react';
+
+export default function SearchBar() {
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const q = inputRef.current?.value.trim();
+    if (q) router.push(`/search?q=${encodeURIComponent(q)}`);
+  }
+
+  return (
+    <div className="bg-white px-4 py-3 md:px-8 md:py-4">
+      <form onSubmit={handleSubmit} className="relative mx-auto max-w-7xl md:max-w-2xl">
+        <input
+          ref={inputRef}
+          type="search"
+          placeholder="Search for products, categories, jewellery..."
+          aria-label="Search products"
+          className="h-12 w-full rounded-full bg-[#F0F0F0] pl-5 pr-14 font-poppins text-sm text-[#1a1410] placeholder-[#8a8a8a] outline-none"
+        />
+        <button
+          type="submit"
+          aria-label="Search"
+          className="absolute -right-1 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-[#C9932E] text-white shadow-md transition-colors hover:bg-[#b8822a]"
+        >
+          <Search size={19} strokeWidth={2.5} />
+        </button>
+      </form>
+    </div>
+  );
+}

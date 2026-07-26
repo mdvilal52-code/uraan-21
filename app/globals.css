@@ -161,6 +161,14 @@ textarea {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* HeroCarousel's translateX slide is a single discrete transform per swipe/
+     autoplay tick, not a continuously-running layer, so it doesn't cause the
+     smear/ghosting the blanket rule above guards against — restore its
+     required ~500ms transition on mobile. */
+  .hero-slide-track {
+    transition-duration: 500ms !important;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────

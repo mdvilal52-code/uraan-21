@@ -1,30 +1,18 @@
-'use client';
+import { Diamond } from 'lucide-react';
 
 export default function AnnouncementBar() {
-  const messages = [
-    '✦ Free Shipping on Orders Above ₹1999',
-    '✦ 100% BIS Hallmarked Jewellery',
-    '✦ 7 Days Easy Returns',
-    '✦ Certified Rudraksh from Nepal',
-    '✦ Use Code WELCOME10 for 10% Off',
-    '✦ Worldwide Shipping Available',
-  ];
-
-  // Duplicate for seamless scroll
-  const allMessages = [...messages, ...messages];
-
   return (
-    <div className="bg-[#1a1410] text-[#e8d49b] py-2 overflow-hidden">
-      {/* Static on mobile (continuous marquee overwhelms weak mobile GPUs) */}
-      <div className="md:hidden text-center text-[10px] tracking-[2px] uppercase font-medium px-4 truncate">
-        {messages[0]}
-      </div>
-      <div className="hidden md:flex animate-scroll-x whitespace-nowrap">
-        <div className="flex items-center gap-12 px-6 text-[10px] tracking-[2px] uppercase font-medium">
-          {allMessages.map((msg, i) => (
-            <span key={i}>{msg}</span>
-          ))}
-        </div>
+    <div className="bg-[#0B1E42] px-3 py-2">
+      <div className="max-w-7xl mx-auto flex flex-col items-center gap-0.5 text-center font-poppins text-[#F7F3E8]">
+        <p className="flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.1em] leading-snug">
+          <Diamond size={9} className="shrink-0 text-[#C9A24A]" fill="#C9A24A" strokeWidth={0} />
+          <span>
+            FREE SHIPPING ON ORDERS ABOVE ₹1999&nbsp;&nbsp;•&nbsp;&nbsp;100% BIS HALLMARKED
+          </span>
+        </p>
+        <p className="text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.1em] leading-snug">
+          •&nbsp;&nbsp;7 DAYS EASY RETURNS&nbsp;&nbsp;•&nbsp;&nbsp;CERTIFIED RIQ 100%
+        </p>
       </div>
     </div>
   );
