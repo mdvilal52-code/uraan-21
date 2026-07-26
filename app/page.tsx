@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -447,12 +448,13 @@ export default function HomePage() {
             ))}
           </div>
           <div className="mt-8 max-w-[280px] md:max-w-md mx-auto bg-white p-2 rounded-2xl border border-[#d4a857]/60">
-            <img
+            <Image
               src="/images/style-model.jpg"
               alt="Model wearing traditional gold temple jewellery"
               width={760}
               height={1140}
               loading="lazy"
+              sizes="(max-width: 768px) 280px, 448px"
               className="block w-full h-auto"
             />
           </div>

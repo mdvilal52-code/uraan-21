@@ -10,27 +10,66 @@ safe demo behaviour, so nothing ever breaks.
 
 ---
 
-## 1. Put the website live on Netlify (required)
+## 1. Put the website live (required)
 
-1. Push this repo to GitHub (already done if you're reading this on GitHub).
-2. Go to **https://app.netlify.com** → sign in with GitHub → **Add new site →
-   Import an existing project**.
-3. Pick this repository. Netlify auto-detects Next.js (via `netlify.toml`
-   and the `@netlify/plugin-nextjs` plugin already in this repo) — just click
-   **Deploy**. That's it — your site is live at
-   `https://<your-site-name>.netlify.app`.
-4. To add a custom domain: Netlify → your site → **Domain management → Add a
-   domain**.
+This app is **hosting-agnostic** — it builds to a self-contained Node server
+and runs identically on any Ubuntu VPS, Docker host, DigitalOcean, AWS, Azure,
+GCP, Hostinger, Coolify, etc. There is no platform lock-in and no adapter to
+install. Pick whichever of the three below fits you.
 
-You change all the settings below in:
-**Netlify → your site → Site configuration → Environment variables**
-(add each key + value, then trigger **Deploys → Trigger deploy → Clear cache
-and deploy site**).
+Set your configuration (the keys from the sections below) in the environment
+however your host does it: a `.env` file next to the app, your VPS shell
+profile, your container's `--env-file`, or your panel's "Environment
+variables" screen. `NEXT_PUBLIC_SITE_URL` should be your public origin, e.g.
+`https://www.omgauriputra.com`.
 
-This project also ships a Netlify Scheduled Function
-(`netlify/functions/abandoned-cart-reminders-cron.ts`) that runs the
-abandoned-cart WhatsApp reminders every 2 hours automatically once
-`CRON_SECRET` and the WhatsApp keys (step 5) are set — no extra setup needed.
+**Option A — Node + PM2 on a VPS (recommended for a plain server)**
+
+```bash
+npm ci
+npm run build
+# copy the static assets next to the standalone server (once per build)
+cp -r .next/static  .next/standalone/.next/static
+cp -r public        .next/standalone/public
+pm2 start ecosystem.config.js && pm2 save     # uses the bundled config
+```
+
+Then put Nginx (or Apache) in front as a reverse proxy to `127.0.0.1:3000`:
+
+```nginx
+server {
+  listen 80;
+  server_name www.omgauriputra.com;
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}
+```
+
+(Add HTTPS with `certbot --nginx`.)
+
+**Option B — Docker**
+
+```bash
+docker build -t om-gauri-putra .
+docker run -d -p 3000:3000 --env-file .env om-gauri-putra
+```
+
+**Option C — any Node host** — run `npm run build`, then start the standalone
+server with `node .next/standalone/server.js` (after copying `.next/static`
+and `public` as in Option A). `npm start` also works for non-standalone hosts.
+
+**Automatic abandoned-cart reminders:** point any scheduler at the reminder
+endpoint once `CRON_SECRET` and the WhatsApp keys (step 5) are set — e.g. a
+system crontab entry every 2 hours:
+
+```cron
+0 */2 * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://your-domain.com/api/cron/abandoned-cart-reminders
+```
 
 ---
 
@@ -64,7 +103,7 @@ device.
    - **Project URL** → set as `SUPABASE_URL`
    - **service_role** key (under "Project API keys") → set as
      `SUPABASE_SERVICE_ROLE_KEY`
-4. Add both to Netlify env vars and **redeploy**.
+4. Add both to your environment (see step 1) and **restart / redeploy**.
 
 Now the admin **Orders**, **CRM / Leads** and **Products** pages show a green
 **“Database”** badge and store live data. Without it, they show sample/bundled
@@ -87,7 +126,7 @@ Real card / UPI / netbanking / wallet payments at checkout.
 
 1. Create an account at **https://razorpay.com** and complete the KYC.
 2. **Dashboard → Settings → API Keys → Generate Key.**
-3. Add to Netlify env vars and **redeploy**:
+3. Add to your environment (see step 1) and **restart / redeploy**:
    - **Key Id** → `NEXT_PUBLIC_RAZORPAY_KEY_ID`
    - **Key Secret** → `RAZORPAY_KEY_SECRET`
 
@@ -131,7 +170,7 @@ and `NEXT_PUBLIC_INSTAGRAM_URL` for the "Follow" button.
 
 ## Quick checklist
 
-- [ ] Deployed on Netlify
+- [ ] Deployed (VPS + PM2, Docker, or any Node host — see step 1)
 - [ ] Changed `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_SESSION_SECRET`
 - [ ] Ran `supabase/schema.sql` and added `SUPABASE_*` keys
 - [ ] Created the public `product-images` Storage bucket

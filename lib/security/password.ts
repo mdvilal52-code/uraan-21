@@ -2,7 +2,7 @@
 // history check (#9). Note: the *primary* auth password is hashed by Supabase
 // Auth (bcrypt); we additionally store an Argon2id hash of each chosen password
 // in password_history so a new password can be rejected if it matches a recent
-// one. hash-wasm is pure WebAssembly, so it runs on Node and Netlify alike.
+// one. hash-wasm is pure WebAssembly, so it runs on any Node runtime.
 import { argon2id, argon2Verify } from 'hash-wasm';
 
 export const PASSWORD_POLICY = {

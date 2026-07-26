@@ -1,5 +1,13 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
+import {
+  Cormorant_Garamond,
+  Cinzel,
+  Jost,
+  Poppins,
+  Noto_Sans_Devanagari,
+  Rozha_One,
+} from 'next/font/google';
 import './globals.css';
 import '../styles/luxury.css';
 import '../styles/animations.css';
@@ -9,6 +17,49 @@ import MobileBottomNav from '@/components/MobileBottomNav';
 import StorageWarningBanner from '@/components/StorageWarningBanner';
 import { SITE_URL } from '@/lib/site';
 import { BUSINESS_NAME, BUSINESS_ADDRESS, BUSINESS_LAT, BUSINESS_LNG } from '@/lib/business';
+
+// Self-hosted fonts via next/font — no render-blocking request to the Google
+// Fonts CDN, no external dependency (works offline / on any host), and the CSS
+// `size-adjust` fallback next/font injects prevents layout shift. Exposed as
+// CSS variables so the existing `font-family: var(--font-*)` rules and the
+// Tailwind `font-serif|display|sans` utilities resolve to them.
+const fontSerif = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-serif',
+});
+const fontDisplay = Cinzel({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-display',
+});
+const fontSans = Jost({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-sans',
+});
+const fontPoppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-poppins',
+});
+const fontDevanagari = Noto_Sans_Devanagari({
+  subsets: ['devanagari'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-devanagari',
+});
+const fontDevanagariDisplay = Rozha_One({
+  subsets: ['devanagari'],
+  weight: ['400'],
+  display: 'swap',
+  variable: '--font-devanagari-display',
+});
 
 const siteUrl = SITE_URL;
 
@@ -111,7 +162,10 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
   },
-  icons: { icon: '/favicon.ico' },
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+  },
 };
 
 export const viewport: Viewport = {
@@ -126,19 +180,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Rozha+One&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html
+      lang="en"
+      className={`${fontSerif.variable} ${fontDisplay.variable} ${fontSans.variable} ${fontPoppins.variable} ${fontDevanagari.variable} ${fontDevanagariDisplay.variable}`}
+    >
+      <head />
       <body className="pb-14 md:pb-0">
         {/* Traffic analytics (Level 3) — dormant until NEXT_PUBLIC_GA_MEASUREMENT_ID
             is set (see the environment variables guide), matching the same

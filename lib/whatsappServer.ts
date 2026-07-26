@@ -3,7 +3,7 @@
 // it fails gracefully when credentials are not configured, so the site keeps
 // working before the integration is wired up.
 //
-// Required env vars (set in Netlify → Site configuration → Environment variables):
+// Required env vars (set in your host's environment / .env):
 //   WHATSAPP_TOKEN            — permanent/long-lived access token for the app
 //   WHATSAPP_PHONE_NUMBER_ID  — the Cloud API phone number id (NOT the number)
 //   WHATSAPP_VERIFY_TOKEN     — any secret string; matched during webhook setup

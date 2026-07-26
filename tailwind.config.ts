@@ -30,12 +30,12 @@ const config: Config = {
         emerald: '#3d6b5a',
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', 'serif'],
-        display: ['"Cinzel"', 'serif'],
-        sans: ['"Jost"', 'sans-serif'],
-        poppins: ['"Poppins"', 'sans-serif'],
-        devanagari: ['"Noto Sans Devanagari"', 'sans-serif'],
-        'devanagari-display': ['"Rozha One"', '"Noto Sans Devanagari"', 'serif'],
+        serif: ['var(--font-serif)', 'serif'],
+        display: ['var(--font-display)', 'serif'],
+        sans: ['var(--font-sans)', 'sans-serif'],
+        poppins: ['var(--font-poppins)', 'sans-serif'],
+        devanagari: ['var(--font-devanagari)', 'sans-serif'],
+        'devanagari-display': ['var(--font-devanagari-display)', 'var(--font-devanagari)', 'serif'],
       },
       animation: {
         'fade-up': 'fadeUp 0.6s ease-out',

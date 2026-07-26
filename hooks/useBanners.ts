@@ -48,7 +48,11 @@ export function useBanners(): { banners: Banner[]; loaded: boolean } {
     let active = true;
     loadBanners().then((list) => {
       if (!active) return;
-      if (list && list.length) setBanners(list);
+      if (list && list.length) {
+        setBanners((prev) =>
+          JSON.stringify(prev) === JSON.stringify(list) ? prev : list
+        );
+      }
       setLoaded(true);
     });
     return () => {
