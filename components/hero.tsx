@@ -1,72 +1,75 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 import { heroSlides } from '@/data/jewelleryData';
 
 export default function Hero() {
   const [current, setCurrent] = useState(0);
 
+  const next = useCallback(
+    () => setCurrent((prev) => (prev + 1) % heroSlides.length),
+    [],
+  );
+
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % heroSlides.length);
-    }, 5500);
+    const timer = setInterval(next, 5500);
     return () => clearInterval(timer);
-  }, []);
+  }, [next]);
 
   return (
-    <section className="relative h-[480px] md:h-[600px] overflow-hidden bg-[#f8f2e6]">
-      {heroSlides.map((slide, idx) => (
-        <div
-          key={idx}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            idx === current ? 'opacity-100 z-10' : 'opacity-0 z-0 max-md:hidden'
-          }`}
-        >
-          {/* Background */}
+    <section className="relative w-full overflow-hidden bg-[#f0eadf]" aria-label="Hero banner">
+      {/* Slides */}
+      <div className="relative" style={{ paddingBottom: '0' }}>
+        {heroSlides.map((slide, idx) => (
           <div
-            className="absolute inset-0 bg-cover bg-right md:bg-center"
-            style={{ backgroundImage: `url(${slide.image})` }}
-          />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent md:from-black/45 md:via-black/15" />
-
-          {/* Content */}
-          <div className="absolute inset-0 flex items-center px-6 md:px-16 lg:px-24">
-            <div className="max-w-md">
-              <p className="serif italic text-[#b8893a] text-sm md:text-base tracking-[3px] mb-3 uppercase animate-fade-up max-w-[140px] leading-tight">
-                {slide.eyebrow}
-              </p>
-              <h1 className="serif text-5xl md:text-7xl font-normal text-white leading-none mb-4 mt-3 animate-slide-in">
-                {slide.title}
-                <br />
-                <em className="gold-text font-medium">{slide.titleEm}</em>
-              </h1>
-              <p className="text-sm md:text-base text-white/85 leading-relaxed mb-6 max-w-xs animate-fade-up">
-                {slide.desc}
-              </p>
-              <Link
-                href={slide.href}
-                className="inline-flex items-center gap-3 px-8 py-3 bg-[#b8893a] text-[#1a1410] text-[11px] tracking-[3px] uppercase font-medium hover:bg-[#e8d49b] hover:text-[#1a1410] transition-all"
-              >
-                {slide.cta} <ChevronRight size={14} />
-              </Link>
-            </div>
+            key={idx}
+            aria-hidden={idx !== current}
+            className={`
+              ${idx === 0 ? 'relative' : 'absolute inset-0'}
+              transition-opacity duration-1000 ease-in-out
+              ${idx === current ? 'opacity-100 z-10' : 'opacity-0 z-0'}
+            `}
+          >
+            {/* Background image — full width, auto height on mobile so the image
+                (which carries brand text) is never cropped. Fixed height on desktop
+                provides a controlled viewport impression. */}
+            <div
+              className="w-full"
+              style={{
+                backgroundImage: `url(${slide.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                height: 'clamp(260px, 55vw, 620px)',
+              }}
+              role="img"
+              aria-label={`${slide.eyebrow} — ${slide.title} ${slide.titleEm}`}
+            />
           </div>
-        </div>
-      ))}
+        ))}
 
-      {/* Dots */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+        {/* Spacer so the section has height when slides are absolute */}
+        {heroSlides.length > 1 && (
+          <div
+            aria-hidden="true"
+            style={{ height: 'clamp(260px, 55vw, 620px)' }}
+          />
+        )}
+      </div>
+
+      {/* Round slider dots */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
         {heroSlides.map((_, idx) => (
           <button
             key={idx}
             aria-label={`Go to slide ${idx + 1}`}
             onClick={() => setCurrent(idx)}
-            className={`h-[2px] transition-all duration-300 ${
-              idx === current ? 'w-10 bg-[#b8893a]' : 'w-6 bg-white/40'
-            }`}
+            className={`
+              rounded-full transition-all duration-300
+              ${idx === current
+                ? 'w-3 h-3 bg-[#C9A24A] shadow-[0_0_0_2px_rgba(201,162,74,0.4)]'
+                : 'w-2.5 h-2.5 bg-white/50 hover:bg-white/75'
+              }
+            `}
           />
         ))}
       </div>
