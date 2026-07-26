@@ -29,7 +29,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-[#0B1E42]/10 bg-[#87CEEB]">
+      <header className="sticky top-0 z-50 border-b border-[#0B1E42]/10 bg-[#C4E7F5]">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-3 py-2.5 md:gap-6 md:px-8 md:py-4">
           {/* Left: hamburger — mobile only */}
           <button

@@ -15,7 +15,7 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="bg-[#87CEEB] px-4 py-3 md:hidden">
+    <div className="bg-[#C4E7F5] px-4 py-3 md:hidden">
       <form onSubmit={handleSubmit} className="relative mx-auto max-w-7xl md:max-w-2xl">
         <input
           ref={inputRef}
