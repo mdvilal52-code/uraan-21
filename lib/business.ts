@@ -61,7 +61,7 @@ export const BUSINESS_PHONE_PRIMARY = process.env.NEXT_PUBLIC_BUSINESS_PHONE || 
 export const BUSINESS_PHONE_SECONDARY = process.env.NEXT_PUBLIC_BUSINESS_PHONE_2 || '+919811810235';
 
 export const SOCIAL_URLS = {
-  instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://instagram.com/omgauriputra',
-  facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL || 'https://www.facebook.com/omgauriputra',
-  youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL || 'https://www.youtube.com/@omgauriputra',
+  instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/omgpgems1975?igsh=dWNpa29wc3JmcHR6',
+  facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL || 'https://www.facebook.com/share/1GaU9yTr6i/',
+  youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL || 'https://www.youtube.com/@jitendersoni4595',
 };

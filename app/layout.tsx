@@ -101,7 +101,11 @@ const localBusinessSchema = {
       closes: '18:00',
     },
   ],
-  sameAs: [process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://instagram.com/omgauriputra'],
+  sameAs: [
+    process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/omgpgems1975?igsh=dWNpa29wc3JmcHR6',
+    process.env.NEXT_PUBLIC_FACEBOOK_URL || 'https://www.facebook.com/share/1GaU9yTr6i/',
+    process.env.NEXT_PUBLIC_YOUTUBE_URL || 'https://www.youtube.com/@jitendersoni4595',
+  ],
 };
 
 export const metadata: Metadata = {
