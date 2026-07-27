@@ -67,6 +67,12 @@ const nextConfig = {
     // Serve modern formats when the browser advertises support.
     formats: ['image/avif', 'image/webp'],
     remotePatterns: imageRemotePatterns,
+    // Default is 60s, so every optimized variant (each size/format combo) was
+    // being thrown away and re-encoded from scratch after a minute even though
+    // banners/product photos barely change. Cache each variant for a year —
+    // admins already get a fresh image whenever they upload a new one because
+    // that's a new URL, not a mutation of the old one.
+    minimumCacheTTL: 31536000,
   },
   async headers() {
     return [

@@ -42,7 +42,7 @@ const SLIDES = [
     titleTop: 'Emeralds That',
     titleEm: 'Enchant',
     text: 'Vivid, untreated emeralds set in gold — a rare touch of nature’s magic for the modern connoisseur.',
-    cta: 'Shop Emeralds',
+    cta: 'Shop Gems',
     href: '/collections?type=gems',
   },
   {
