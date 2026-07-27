@@ -73,7 +73,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#C4E7F5]">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-[#9a8c75]">
