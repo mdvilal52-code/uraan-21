@@ -157,6 +157,14 @@
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* ► Dark-surface remap — the shared product tokens are inked for light cards
+   (#1a1410). The cart drawer sits on a deep-navy panel, so re-map title + price
+   to light there for contrast. Scoped to .cart-drawer only; light surfaces are
+   untouched. */
+.cart-drawer .t-product-title-sm { color: #ffffff; }
+.cart-drawer .t-price-sm,
+.cart-drawer .t-price-lg { color: #e8c877; }
+
 /* ► Supporting text */
 .t-subtitle {
   font-size: 11px;

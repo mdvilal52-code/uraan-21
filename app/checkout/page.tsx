@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import { useCart } from '@/context/CartContext';
@@ -718,7 +719,11 @@ export default function CheckoutPage() {
               <div className="space-y-4 mb-4 max-h-64 overflow-y-auto pr-1">
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-4 items-center">
-                    <div className="w-16 h-16 bg-white bg-cover bg-center flex-shrink-0 rounded" style={{ backgroundImage: `url(${item.image})` }} />
+                    <div className="relative w-16 h-16 bg-white flex-shrink-0 rounded overflow-hidden">
+                      {item.image && (
+                        <Image src={item.image} alt={item.name} fill sizes="64px" className="object-cover" />
+                      )}
+                    </div>
                     <div className="flex-1 min-w-0 flex flex-col gap-1">
                       <div className="t-product-title-sm">{item.name}</div>
                       <div className="t-caption">Qty: {item.quantity}</div>

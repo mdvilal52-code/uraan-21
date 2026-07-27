@@ -238,13 +238,17 @@ export default function HomePage() {
             loop
             muted
             playsInline
-            preload="auto"
+            preload="none"
+            poster="/videos/signature-collection-poster.jpg"
             disablePictureInPicture
             disableRemotePlayback
             aria-hidden="true"
             tabIndex={-1}
             className="absolute inset-0 w-full h-full object-cover object-center"
           >
+            {/* WebM first (~1.3MB) so supporting browsers skip the 8.6MB MP4;
+                the poster paints instantly while nothing downloads until play. */}
+            <source src="/videos/signature-collection.webm" type="video/webm" />
             <source src="/videos/signature-collection.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-black/75" />

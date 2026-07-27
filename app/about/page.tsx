@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
@@ -20,10 +21,8 @@ export default function AboutPage() {
         <span>About Us</span>
       </div>
 
-      <section
-        className="relative h-[300px] md:h-[420px] bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: 'url(/images/banner.jpg)' }}
-      >
+      <section className="relative h-[300px] md:h-[420px] flex items-center justify-center overflow-hidden">
+        <Image src="/images/banner.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white px-4">
           <p className="serif italic text-[#e8d49b] tracking-[3px] uppercase text-sm mb-3">
@@ -37,10 +36,9 @@ export default function AboutPage() {
 
       <section className="py-16 px-4 max-w-5xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-          <div
-            className="aspect-[4/5] bg-cover bg-center bg-[#f8f2e6]"
-            style={{ backgroundImage: 'url(/images/model.jpg)' }}
-          />
+          <div className="relative aspect-[4/5] bg-[#f8f2e6] overflow-hidden">
+            <Image src="/images/model.jpg" alt="Artisan crafting fine jewellery" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+          </div>
           <div>
             <p className="text-[#b8893a] serif italic text-sm tracking-[2px] mb-2">
               Since Generations

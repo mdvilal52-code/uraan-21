@@ -21,7 +21,7 @@ export default function CartDrawer() {
 
       {/* Drawer */}
       <aside
-        className={`fixed top-0 right-0 bottom-0 w-[90%] max-w-[400px] bg-[#0B1E42] z-[201] transition-transform duration-300 flex flex-col ${
+        className={`cart-drawer fixed top-0 right-0 bottom-0 w-[90%] max-w-[400px] bg-[#0B1E42] z-[201] transition-transform duration-300 flex flex-col ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
@@ -67,10 +68,11 @@ export default function CartPage() {
             <div className="lg:col-span-2 space-y-3">
               {items.map((item) => (
                 <div key={item.id} className="flex gap-4 md:gap-5 bg-white border border-[rgba(184,137,58,0.18)] p-4 items-center rounded">
-                  <div
-                    className="w-24 h-24 md:w-28 md:h-28 bg-[#f8f2e6] bg-cover bg-center flex-shrink-0 rounded"
-                    style={{ backgroundImage: `url(${item.image})` }}
-                  />
+                  <div className="relative w-24 h-24 md:w-28 md:h-28 bg-[#f8f2e6] flex-shrink-0 rounded overflow-hidden">
+                    {item.image && (
+                      <Image src={item.image} alt={item.name} fill sizes="112px" className="object-cover" />
+                    )}
+                  </div>
                   <div className="flex-1 min-w-0 flex flex-col gap-2">
                     <div className="t-product-title-sm">
                       {item.name}
