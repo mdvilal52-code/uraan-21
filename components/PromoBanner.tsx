@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 
-// Auto-rotating hero carousel — three slides that cross-fade every 5s, with
+// Auto-rotating hero carousel — five slides that cross-fade every 5s, with
 // clickable progress-bar indicators. Mirrors the omgpgems.com hero: same
 // copy, imagery, gold accents and button styling.
 const SLIDES = [
@@ -35,10 +36,33 @@ const SLIDES = [
     cta: 'Shop Rudraksh',
     href: '/collections?type=rudraksh',
   },
+  {
+    image: '/images/gallery/emerald-gem.jpg',
+    eyebrow: 'Nature’s Rarest',
+    titleTop: 'Emeralds That',
+    titleEm: 'Enchant',
+    text: 'Vivid, untreated emeralds set in gold — a rare touch of nature’s magic for the modern connoisseur.',
+    cta: 'Shop Emeralds',
+    href: '/collections?type=gems',
+  },
+  {
+    image: '/images/gallery/blue-diamond.jpg',
+    eyebrow: 'Rare Brilliance',
+    titleTop: 'Diamonds Beyond',
+    titleEm: 'Compare',
+    text: 'Certified diamonds, cut to perfection — brilliance engineered to last a lifetime.',
+    cta: 'Shop Diamonds',
+    href: '/collections?type=diamond',
+  },
 ];
 
 export default function PromoBanner() {
   const [active, setActive] = useState(0);
+  // Only the active slide + the one it's about to cross-fade into ever get an
+  // <Image> mounted, so the browser fetches at most 2 of the 5 slide images at
+  // a time instead of all 5 up front. Once loaded a slide stays mounted (the
+  // set only grows) so revisiting it on the next loop is instant.
+  const [primed, setPrimed] = useState<Set<number>>(() => new Set([0, 1 % SLIDES.length]));
 
   const go = useCallback((i: number) => setActive(((i % SLIDES.length) + SLIDES.length) % SLIDES.length), []);
 
@@ -46,6 +70,14 @@ export default function PromoBanner() {
     const id = setInterval(() => setActive((a) => (a + 1) % SLIDES.length), 5000);
     return () => clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    setPrimed((prev) => {
+      const next = (active + 1) % SLIDES.length;
+      if (prev.has(active) && prev.has(next)) return prev;
+      return new Set(prev).add(active).add(next);
+    });
+  }, [active]);
 
   return (
     <section
@@ -61,10 +93,16 @@ export default function PromoBanner() {
             i === active ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         >
-          <div
-            className="absolute inset-0 bg-cover bg-right md:bg-center"
-            style={{ backgroundImage: `url(${s.image})` }}
-          />
+          {primed.has(i) && (
+            <Image
+              src={s.image}
+              alt=""
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className="object-cover object-right md:object-center"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent md:from-black/45 md:via-black/15" />
           <div className="absolute inset-0 flex items-center px-6 md:px-16 lg:px-24">
             <div className="max-w-md">
