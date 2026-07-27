@@ -7,7 +7,10 @@ import { useCart } from '@/context/CartContext';
 import PriceDisplay from '@/components/ui/PriceDisplay';
 
 export default function CartDrawer() {
-  const { items, isOpen, closeCart, totalItems, totalPrice, updateQuantity, removeFromCart } = useCart();
+  const {
+    items, isOpen, closeCart, totalItems, updateQuantity, removeFromCart,
+    toggleSelected, selectedCount, selectedPrice,
+  } = useCart();
 
   return (
     <>
@@ -63,8 +66,15 @@ export default function CartDrawer() {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center gap-4 bg-white/10 border border-white/10 p-3 rounded-md"
+                    className="flex items-center gap-3 bg-white/10 border border-white/10 p-3 rounded-md"
                   >
+                    <input
+                      type="checkbox"
+                      checked={item.selected !== false}
+                      onChange={() => toggleSelected(item.id)}
+                      aria-label={`${item.selected !== false ? 'Deselect' : 'Select'} ${item.name} for checkout`}
+                      className="w-[18px] h-[18px] shrink-0 accent-[#C9A24A] cursor-pointer"
+                    />
                     <div className="relative w-[72px] h-[72px] flex-shrink-0 rounded overflow-hidden bg-[#f8f2e6]">
                       {item.image ? (
                         <Image
@@ -122,26 +132,37 @@ export default function CartDrawer() {
             <div className="border-t border-white/10 p-5 bg-[#0a1835]">
               <div className="flex justify-between items-baseline mb-4">
                 <span className="display text-xs tracking-[2px] uppercase text-white">
-                  Subtotal
+                  Subtotal {selectedCount !== totalItems && `(${selectedCount} selected)`}
                 </span>
                 <PriceDisplay
-                  currentPrice={totalPrice}
+                  currentPrice={selectedPrice}
                   size="lg"
                   priceStyle={{ fontSize: 'clamp(26px, 5vw, 32px)' }}
                 />
               </div>
               <p className="text-[10px] text-white/50 mb-4 italic">
-                Taxes & shipping calculated at checkout
+                {selectedCount === 0
+                  ? 'Select at least one item to check out.'
+                  : 'Taxes & shipping calculated at checkout'}
               </p>
 
               <div className="space-y-2">
-                <Link
-                  href="/checkout"
-                  onClick={closeCart}
-                  className="block w-full bg-[#C9A24A] text-[#0B1E42] py-3 text-[11px] tracking-[3px] uppercase font-semibold hover:bg-[#b8893a] hover:text-white text-center transition-all"
-                >
-                  Checkout
-                </Link>
+                {selectedCount === 0 ? (
+                  <span
+                    aria-disabled="true"
+                    className="block w-full bg-[#C9A24A]/40 text-[#0B1E42]/60 py-3 text-[11px] tracking-[3px] uppercase font-semibold text-center cursor-not-allowed"
+                  >
+                    Checkout
+                  </span>
+                ) : (
+                  <Link
+                    href="/checkout"
+                    onClick={closeCart}
+                    className="block w-full bg-[#C9A24A] text-[#0B1E42] py-3 text-[11px] tracking-[3px] uppercase font-semibold hover:bg-[#b8893a] hover:text-white text-center transition-all"
+                  >
+                    Checkout
+                  </Link>
+                )}
                 <Link
                   href="/cart"
                   onClick={closeCart}

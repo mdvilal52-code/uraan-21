@@ -33,7 +33,12 @@ declare global {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, totalItems, totalPrice, clearCart } = useCart();
+  // Checkout only ever acts on the items the shopper selected in the cart —
+  // anything they left unchecked stays in the cart untouched.
+  const {
+    items: allItems, selectedItems: items, selectedCount: totalItems,
+    selectedPrice: totalPrice, removeSelected,
+  } = useCart();
   const [step, setStep] = useState<'address' | 'payment' | 'success'>('address');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
   const [orderId, setOrderId] = useState('');
@@ -241,7 +246,7 @@ export default function CheckoutPage() {
     recoverAbandonedCart(form.phone);
     setOrderId(id);
     setStep('success');
-    clearCart();
+    removeSelected();
   };
 
   // Server recomputes the authoritative price from the real product
@@ -367,14 +372,24 @@ export default function CheckoutPage() {
   }
 
   if (items.length === 0 && step !== 'success') {
+    const cartHasUnselectedItems = allItems.length > 0;
     return (
       <main className="min-h-screen bg-[#C4E7F5]">
         <Navbar />
         <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-          <h1 className="serif text-3xl text-[#1a1410] mb-3">Your cart is empty</h1>
-          <p className="text-sm text-[#6b5d4c] mb-6">Add some products before checking out.</p>
-          <Link href="/collections" className="inline-flex items-center gap-2 px-8 py-3 bg-[#1a1410] text-[#e8d49b] text-[11px] tracking-[3px] uppercase font-semibold">
-            Browse Products <ChevronRight size={14} />
+          <h1 className="serif text-3xl text-[#1a1410] mb-3">
+            {cartHasUnselectedItems ? 'No items selected' : 'Your cart is empty'}
+          </h1>
+          <p className="text-sm text-[#6b5d4c] mb-6">
+            {cartHasUnselectedItems
+              ? 'Go back to your cart and select at least one item to check out.'
+              : 'Add some products before checking out.'}
+          </p>
+          <Link
+            href={cartHasUnselectedItems ? '/cart' : '/collections'}
+            className="inline-flex items-center gap-2 px-8 py-3 bg-[#1a1410] text-[#e8d49b] text-[11px] tracking-[3px] uppercase font-semibold"
+          >
+            {cartHasUnselectedItems ? 'Back to Cart' : 'Browse Products'} <ChevronRight size={14} />
           </Link>
         </div>
         <Footer />
