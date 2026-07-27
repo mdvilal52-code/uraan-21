@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -11,13 +12,7 @@ import Categories from '@/components/Categories';
 import PromoBanners from '@/components/PromoBanners';
 import Bestseller from '@/components/Bestseller';
 import Trending from '@/components/Trending';
-import Testimonials from '@/components/Testimonials';
-import InstagramGallery from '@/components/InstagramGallery';
-import Newsletter from '@/components/Newsletter';
-import About from '@/components/About';
 import CartDrawer from '@/components/CartDrawer';
-import FloatingActions from '@/components/FloatingActions';
-import PaymentOptions from '@/components/PaymentOptions';
 import { whatsappLink } from '@/lib/whatsapp';
 import { SOCIAL_URLS } from '@/lib/business';
 import ProductCard from '@/components/ProductCard';
@@ -37,6 +32,18 @@ import {
   Shirt,
 } from 'lucide-react';
 import { FaFacebook, FaInstagram, FaYoutube, } from "react-icons/fa";
+
+// Below-the-fold sections: code-split out of the initial homepage bundle.
+// They still render in the SSR HTML (ssr: true, the default) for SEO, but
+// their JS ships as separate chunks instead of bloating the main bundle.
+const Testimonials = dynamic(() => import('@/components/Testimonials'));
+const InstagramGallery = dynamic(() => import('@/components/InstagramGallery'));
+const Newsletter = dynamic(() => import('@/components/Newsletter'));
+const About = dynamic(() => import('@/components/About'));
+const PaymentOptions = dynamic(() => import('@/components/PaymentOptions'));
+// Floating overlay chrome only (scroll-to-top / WhatsApp) — no SEO content,
+// so it can skip the server render entirely.
+const FloatingActions = dynamic(() => import('@/components/FloatingActions'), { ssr: false });
 
 // Delicate gold leaf-branch corner ornament for the "Shop By Budget" section.
 function LeafBranch({ className }: { className?: string }) {
