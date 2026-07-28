@@ -58,6 +58,7 @@ export default function ProductForm({ initialProduct, mode = 'add' }: ProductFor
     seoDescription: initialProduct?.seoDescription || '',
     useDynamicPricing: initialProduct?.useDynamicPricing ?? false,
     makingCharge: initialProduct?.makingCharge ?? 0,
+    videoUrl: initialProduct?.videoUrl || '',
   });
 
   const [images, setImages] = useState<string[]>(initialImages);
@@ -559,6 +560,24 @@ export default function ProductForm({ initialProduct, mode = 'add' }: ProductFor
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Product Video */}
+      <div className="mt-8 pt-5 border-t border-[rgba(184,137,58,0.18)]">
+        <h3 className="display text-xs tracking-[3px] uppercase text-[#1a1410] mb-3">Product Video</h3>
+        <div>
+          <label className="luxury-label">YouTube Link</label>
+          <input
+            type="url"
+            value={form.videoUrl}
+            onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
+            className="luxury-input"
+            placeholder="https://www.youtube.com/watch?v=..."
+          />
+          <p className="text-[10px] mt-1 text-[#9a8c75]">
+            Optional. Shows a &quot;Product Video&quot; button next to the price on the product page.
+          </p>
         </div>
       </div>
 

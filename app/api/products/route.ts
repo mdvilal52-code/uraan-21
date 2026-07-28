@@ -70,6 +70,7 @@ export async function POST(request: Request) {
     Barcode: { value: String(body.barcode ?? ''), max: MAX_LEN.short },
     'SEO title': { value: String(body.seoTitle ?? ''), max: MAX_LEN.short },
     'SEO description': { value: String(body.seoDescription ?? ''), max: MAX_LEN.text },
+    'Product video URL': { value: String(body.videoUrl ?? ''), max: MAX_LEN.url },
   });
   if (lengthError) return NextResponse.json({ ok: false, error: lengthError }, { status: 400 });
 
@@ -103,6 +104,7 @@ export async function POST(request: Request) {
     status: body.status === 'draft' ? 'draft' : 'published',
     featured: body.featured ?? false,
     trending: body.trending ?? false,
+    videoUrl: body.videoUrl || undefined,
   };
 
   const result = await dbInsertProduct(product);

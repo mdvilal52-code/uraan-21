@@ -46,6 +46,7 @@ export type Product = {
   featured?: boolean;
   trending?: boolean;
   deletedAt?: string;
+  videoUrl?: string; // YouTube link shown as a "Product Video" button on the PDP
 };
 
 export type Category = {

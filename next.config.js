@@ -10,8 +10,9 @@ const cspReportOnly = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "connect-src 'self' https://*.supabase.co https://*.razorpay.com https://api.razorpay.com",
-  // Razorpay checkout iframes + Google Maps embed on the Contact page.
-  "frame-src 'self' https://*.razorpay.com https://api.razorpay.com https://www.google.com https://maps.google.com",
+  // Razorpay checkout iframes, Google Maps embed on the Contact page, and the
+  // YouTube "Product Video" embed on the PDP.
+  "frame-src 'self' https://*.razorpay.com https://api.razorpay.com https://www.google.com https://maps.google.com https://www.youtube-nocookie.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

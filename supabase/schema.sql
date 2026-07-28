@@ -356,6 +356,7 @@ alter table public.products add column if not exists status text not null defaul
 alter table public.products add column if not exists featured boolean not null default false;
 alter table public.products add column if not exists trending boolean not null default false;
 alter table public.products add column if not exists deleted_at timestamptz; -- soft delete; null = active
+alter table public.products add column if not exists video_url text; -- YouTube link shown as "Product Video" on the PDP
 create index if not exists products_deleted_idx on public.products (deleted_at);
 
 -- Generic key/value store for admin-editable global settings — starts with

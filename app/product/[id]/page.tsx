@@ -21,10 +21,12 @@ import { useReviews, verifiedOnly } from '@/hooks/useReviews';
 import { voteHelpful, reportReviewAction } from '@/lib/reviewsActions';
 import { reviewAccent, initialsOf } from '@/lib/reviewStyle';
 import WriteReviewModal from '@/components/WriteReviewModal';
+import { toYouTubeEmbedUrl } from '@/lib/youtube';
 import {
   Heart, Truck, ShieldCheck, RotateCw,
   Star, Plus, Minus, ChevronRight, Award,
   ThumbsUp, Flag, CheckCircle2, Pencil, ArrowUpLeft,
+  Play, X,
 } from 'lucide-react';
 
 export default function ProductDetailPage({
@@ -39,6 +41,7 @@ export default function ProductDetailPage({
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'shipping'>('desc');
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [reviewSort, setReviewSort] = useState<'newest' | 'helpful'>('newest');
   const [votedReview, setVotedReview] = useState<string | null>(null);
 
@@ -63,6 +66,7 @@ export default function ProductDetailPage({
 
   const inWishlist = isInWishlist(product.id);
   const related = getRelatedProducts(product.id, 4, list);
+  const videoEmbedUrl = product.videoUrl ? toYouTubeEmbedUrl(product.videoUrl) : null;
 
   const productReviews = verifiedOnly(allReviews).filter(
     (r) => r.productId === product.id || r.product === product.name
@@ -215,12 +219,25 @@ export default function ProductDetailPage({
               </span>
             </div>
 
-            <PriceDisplay
-              currentPrice={product.price}
-              originalPrice={product.oldPrice}
-              size="lg"
-              className="mb-5 pb-5 border-b border-[rgba(184,137,58,0.18)]"
-            />
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-5 pb-5 border-b border-[rgba(184,137,58,0.18)]">
+              <PriceDisplay
+                currentPrice={product.price}
+                originalPrice={product.oldPrice}
+                size="lg"
+              />
+              {videoEmbedUrl && (
+                <button
+                  type="button"
+                  onClick={() => setVideoModalOpen(true)}
+                  className="inline-flex items-center gap-2.5 h-11 px-5 rounded-md bg-[#0B1E42] text-white text-[11px] tracking-[2px] uppercase font-semibold shadow-[0_0_15px_rgba(11,30,66,0.45)] hover:shadow-[0_0_22px_rgba(11,30,66,0.65)] transition-shadow shrink-0"
+                >
+                  <span className="w-6 h-6 rounded-full bg-white grid place-items-center shrink-0">
+                    <Play size={11} className="text-[#0B1E42] fill-[#0B1E42] ml-0.5" />
+                  </span>
+                  Product Video
+                </button>
+              )}
+            </div>
 
             <div className="grid grid-cols-2 gap-3 mb-5">
               <div className="bg-[#f8f2e6] p-3 border border-[rgba(184,137,58,0.18)]">
@@ -467,6 +484,31 @@ export default function ProductDetailPage({
         productId={product.id}
         productName={product.name}
       />
+
+      {videoModalOpen && videoEmbedUrl && (
+        <div
+          className="fixed inset-0 z-[300] bg-black/80 flex items-center justify-center p-4"
+          onClick={() => setVideoModalOpen(false)}
+        >
+          <div className="relative w-full max-w-3xl aspect-video" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              onClick={() => setVideoModalOpen(false)}
+              aria-label="Close video"
+              className="absolute -top-10 right-0 text-white/80 hover:text-white"
+            >
+              <X size={22} />
+            </button>
+            <iframe
+              src={videoEmbedUrl}
+              title={`${product.name} — Product Video`}
+              className="w-full h-full rounded-md"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      )}
 
       {related.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 py-12 border-t border-[rgba(184,137,58,0.18)] mt-8">
