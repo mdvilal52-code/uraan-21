@@ -98,11 +98,13 @@ export default function PromoBanner() {
         >
           {primed.has(i) && (
             s.fitHeight ? (
-              /* Portrait image: absolute h-full keeps full gem in frame without cover-scale */
-              <div className="absolute inset-0 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={s.image} alt="" className="absolute top-0 right-0 w-auto" style={{ height: '100%' }} />
-              </div>
+              <Image
+                src={s.image}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-contain object-right"
+              />
             ) : (
               <Image
                 src={s.image}
