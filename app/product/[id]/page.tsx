@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/navbar';
@@ -82,6 +82,13 @@ export default function ProductDetailPage({
       : new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
+  useEffect(() => {
+    if (!videoModalOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setVideoModalOpen(false); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [videoModalOpen]);
+
   const handleHelpful = async (id: string) => {
     const voted = await voteHelpful(id);
     if (voted) setVotedReview(id);
@@ -135,6 +142,18 @@ export default function ProductDetailPage({
     };
   }
 
+  const videoObjectSchema = videoEmbedUrl
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'VideoObject',
+        name: `${product.name} — Product Video`,
+        description: product.seoDescription || product.description,
+        thumbnailUrl: absoluteImage ? [absoluteImage] : undefined,
+        embedUrl: videoEmbedUrl,
+        uploadDate: new Date().toISOString().split('T')[0],
+      }
+    : null;
+
   return (
     <main className="min-h-screen bg-white">
       <script
@@ -142,6 +161,13 @@ export default function ProductDetailPage({
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
+      {videoObjectSchema && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(videoObjectSchema) }}
+        />
+      )}
       <Navbar />
       <CartDrawer />
 
@@ -229,7 +255,8 @@ export default function ProductDetailPage({
                 <button
                   type="button"
                   onClick={() => setVideoModalOpen(true)}
-                  className="inline-flex items-center gap-2.5 h-11 px-5 rounded-md bg-[#0B1E42] text-white text-[11px] tracking-[2px] uppercase font-semibold shadow-[0_0_15px_rgba(11,30,66,0.45)] hover:shadow-[0_0_22px_rgba(11,30,66,0.65)] transition-shadow shrink-0"
+                  aria-label={`Watch product video for ${product.name}`}
+                  className="inline-flex items-center justify-center gap-2.5 h-11 px-5 rounded-lg bg-gradient-to-r from-[#0B1E42] to-[#162d66] text-white text-[11px] tracking-[2px] uppercase font-semibold shadow-[0_0_18px_rgba(11,30,66,0.5)] hover:shadow-[0_0_30px_rgba(11,30,66,0.75)] hover:scale-[1.04] active:scale-[0.97] transition-all duration-300 w-full sm:w-auto shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#162d66]"
                 >
                   <span className="w-6 h-6 rounded-full bg-white grid place-items-center shrink-0">
                     <Play size={11} className="text-[#0B1E42] fill-[#0B1E42] ml-0.5" />
@@ -487,24 +514,31 @@ export default function ProductDetailPage({
 
       {videoModalOpen && videoEmbedUrl && (
         <div
-          className="fixed inset-0 z-[300] bg-black/80 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${product.name} product video`}
+          className="fixed inset-0 z-[300] bg-black/85 flex items-center justify-center p-4"
           onClick={() => setVideoModalOpen(false)}
         >
-          <div className="relative w-full max-w-3xl aspect-video" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative w-full max-w-3xl aspect-video"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               type="button"
               onClick={() => setVideoModalOpen(false)}
-              aria-label="Close video"
-              className="absolute -top-10 right-0 text-white/80 hover:text-white"
+              aria-label="Close video (Esc)"
+              className="absolute -top-10 right-0 text-white/80 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-white rounded"
             >
               <X size={22} />
             </button>
             <iframe
               src={videoEmbedUrl}
               title={`${product.name} — Product Video`}
-              className="w-full h-full rounded-md"
+              className="w-full h-full rounded-xl"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
+              loading="lazy"
             />
           </div>
         </div>
