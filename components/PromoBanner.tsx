@@ -53,6 +53,7 @@ const SLIDES = [
     text: 'Certified diamonds, cut to perfection — brilliance engineered to last a lifetime.',
     cta: 'Shop Diamonds',
     href: '/collections?type=diamond',
+    imgPosition: 'object-cover object-top',
   },
 ];
 
@@ -100,7 +101,7 @@ export default function PromoBanner() {
               fill
               priority={i === 0}
               sizes="100vw"
-              className="object-cover object-right md:object-center"
+              className={s.imgPosition ?? 'object-cover object-right md:object-center'}
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent md:from-black/45 md:via-black/15" />
