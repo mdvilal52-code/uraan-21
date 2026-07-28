@@ -49,6 +49,13 @@ export default function ProductDetailPage({
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { reviews: allReviews } = useReviews();
 
+  useEffect(() => {
+    if (!videoModalOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setVideoModalOpen(false); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [videoModalOpen]);
+
   if (!product) {
     // Still fetching the live catalogue — don't 404 a DB-only product yet.
     if (!loaded) {
@@ -81,13 +88,6 @@ export default function ProductDetailPage({
       ? (b.helpful || 0) - (a.helpful || 0)
       : new Date(b.date).getTime() - new Date(a.date).getTime()
   );
-
-  useEffect(() => {
-    if (!videoModalOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setVideoModalOpen(false); };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [videoModalOpen]);
 
   const handleHelpful = async (id: string) => {
     const voted = await voteHelpful(id);
