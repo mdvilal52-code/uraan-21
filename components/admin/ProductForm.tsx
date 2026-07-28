@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Save, X, Upload, Plus, Trash2, ArrowUp, ArrowDown, Info } from 'lucide-react';
 import { Product, ProductVariant, categories } from '@/data/jewelleryData';
 import { invalidateProductCache } from '@/hooks/useProducts';
+import { toYouTubeEmbedUrl } from '@/lib/youtube';
 
 type ProductFormProps = {
   initialProduct?: Product;
@@ -71,7 +72,19 @@ export default function ProductForm({ initialProduct, mode = 'add' }: ProductFor
 
   const [submitted, setSubmitted] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [videoUrlError, setVideoUrlError] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleVideoUrlChange = (value: string) => {
+    setForm({ ...form, videoUrl: value });
+    if (!value.trim()) {
+      setVideoUrlError('');
+    } else if (!toYouTubeEmbedUrl(value)) {
+      setVideoUrlError('Only YouTube URLs are accepted (youtube.com or youtu.be).');
+    } else {
+      setVideoUrlError('');
+    }
+  };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -565,19 +578,29 @@ export default function ProductForm({ initialProduct, mode = 'add' }: ProductFor
 
       {/* Product Video */}
       <div className="mt-8 pt-5 border-t border-[rgba(184,137,58,0.18)]">
-        <h3 className="display text-xs tracking-[3px] uppercase text-[#1a1410] mb-3">Product Video</h3>
+        <h3 className="display text-xs tracking-[3px] uppercase text-[#1a1410] mb-3 flex items-center gap-2">
+          <span aria-hidden="true">🎥</span> Product Video Link
+        </h3>
         <div>
-          <label className="luxury-label">YouTube Link</label>
+          <label className="luxury-label">YouTube URL</label>
           <input
             type="url"
             value={form.videoUrl}
-            onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
-            className="luxury-input"
-            placeholder="https://www.youtube.com/watch?v=..."
+            onChange={(e) => handleVideoUrlChange(e.target.value)}
+            className={`luxury-input${videoUrlError ? ' !border-[#7a2e2e] focus:!border-[#7a2e2e]' : ''}`}
+            placeholder="https://www.youtube.com/watch?v=xxxxxxxx"
+            aria-describedby="video-url-hint"
+            aria-invalid={Boolean(videoUrlError)}
           />
-          <p className="text-[10px] mt-1 text-[#9a8c75]">
-            Optional. Shows a &quot;Product Video&quot; button next to the price on the product page.
-          </p>
+          {videoUrlError ? (
+            <p id="video-url-hint" className="text-[10px] mt-1 text-[#7a2e2e]" role="alert">
+              {videoUrlError}
+            </p>
+          ) : (
+            <p id="video-url-hint" className="text-[10px] mt-1 text-[#9a8c75]">
+              Accepted: youtube.com/watch?v=… · youtu.be/… · youtube.com/shorts/… — leave blank for no video.
+            </p>
+          )}
         </div>
       </div>
 
