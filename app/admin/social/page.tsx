@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import {
   Youtube, Facebook, Instagram, Upload, Send, Clock,
   CheckCircle, XCircle, AlertCircle, RefreshCw, Trash2,
@@ -491,33 +492,43 @@ export default function SocialPage() {
         <p className="text-xs text-[#e8d49b]/50 mt-0.5">Publish videos to YouTube, Facebook & Instagram</p>
       </div>
 
-      {/* Live profile quick links */}
-      <div className="px-6 pt-6 pb-2">
-        <h2 className="text-sm font-semibold text-[#e8d49b] mb-3">Your Social Profiles</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {SOCIAL_PROFILE_LINKS.map(({ platform, label, subtitle, href, Icon, color }) => (
-            <a
-              key={platform}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative flex flex-col items-center gap-3 rounded-2xl border-2 bg-[#1e1a14] px-6 py-7 text-center transition hover:-translate-y-0.5 hover:shadow-xl"
-              style={{ borderColor: color }}
-            >
-              <ExternalLink size={14} className="absolute top-4 right-4 text-[#e8d49b]/30 group-hover:text-[#e8d49b]/60 transition" />
-              <span
-                className="flex items-center justify-center w-14 h-14 rounded-full shadow-md"
-                style={{ backgroundColor: color }}
+      {/* Live profile quick links — diamond-sparkle backdrop */}
+      <div className="relative overflow-hidden">
+        <Image
+          src="/images/admin/social-diamonds-bg.jpg"
+          alt=""
+          fill
+          className="object-cover opacity-60"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f0d09]/45 via-[#0f0d09]/65 to-[#0f0d09]" />
+        <div className="relative px-6 pt-6 pb-5">
+          <h2 className="text-sm font-semibold text-[#e8d49b] mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">Your Social Profiles</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {SOCIAL_PROFILE_LINKS.map(({ platform, label, subtitle, href, Icon, color }) => (
+              <a
+                key={platform}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative flex flex-col items-center gap-3 rounded-2xl border-2 bg-[#1e1a14]/60 backdrop-blur-sm px-6 py-7 text-center transition hover:-translate-y-0.5 hover:shadow-xl"
+                style={{ borderColor: color }}
               >
-                <Icon size={26} className="text-white" />
-              </span>
-              <Icon size={44} style={{ color }} strokeWidth={1.5} className="opacity-90" />
-              <div>
-                <div className="text-base font-bold text-white">{label}</div>
-                <div className="text-xs font-semibold" style={{ color }}>{subtitle}</div>
-              </div>
-            </a>
-          ))}
+                <ExternalLink size={14} className="absolute top-4 right-4 text-[#e8d49b]/30 group-hover:text-[#e8d49b]/60 transition" />
+                <span
+                  className="flex items-center justify-center w-14 h-14 rounded-full shadow-md"
+                  style={{ backgroundColor: color }}
+                >
+                  <Icon size={26} className="text-white" />
+                </span>
+                <Icon size={44} style={{ color }} strokeWidth={1.5} className="opacity-90" />
+                <div>
+                  <div className="text-base font-bold text-white">{label}</div>
+                  <div className="text-xs font-semibold" style={{ color }}>{subtitle}</div>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
