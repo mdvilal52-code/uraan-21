@@ -9,6 +9,7 @@ import AddToCartButton from '@/components/AddToCartButton';
 import PriceDisplay from '@/components/ui/PriceDisplay';
 import { useWishlist } from '@/context/wishlistContext';
 import { Heart, ChevronRight, Trash2, X } from 'lucide-react';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 export default function WishlistPage() {
   const { items, totalItems, removeFromWishlist, clearWishlist } = useWishlist();
@@ -79,6 +80,8 @@ export default function WishlistPage() {
                     alt={item.name}
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
+                    placeholder="blur"
+                    blurDataURL={blurDataURL()}
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </Link>

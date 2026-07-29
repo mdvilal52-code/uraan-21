@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
 import { Sparkles, ChevronRight, Calendar, User } from 'lucide-react';
 import type { BlogPost } from '@/lib/blog';
+import { isOptimizableImageSrc } from '@/lib/safeImage';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 export default function BlogListPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -63,10 +66,22 @@ export default function BlogListPage() {
                 href={`/blog/${p.slug}`}
                 className="group block border border-[rgba(184,137,58,0.18)] hover:shadow-[0_12px_40px_rgba(122,90,31,0.12)] transition-all"
               >
-                <div
-                  className="aspect-[16/10] bg-cover bg-center bg-[#f8f2e6]"
-                  style={{ backgroundImage: `url(${p.coverImage || '/images/necklace.jpg'})` }}
-                />
+                <div className="relative aspect-[16/10] bg-[#f8f2e6] overflow-hidden">
+                  {isOptimizableImageSrc(p.coverImage) ? (
+                    <Image
+                      src={p.coverImage || '/images/necklace.jpg'}
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      placeholder="blur"
+                      blurDataURL={blurDataURL()}
+                      className="object-cover"
+                    />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.coverImage || '/images/necklace.jpg'} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                  )}
+                </div>
                 <div className="p-5">
                   <h2 className="serif text-xl text-[#1a1410] mb-2 group-hover:text-[#b8893a] transition-colors">
                     {p.title}

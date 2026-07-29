@@ -9,6 +9,7 @@ import CartDrawer from '@/components/CartDrawer';
 import PriceDisplay from '@/components/ui/PriceDisplay';
 import { useCart } from '@/context/CartContext';
 import { ShoppingBag, ChevronRight, Tag, Truck, ShieldCheck, Plus, Minus, Trash2 } from 'lucide-react';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 export default function CartPage() {
   const {
@@ -80,7 +81,15 @@ export default function CartPage() {
                   />
                   <div className="relative w-24 h-24 md:w-28 md:h-28 bg-[#f8f2e6] flex-shrink-0 rounded overflow-hidden">
                     {item.image && (
-                      <Image src={item.image} alt={item.name} fill sizes="112px" className="object-cover" />
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        sizes="112px"
+                        placeholder="blur"
+                        blurDataURL={blurDataURL()}
+                        className="object-cover"
+                      />
                     )}
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col gap-2">

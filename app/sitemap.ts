@@ -7,12 +7,16 @@ import { dbGetPublishedPosts } from '@/lib/blogDb';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  const staticRoutes = ['', '/collections', '/about', '/contact', '/reviews', '/login', '/register', '/blog'];
+  const staticRoutes = [
+    '', '/collections', '/about', '/contact', '/reviews', '/login', '/register', '/blog',
+    '/privacy-policy', '/terms', '/data-deletion',
+  ];
+  const legalRoutes = new Set(['/privacy-policy', '/terms', '/data-deletion']);
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${SITE_URL}${path}`,
     lastModified: now,
-    changeFrequency: path === '' || path === '/collections' ? 'daily' : 'weekly',
-    priority: path === '' ? 1 : path === '/collections' ? 0.9 : 0.6,
+    changeFrequency: path === '' || path === '/collections' ? 'daily' : legalRoutes.has(path) ? 'yearly' : 'weekly',
+    priority: path === '' ? 1 : path === '/collections' ? 0.9 : legalRoutes.has(path) ? 0.3 : 0.6,
   }));
 
   // One entry per product so Google can index every product page.

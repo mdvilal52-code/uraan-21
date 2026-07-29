@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { X, ShoppingBag, Plus, Minus, Trash2, ChevronRight, ShieldCheck } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import PriceDisplay from '@/components/ui/PriceDisplay';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 export default function CartDrawer() {
   const {
@@ -82,6 +83,8 @@ export default function CartDrawer() {
                           alt={item.name}
                           fill
                           sizes="72px"
+                          placeholder="blur"
+                          blurDataURL={blurDataURL()}
                           className="object-cover"
                         />
                       ) : (

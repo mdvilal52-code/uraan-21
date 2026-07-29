@@ -12,6 +12,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { saveOrder } from '@/lib/userOrders';
 import LocationPicker from '@/components/LocationPicker';
 import type { GeoAddress } from '@/lib/geo/nominatim';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 import {
   CreditCard, Smartphone, Wallet, Building2, Banknote,
   Lock, CheckCircle2, ShieldCheck, Truck, ChevronRight, MapPin,
@@ -736,7 +737,15 @@ export default function CheckoutPage() {
                   <div key={item.id} className="flex gap-4 items-center">
                     <div className="relative w-16 h-16 bg-white flex-shrink-0 rounded overflow-hidden">
                       {item.image && (
-                        <Image src={item.image} alt={item.name} fill sizes="64px" className="object-cover" />
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          sizes="64px"
+                          placeholder="blur"
+                          blurDataURL={blurDataURL()}
+                          className="object-cover"
+                        />
                       )}
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col gap-1">

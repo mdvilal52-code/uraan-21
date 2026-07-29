@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import Sidebar from '@/components/admin/Sidebar';
 import Topbar from '@/components/admin/Topbar';
 import IdleTimeout from '@/components/admin/IdleTimeout';
+import CommandPalette from '@/components/admin/CommandPalette';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -18,6 +19,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex bg-[#fbf8f1] min-h-screen">
       <IdleTimeout />
+      <CommandPalette />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       {/* min-w-0 lets the content column shrink so wide tables scroll
           inside their own container instead of overflowing the page. */}

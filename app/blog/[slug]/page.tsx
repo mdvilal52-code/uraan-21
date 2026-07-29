@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
 import { Calendar, User, ChevronRight } from 'lucide-react';
 import type { BlogPost } from '@/lib/blog';
+import { isOptimizableImageSrc } from '@/lib/safeImage';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
@@ -65,10 +68,23 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </div>
 
         {post.coverImage && (
-          <div
-            className="aspect-[16/9] bg-cover bg-center bg-[#f8f2e6] mb-8"
-            style={{ backgroundImage: `url(${post.coverImage})` }}
-          />
+          <div className="relative aspect-[16/9] bg-[#f8f2e6] mb-8 overflow-hidden">
+            {isOptimizableImageSrc(post.coverImage) ? (
+              <Image
+                src={post.coverImage}
+                alt=""
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 800px"
+                placeholder="blur"
+                blurDataURL={blurDataURL()}
+                className="object-cover"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={post.coverImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
+            )}
+          </div>
         )}
 
         <div className="text-sm md:text-base text-[#3a2f24] leading-relaxed whitespace-pre-wrap">

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 // Single static hero banner, served responsively:
 // - mobile: a taller, portrait-friendly composition (banner-mobile.jpg)
@@ -13,6 +14,8 @@ export default function HeroCarousel() {
         width={864}
         height={505}
         priority
+        placeholder="blur"
+        blurDataURL={blurDataURL(864, 505)}
         className="block w-full h-auto md:hidden"
         sizes="100vw"
       />
@@ -23,6 +26,8 @@ export default function HeroCarousel() {
         width={1536}
         height={456}
         priority
+        placeholder="blur"
+        blurDataURL={blurDataURL(1536, 456)}
         className="hidden w-full h-auto md:block"
         sizes="100vw"
       />

@@ -7,12 +7,18 @@ import { Product } from '@/data/jewelleryData';
 import { useWishlist } from '@/context/wishlistContext';
 import AddToCartButton from '@/components/AddToCartButton';
 import PriceDisplay from '@/components/ui/PriceDisplay';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 type ProductCardProps = {
   product: Product;
+  // Set true for the first row of a grid so the browser fetches it with
+  // fetchpriority="high" instead of competing equally with every other
+  // card's image — the standard fix for grid/listing pages where many real
+  // photos load at once and the LCP candidate gets starved of bandwidth.
+  priority?: boolean;
 };
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, priority = false }: ProductCardProps) {
   const { toggleWishlist, isInWishlist } = useWishlist();
   const inWishlist = isInWishlist(product.id);
 
@@ -55,6 +61,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             alt={product.name}
             fill
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={priority}
+            placeholder="blur"
+            blurDataURL={blurDataURL()}
             className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
         )}

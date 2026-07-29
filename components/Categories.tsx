@@ -1,9 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Gem, ChevronRight, LayoutGrid } from 'lucide-react';
 import { CATEGORY_THEME, CATEGORY_IMAGES, fallbackCategoryImage } from '@/lib/categoryStyles';
 import { useCategories } from '@/hooks/useCategories';
+import { isOptimizableImageSrc } from '@/lib/safeImage';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 export default function Categories() {
   const { categories } = useCategories();
@@ -34,10 +37,27 @@ export default function Categories() {
               <div className="absolute top-0 left-0 right-0 h-[2px] z-10 bg-gradient-to-r from-[#d4a857] via-[#b8893a] to-[#8c6726] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
 
               <div className="relative w-full aspect-[4/5] overflow-hidden">
-                <div
-                  className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                  style={{ backgroundImage: `url(${image})` }}
-                />
+                {isOptimizableImageSrc(image) ? (
+                  <Image
+                    src={image}
+                    alt={cat.name}
+                    fill
+                    sizes="(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+                    placeholder="blur"
+                    blurDataURL={blurDataURL()}
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  // Admin-pasted external URL outside images.remotePatterns —
+                  // see lib/safeImage.ts for why this can't go through the
+                  // optimizer.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={image}
+                    alt={cat.name}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                )}
               </div>
 
               <div className="px-2 py-3 md:py-4 text-center">
