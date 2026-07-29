@@ -68,6 +68,27 @@ export async function dbGetCategories(): Promise<Category[] | null> {
       if (!used.has(candidate)) { c.image = candidate; used.add(candidate); break; }
     }
   }
+
+  // Sort into the site's canonical category order (same sequence as the
+  // bundled seed list in data/jewelleryData.ts and the CATEGORY_THEME /
+  // CATEGORY_IMAGES maps) rather than raw DB insertion order (created_at),
+  // which is arbitrary and doesn't match what admins/customers expect. This
+  // also stops the visible reorder flash on first load: the seed data (used
+  // for the very first paint) and this DB-backed list now render in the
+  // same order, so swapping from one to the other is invisible instead of
+  // looking like the grid re-shuffles / "opens twice". Any category not in
+  // the canonical list (e.g. a brand-new admin-created one) sorts after all
+  // known ones, in its original created_at order.
+  const CANONICAL_ORDER = Object.keys(CATEGORY_IMAGES);
+  categories.sort((a, b) => {
+    const ai = CANONICAL_ORDER.indexOf(a.slug);
+    const bi = CANONICAL_ORDER.indexOf(b.slug);
+    if (ai === -1 && bi === -1) return 0;
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
   return categories;
 }
 
