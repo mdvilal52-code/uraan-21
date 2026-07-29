@@ -153,6 +153,32 @@ taking an online payment (handy for testing and Cash-on-Delivery).
 
 ---
 
+## 5b. Backups (Admin → Backups)
+
+Automated database + Storage backups, restorable from the admin panel.
+
+1. Install `postgresql-client` on the VPS (gives you `pg_dump` / `psql`):
+   `apt-get install -y postgresql-client` (Ubuntu/Debian).
+2. Supabase → **Project Settings → Database → Connection string** → copy the
+   URI and set it as `SUPABASE_DB_URL` (this is different from `SUPABASE_URL`,
+   which is the REST API host, not a Postgres connection string).
+3. Restart / redeploy. **Admin → Backups** now shows a green "configured"
+   banner instead of listing what's missing, and **Backup Now** works.
+4. Point a daily cron job at the backup endpoint (reuses `CRON_SECRET` from
+   step 1's abandoned-cart-reminder cron):
+   ```cron
+   0 2 * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://your-domain.com/api/cron/backups
+   ```
+   Each run creates a scheduled backup, then prunes old ones per
+   `BACKUP_RETENTION_DAILY` / `BACKUP_RETENTION_MONTHLY` (defaults: 30 daily,
+   12 monthly — see `.env.example`).
+
+Every restore automatically takes a fresh safety backup of the current
+database first, and every delete removes the backup from disk immediately —
+nothing is just hidden.
+
+---
+
 ## 6. CRM (HubSpot, optional)
 
 Website enquiries already save to your Supabase database (step 3) and show in

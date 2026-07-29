@@ -6,6 +6,7 @@ import type { Product } from '@/data/jewelleryData';
 import { MAX_LEN, tooLong } from '@/lib/security/validate';
 import { logAudit } from '@/lib/audit';
 import { currentApiAdmin } from '@/lib/security/guard';
+import { createBackup } from '@/lib/backups';
 
 const MAX_ROWS = 500;
 const MAX_CSV_BYTES = 2 * 1024 * 1024; // 2 MB — generous for a 500-row product CSV.
@@ -232,12 +233,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'No valid rows to import (name and price are required).' }, { status: 400 });
   }
 
+  const admin = await currentApiAdmin();
+
+  // Bulk import overwrites/adds a large batch of catalogue rows at once —
+  // a destructive-enough action to auto-create a safety backup first. This
+  // is best-effort: a misconfigured/unset backup system (common until an
+  // operator sets SUPABASE_DB_URL) must never block the import itself.
+  const safety = await createBackup({ type: 'safety', label: 'pre-bulk-import', createdBy: admin?.email });
+
   const result = await dbBulkInsertProducts(products);
   const inserted = result.inserted;
   const failed = result.failed + parseFailed;
 
-  const admin = await currentApiAdmin();
-  await logAudit({ actorEmail: admin?.email, actorRole: admin?.role, action: 'product_bulk_imported', metadata: { count: inserted } });
+  await logAudit({
+    actorEmail: admin?.email,
+    actorRole: admin?.role,
+    action: 'product_bulk_imported',
+    metadata: { count: inserted, safetyBackupId: safety.ok ? safety.manifest?.id : null },
+  });
 
   return NextResponse.json({ ok: true, inserted, failed });
 }

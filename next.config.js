@@ -5,11 +5,16 @@
 // live store, so we can tighten it to enforcing once the report is clean.
 const cspReportOnly = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://*.razorpay.com",
+  // Google Analytics (gtag.js) only ever loads when NEXT_PUBLIC_GA_MEASUREMENT_ID
+  // is set, but the CSP allow-list has to be correct whether or not that's
+  // configured on this particular deployment — otherwise turning CSP from
+  // Report-Only to enforcing would silently break analytics the moment
+  // someone flips the env var on.
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://*.razorpay.com https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.supabase.co https://*.razorpay.com https://api.razorpay.com",
+  "connect-src 'self' https://*.supabase.co https://*.razorpay.com https://api.razorpay.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com",
   // Razorpay checkout iframes, Google Maps embed on the Contact page, and the
   // YouTube "Product Video" embed on the PDP.
   "frame-src 'self' https://*.razorpay.com https://api.razorpay.com https://www.google.com https://maps.google.com https://www.youtube-nocookie.com",

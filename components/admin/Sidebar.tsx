@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Package, ShoppingCart, Users, BarChart3,
   Grid3x3, Image as ImageIcon, Star, Ticket, Settings, UserCog, LogOut, Gem,
   Contact, X, Home, ShieldCheck, RotateCcw, ShoppingBag, Megaphone,
-  Newspaper, ScrollText, Share2,
+  Newspaper, ScrollText, Share2, HardDrive,
 } from 'lucide-react';
 import { hasAtLeast, type Role } from '@/lib/rbac';
 
@@ -29,6 +29,7 @@ const menuItems: { href: string; label: string; icon: typeof LayoutDashboard; mi
   { href: '/admin/users', label: 'Admin Users', icon: UserCog, minRole: 'super_admin' },
   { href: '/admin/social', label: 'Social Media', icon: Share2, minRole: 'admin' },
   { href: '/admin/audit-log', label: 'Audit Log', icon: ScrollText, minRole: 'admin' },
+  { href: '/admin/backups', label: 'Backups', icon: HardDrive, minRole: 'super_admin' },
   { href: '/admin/security', label: 'Security', icon: ShieldCheck, minRole: 'staff' },
   { href: '/admin/settings', label: 'Settings', icon: Settings, minRole: 'super_admin' },
 ];
