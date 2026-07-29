@@ -71,6 +71,30 @@ export async function loginUser(
   return { ok: true };
 }
 
+export async function loginFromSupabaseUser(input: {
+  email: string;
+  name: string;
+  phone: string;
+}): Promise<void> {
+  const email = input.email.trim().toLowerCase();
+  const users = readUsers();
+  const existing = users.find((u) => u.email === email);
+  if (!existing) {
+    const user: StoredUser = {
+      name: input.name.trim() || email.split('@')[0],
+      email,
+      phone: input.phone.trim(),
+      joinedOn: new Date().toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }),
+      // OAuth-verified identity (Google/Facebook via Supabase Auth) has no local
+      // password; this hash can never match a real SHA-256(password) digest, so
+      // loginUser() correctly rejects password attempts against this account.
+      passwordHash: 'oauth',
+    };
+    localStorage.setItem(USERS_KEY, JSON.stringify([...users, user]));
+  }
+  localStorage.setItem(SESSION_KEY, email);
+}
+
 export function logoutUser(): void {
   localStorage.removeItem(SESSION_KEY);
 }

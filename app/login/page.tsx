@@ -7,6 +7,7 @@ import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import { Mail, Lock, Eye, EyeOff, ChevronRight, AlertCircle, ShieldCheck } from 'lucide-react';
 import { loginUser, getCurrentUser } from '@/lib/auth';
+import { createClient } from '@/lib/supabase/browser';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,6 +23,16 @@ export default function LoginPage() {
   useEffect(() => {
     if (getCurrentUser()) router.replace(nextUrl());
   }, [router]);
+
+  const handleOAuth = async (provider: 'google' | 'facebook') => {
+    setSocialNotice('');
+    const supabase = createClient();
+    const redirectTo = `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(nextUrl())}`;
+    const { error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo } });
+    if (error) {
+      setSocialNotice(`${provider === 'google' ? 'Google' : 'Facebook'} sign-in failed: ${error.message}`);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,7 +145,7 @@ export default function LoginPage() {
           <div className="space-y-2">
             <button
               type="button"
-              onClick={() => setSocialNotice('Google sign-in is being set up. Please continue with your email — it takes under a minute and you get 10% off your first order!')}
+              onClick={() => handleOAuth('google')}
               className="w-full py-3 rounded-xl bg-white border border-[#dadce0] text-[#3c4043] text-[11px] tracking-[1.5px] uppercase font-semibold hover:bg-[#f8f9fa] shadow-sm flex items-center justify-center gap-2"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4" aria-hidden="true">
@@ -147,7 +158,7 @@ export default function LoginPage() {
             </button>
             <button
               type="button"
-              onClick={() => setSocialNotice('Facebook sign-in is being set up. Please continue with your email — it takes under a minute!')}
+              onClick={() => handleOAuth('facebook')}
               className="w-full py-3 rounded-xl bg-[#1877F2] text-white text-[11px] tracking-[1.5px] uppercase font-semibold hover:bg-[#0d65d9] shadow-sm flex items-center justify-center gap-2"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4" fill="#FFFFFF" aria-hidden="true">
