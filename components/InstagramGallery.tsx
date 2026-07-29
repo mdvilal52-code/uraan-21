@@ -5,7 +5,7 @@ import { FaInstagram } from 'react-icons/fa';
 import { instagramImages } from '@/data/jewelleryData';
 
 const PROFILE_URL =
-  process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://instagram.com/omgauriputra';
+  process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/omgpgems1975?igsh=dWNpa29wc3JmcHR6';
 
 type Post = { id: string; image: string; permalink: string; caption?: string };
 

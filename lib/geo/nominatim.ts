@@ -5,7 +5,7 @@
 // https://operations.osmfoundation.org/policies/nominatim/
 
 const NOMINATIM_BASE = 'https://nominatim.openstreetmap.org';
-const USER_AGENT = 'OmGauriPoojaGems/1.0 (checkout address lookup)';
+const USER_AGENT = 'OmGauriPutraGems/1.0 (checkout address lookup)';
 
 export type GeoAddress = {
   line1: string;

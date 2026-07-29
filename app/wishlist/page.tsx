@@ -14,20 +14,20 @@ export default function WishlistPage() {
   const { items, totalItems, removeFromWishlist, clearWishlist } = useWishlist();
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#191970]">
       <Navbar />
       <CartDrawer />
 
-      <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-[#9a8c75]">
-        <Link href="/" className="text-[#b8893a] font-medium">Home</Link>
+      <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-white/80">
+        <Link href="/" className="text-white font-medium">Home</Link>
         <span className="mx-2 opacity-50">›</span>
         <span>Wishlist</span>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 pb-4 flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="serif text-4xl md:text-5xl text-[#1a1410] mb-2">My Wishlist</h1>
-          <p className="text-sm text-[#6b5d4c]">
+          <h1 className="serif text-4xl md:text-5xl text-white mb-2">My Wishlist</h1>
+          <p className="text-sm text-white/80">
             {totalItems > 0
               ? `${totalItems} item${totalItems > 1 ? 's' : ''} saved for later.`
               : 'Your wishlist is empty.'}
@@ -36,7 +36,7 @@ export default function WishlistPage() {
         {totalItems > 0 && (
           <button
             onClick={clearWishlist}
-            className="text-[11px] tracking-[2px] uppercase font-semibold text-[#9a8c75] hover:text-[#7a2e2e] inline-flex items-center gap-1.5 transition-colors duration-200"
+            className="text-[11px] tracking-[2px] uppercase font-semibold text-white/80 hover:text-white inline-flex items-center gap-1.5 transition-colors duration-200"
           >
             <Trash2 size={13} /> Clear All
           </button>

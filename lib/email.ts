@@ -2,7 +2,7 @@
 // RESEND_API_KEY is set, so every send is a safe no-op until then. Used for
 // security alerts and email OTP. Never throws.
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const FROM = process.env.SECURITY_EMAIL_FROM || 'Om Gauri Pooja Gems Security <security@omgauriputra.com>';
+const FROM = process.env.SECURITY_EMAIL_FROM || 'Om Gauri Putra Gems Security <security@omgauriputra.com>';
 
 export function isEmailConfigured(): boolean {
   return Boolean(RESEND_API_KEY);

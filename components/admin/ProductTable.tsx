@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Eye, Edit2, Trash2, Package, RotateCcw, AlertTriangle } from 'lucide-react';
+import { Eye, Edit2, Trash2, Package, RotateCcw, AlertTriangle, Video } from 'lucide-react';
 import { Product } from '@/data/jewelleryData';
 
 type ProductTableProps = {
@@ -21,6 +21,7 @@ export default function ProductTable({ products, onDelete, onRestore }: ProductT
             <th className="text-left py-3 px-4 font-semibold">Price</th>
             <th className="text-left py-3 px-4 font-semibold">Stock</th>
             <th className="text-left py-3 px-4 font-semibold">Rating</th>
+            <th className="text-left py-3 px-4 font-semibold hidden md:table-cell">Video</th>
             <th className="text-right py-3 px-4 font-semibold">Actions</th>
           </tr>
         </thead>
@@ -78,6 +79,17 @@ export default function ProductTable({ products, onDelete, onRestore }: ProductT
               </td>
               <td className="py-3 px-4 text-[#6b5d4c]">
                 {p.rating} ★ ({p.reviewCount})
+              </td>
+              <td className="py-3 px-4 hidden md:table-cell">
+                {p.videoUrl ? (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold bg-[#3d6b5a]/10 text-[#3d6b5a]">
+                    <Video size={10} /> ✓ Linked
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold bg-[#9a8c75]/10 text-[#9a8c75]">
+                    No Video
+                  </span>
+                )}
               </td>
               <td className="py-3 px-4">
                 <div className="flex justify-end gap-2">

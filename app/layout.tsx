@@ -1,6 +1,13 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { Cormorant_Garamond, Cinzel, Jost } from 'next/font/google';
+import {
+  Cormorant_Garamond,
+  Cinzel,
+  Jost,
+  Poppins,
+  Noto_Sans_Devanagari,
+  Rozha_One,
+} from 'next/font/google';
 import './globals.css';
 import '../styles/luxury.css';
 import '../styles/animations.css';
@@ -34,6 +41,24 @@ const fontSans = Jost({
   weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
   variable: '--font-sans',
+});
+const fontPoppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-poppins',
+});
+const fontDevanagari = Noto_Sans_Devanagari({
+  subsets: ['devanagari'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-devanagari',
+});
+const fontDevanagariDisplay = Rozha_One({
+  subsets: ['devanagari'],
+  weight: ['400'],
+  display: 'swap',
+  variable: '--font-devanagari-display',
 });
 
 const siteUrl = SITE_URL;
@@ -76,7 +101,11 @@ const localBusinessSchema = {
       closes: '18:00',
     },
   ],
-  sameAs: [process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://instagram.com/omgauriputra'],
+  sameAs: [
+    process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/omgpgems1975?igsh=dWNpa29wc3JmcHR6',
+    process.env.NEXT_PUBLIC_FACEBOOK_URL || 'https://www.facebook.com/share/1GaU9yTr6i/',
+    process.env.NEXT_PUBLIC_YOUTUBE_URL || 'https://www.youtube.com/@jitendersoni4595',
+  ],
 };
 
 export const metadata: Metadata = {
@@ -87,11 +116,11 @@ export const metadata: Metadata = {
     ? { google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION }
     : undefined,
   title: {
-    default: 'Om Gauri Pooja Gems Jewellery & Rudraksh — Gold, Silver, Diamond & Rudraksh Online',
-    template: '%s | Om Gauri Pooja Gems Jewellery & Rudraksh',
+    default: 'Om Gauri Putra Gems Jewellery & Rudraksh — Gold, Silver, Diamond & Rudraksh Online',
+    template: '%s | Om Gauri Putra Gems Jewellery & Rudraksh',
   },
   description:
-    'Buy certified gold, 92.5 silver, diamond and authentic Nepal Rudraksh jewellery online at Om Gauri Pooja Gems Jewellery & Rudraksh. BIS hallmarked, bridal sets, necklaces, earrings & rings with free shipping above ₹1999. Located in Shyam Colony, Budh Vihar Phase-2, Delhi.',
+    'Buy certified gold, 92.5 silver, diamond and authentic Nepal Rudraksh jewellery online at Om Gauri Putra Gems Jewellery & Rudraksh. BIS hallmarked, bridal sets, necklaces, earrings & rings with free shipping above ₹1999. Located in Shyam Colony, Budh Vihar Phase-2, Delhi.',
   keywords: [
     'gold jewellery online',
     'silver jewellery',
@@ -108,27 +137,27 @@ export const metadata: Metadata = {
     'jewellery shop Shyam Colony Delhi',
     'jewellery shop Budh Vihar',
     'jewellery shop Budh Vihar Phase-2',
-    'Om Gauri Pooja Gems',
+    'Om Gauri Putra Gems',
     'OMGP gems',
   ],
-  authors: [{ name: 'Om Gauri Pooja Gems Jewellery & Rudraksh' }],
-  creator: 'Om Gauri Pooja Gems Jewellery & Rudraksh',
-  applicationName: 'Om Gauri Pooja Gems Jewellery & Rudraksh',
+  authors: [{ name: 'Om Gauri Putra Gems Jewellery & Rudraksh' }],
+  creator: 'Om Gauri Putra Gems Jewellery & Rudraksh',
+  applicationName: 'Om Gauri Putra Gems Jewellery & Rudraksh',
   category: 'shopping',
   alternates: { canonical: siteUrl },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
     url: siteUrl,
-    siteName: 'Om Gauri Pooja Gems Jewellery & Rudraksh',
-    title: 'Om Gauri Pooja Gems Jewellery & Rudraksh — Gold, Silver, Diamond & Rudraksh',
+    siteName: 'Om Gauri Putra Gems Jewellery & Rudraksh',
+    title: 'Om Gauri Putra Gems Jewellery & Rudraksh — Gold, Silver, Diamond & Rudraksh',
     description:
       'Certified gold, silver, diamond and authentic Rudraksh jewellery. BIS hallmarked, bridal collections, free shipping above ₹1999.',
-    images: [{ url: '/images/hero.jpg', width: 1200, height: 630, alt: 'Om Gauri Pooja Gems Jewellery & Rudraksh' }],
+    images: [{ url: '/images/hero.jpg', width: 1200, height: 630, alt: 'Om Gauri Putra Gems Jewellery & Rudraksh' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Om Gauri Pooja Gems Jewellery & Rudraksh — Fine Jewellery',
+    title: 'Om Gauri Putra Gems Jewellery & Rudraksh — Fine Jewellery',
     description: 'Certified gold, silver, diamond & authentic Rudraksh jewellery online.',
     images: ['/images/hero.jpg'],
   },
@@ -157,7 +186,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSerif.variable} ${fontDisplay.variable} ${fontSans.variable}`}
+      className={`${fontSerif.variable} ${fontDisplay.variable} ${fontSans.variable} ${fontPoppins.variable} ${fontDevanagari.variable} ${fontDevanagariDisplay.variable}`}
     >
       <head />
       <body className="pb-14 md:pb-0">

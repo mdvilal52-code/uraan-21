@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
@@ -10,20 +11,18 @@ import CopyAddressButton from '@/components/CopyAddressButton';
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#0B1E42]">
       <Navbar />
       <CartDrawer />
 
-      <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-[#9a8c75]">
-        <Link href="/" className="text-[#b8893a] font-medium">Home</Link>
+      <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-white/60">
+        <Link href="/" className="text-[#C9A24A] font-medium">Home</Link>
         <span className="mx-2 opacity-50">›</span>
         <span>About Us</span>
       </div>
 
-      <section
-        className="relative h-[300px] md:h-[420px] bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: 'url(/images/banner.jpg)' }}
-      >
+      <section className="relative h-[300px] md:h-[420px] flex items-center justify-center overflow-hidden">
+        <Image src="/images/banner.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white px-4">
           <p className="serif italic text-[#e8d49b] tracking-[3px] uppercase text-sm mb-3">
@@ -37,30 +36,29 @@ export default function AboutPage() {
 
       <section className="py-16 px-4 max-w-5xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-          <div
-            className="aspect-[4/5] bg-cover bg-center bg-[#f8f2e6]"
-            style={{ backgroundImage: 'url(/images/model.jpg)' }}
-          />
+          <div className="relative aspect-[4/5] bg-[#f8f2e6] overflow-hidden">
+            <Image src="/images/model.jpg" alt="Artisan crafting fine jewellery" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+          </div>
           <div>
             <p className="text-[#b8893a] serif italic text-sm tracking-[2px] mb-2">
               Since Generations
             </p>
-            <h2 className="serif text-3xl md:text-4xl text-[#1a1410] mb-5 leading-tight">
+            <h2 className="serif text-3xl md:text-4xl text-white mb-5 leading-tight">
               Crafting <em className="gold-text">Heirlooms</em> for Every Family
             </h2>
-            <p className="text-sm text-[#6b5d4c] leading-relaxed mb-4">
-              Om Gauri Pooja Gems Jewellery & Rudraksh was founded with a single vision — to bring authentic,
+            <p className="text-sm text-white/70 leading-relaxed mb-4">
+              Om Gauri Putra Gems Jewellery & Rudraksh was founded with a single vision — to bring authentic,
               certified, and exquisitely crafted jewellery to every Indian family.
               Three generations later, we remain committed to the same values: purity,
               craftsmanship, and trust.
             </p>
-            <p className="text-sm text-[#6b5d4c] leading-relaxed mb-4">
+            <p className="text-sm text-white/70 leading-relaxed mb-4">
               Every piece in our collection is handcrafted by master artisans, with
               meticulous attention to detail. From 916 hallmarked gold to 92.5%
               certified silver, from rare gemstones to authentic Rudraksh sourced
               from Nepal — we ensure only the finest reaches our customers.
             </p>
-            <p className="text-sm text-[#6b5d4c] leading-relaxed">
+            <p className="text-sm text-white/70 leading-relaxed">
               We believe jewellery is more than an ornament — it&apos;s a story, a memory,
               a blessing passed through generations.
             </p>
@@ -68,10 +66,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-[#f8f2e6] py-16 px-4">
+      <section className="bg-[#0B1E42] py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <p className="section-tag-italic">What We Stand For</p>
-          <h2 className="section-heading">Our Values</h2>
+          <h2 className="section-heading" style={{ color: 'white' }}>Our Values</h2>
           <div className="luxury-divider"><Sparkles size={10} /></div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
             {[
@@ -91,14 +89,14 @@ export default function AboutPage() {
                 desc: 'From your first visit to lifetime servicing, your trust is sacred to us. We are here for every milestone.',
               },
             ].map((v, i) => (
-              <div key={i} className="bg-white border border-[rgba(184,137,58,0.18)] p-6 text-center">
-                <div className="w-14 h-14 rounded-full bg-[#fbf8f1] mx-auto mb-4 grid place-items-center">
-                  <v.icon className="text-[#b8893a]" size={24} />
+              <div key={i} className="bg-white/10 border border-[rgba(201,162,74,0.3)] p-6 text-center">
+                <div className="w-14 h-14 rounded-full bg-white/10 mx-auto mb-4 grid place-items-center">
+                  <v.icon className="text-[#C9A24A]" size={24} />
                 </div>
-                <h3 className="display text-sm tracking-[2px] uppercase text-[#1a1410] mb-3">
+                <h3 className="display text-sm tracking-[2px] uppercase text-white mb-3">
                   {v.title}
                 </h3>
-                <p className="text-xs text-[#6b5d4c] leading-relaxed">{v.desc}</p>
+                <p className="text-xs text-white/70 leading-relaxed">{v.desc}</p>
               </div>
             ))}
           </div>

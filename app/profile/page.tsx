@@ -147,7 +147,7 @@ export default function ProfilePage() {
 
   if (!account) {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-[#C4E7F5]">
         <Navbar />
         <div className="py-32 text-center text-sm text-[#9a8c75] tracking-[2px] uppercase">
           Checking your account…
@@ -166,7 +166,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#C4E7F5]">
       <Navbar />
       <CartDrawer />
 

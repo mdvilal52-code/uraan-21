@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, Eye } from 'lucide-react';
 import { Product } from '@/data/jewelleryData';
 import { useWishlist } from '@/context/wishlistContext';
@@ -48,10 +49,15 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       {/* Image */}
       <div className="aspect-square relative bg-[#f8f2e6] overflow-hidden shrink-0">
-        <div
-          className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-          style={{ backgroundImage: `url(${product.image})` }}
-        />
+        {product.image && (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        )}
 
         {/* Badge */}
         {product.tag && (

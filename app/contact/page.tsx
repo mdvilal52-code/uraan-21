@@ -71,20 +71,20 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#0B1E42]">
       <Navbar />
       <CartDrawer />
 
-      <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-[#9a8c75]">
-        <Link href="/" className="text-[#b8893a] font-medium">Home</Link>
+      <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-white/60">
+        <Link href="/" className="text-[#C9A24A] font-medium">Home</Link>
         <span className="mx-2 opacity-50">›</span>
         <span>Contact Us</span>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 pb-4">
-        <p className="text-[#b8893a] serif italic text-sm tracking-[2px] mb-1">Get in Touch</p>
-        <h1 className="serif text-4xl md:text-5xl text-[#1a1410] mb-2">Contact Us</h1>
-        <p className="text-sm text-[#6b5d4c] max-w-2xl">
+        <p className="text-[#C9A24A] serif italic text-sm tracking-[2px] mb-1">Get in Touch</p>
+        <h1 className="serif text-4xl md:text-5xl text-white mb-2">Contact Us</h1>
+        <p className="text-sm text-white/70 max-w-2xl">
           We&apos;d love to hear from you. Whether you have a question or need styling advice — drop us a line.
         </p>
       </div>
@@ -176,7 +176,7 @@ export default function ContactPage() {
 
         {/* Store Info */}
         <div className="space-y-5">
-          <div className="bg-[#f8f2e6] border border-[rgba(184,137,58,0.18)] p-5 md:p-6">
+          <div className="bg-[#C4E7F5] border border-[rgba(11,30,66,0.15)] p-5 md:p-6">
             <h2 className="display text-sm tracking-[3px] uppercase text-[#1a1410] mb-4">
               Our Flagship Store
             </h2>
@@ -251,7 +251,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div id="find-us" className="bg-[#f8f2e6] border border-[rgba(184,137,58,0.18)] p-6">
+          <div id="find-us" className="bg-[#C4E7F5] border border-[rgba(11,30,66,0.15)] p-6">
             <h2 className="display text-sm tracking-[3px] uppercase text-[#1a1410] mb-4">
               Find Us
             </h2>

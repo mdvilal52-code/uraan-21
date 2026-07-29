@@ -2,29 +2,24 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
-import Hero from '@/components/hero';
+import HeroCarousel from '@/components/HeroCarousel';
+import PromoBanner from '@/components/PromoBanner';
+import TrustBadges from '@/components/TrustBadges';
 import Categories from '@/components/Categories';
 import PromoBanners from '@/components/PromoBanners';
 import Bestseller from '@/components/Bestseller';
 import Trending from '@/components/Trending';
-import Testimonials from '@/components/Testimonials';
-import InstagramGallery from '@/components/InstagramGallery';
-import Newsletter from '@/components/Newsletter';
-import About from '@/components/About';
 import CartDrawer from '@/components/CartDrawer';
-import FloatingActions from '@/components/FloatingActions';
-import PaymentOptions from '@/components/PaymentOptions';
 import { whatsappLink } from '@/lib/whatsapp';
+import { SOCIAL_URLS } from '@/lib/business';
 import ProductCard from '@/components/ProductCard';
 import { getSaleProducts } from '@/lib/products';
 import { useProducts } from '@/hooks/useProducts';
 import {
-  Truck,
   ShieldCheck,
-  RotateCw,
-  Lock,
   ChevronRight,
   Sparkles,
   MessageCircle,
@@ -37,6 +32,18 @@ import {
   Shirt,
 } from 'lucide-react';
 import { FaFacebook, FaInstagram, FaYoutube, } from "react-icons/fa";
+
+// Below-the-fold sections: code-split out of the initial homepage bundle.
+// They still render in the SSR HTML (ssr: true, the default) for SEO, but
+// their JS ships as separate chunks instead of bloating the main bundle.
+const Testimonials = dynamic(() => import('@/components/Testimonials'));
+const InstagramGallery = dynamic(() => import('@/components/InstagramGallery'));
+const Newsletter = dynamic(() => import('@/components/Newsletter'));
+const About = dynamic(() => import('@/components/About'));
+const PaymentOptions = dynamic(() => import('@/components/PaymentOptions'));
+// Floating overlay chrome only (scroll-to-top / WhatsApp) — no SEO content,
+// so it can skip the server render entirely.
+const FloatingActions = dynamic(() => import('@/components/FloatingActions'), { ssr: false });
 
 // Delicate gold leaf-branch corner ornament for the "Shop By Budget" section.
 function LeafBranch({ className }: { className?: string }) {
@@ -216,30 +223,13 @@ export default function HomePage() {
       <FloatingActions />
 
       {/* 1. HERO SLIDER */}
-      <Hero />
+      <HeroCarousel />
 
-      {/* 2. TRUST STRIP */}
-      <section className="bg-[#3a2f24] border-y border-[rgba(184,137,58,0.18)]">
-        <div className="max-w-7xl mx-auto grid grid-cols-4">
-          {[
-            { icon: Truck, title: 'Free Shipping', sub: 'Complimentary Above ₹1,999' },
-            { icon: ShieldCheck, title: 'Certified', sub: 'BIS Hallmarked Purity' },
-            { icon: RotateCw, title: 'Easy Returns', sub: '7-Day Hassle-Free' },
-            { icon: Lock, title: 'Secure Pay', sub: '256-bit SSL Encrypted' },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-center text-center py-5 md:py-6 px-1.5 md:px-4 border-r border-[rgba(184,137,58,0.18)] last:border-r-0"
-            >
-              <item.icon className="text-[#b8893a] mb-2" size={22} />
-              <div className="text-[8px] md:text-[10px] font-semibold tracking-[1px] md:tracking-[1.5px] uppercase text-[#e8d49b]">
-                {item.title}
-              </div>
-              <div className="text-[8px] md:text-[10px] text-[#e8d49b]/60 mt-1 leading-tight">{item.sub}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* 2. TIMELESS ELEGANCE — Promo Banner */}
+      <PromoBanner />
+
+      {/* 3. TRUST STRIP */}
+      <TrustBadges />
 
       {/* 3. SHOP BY CATEGORY */}
       <Categories />
@@ -249,26 +239,25 @@ export default function HomePage() {
 
       {/* 4. SIGNATURE COLLECTION VIDEO */}
       <section className="relative">
-        <div className="relative h-[560px] md:h-[680px] overflow-hidden bg-[#1a1410]">
-          {/* Decorative background reel. WebM (VP9) is listed first so capable
-              browsers pick the sharper, more efficient stream; MP4 is the H.264
-              fallback. preload="auto" buffers enough to keep HD playback smooth
-              without re-buffering, and PiP/remote playback are disabled so the
-              full-resolution frame is never downscaled to a cast/picture window. */}
+        <div className="relative h-[480px] md:h-[700px] overflow-hidden bg-[#1a1410]">
           <video
             autoPlay
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
+            poster="/videos/signature-collection-poster.jpg"
             disablePictureInPicture
             disableRemotePlayback
             aria-hidden="true"
             tabIndex={-1}
-            poster="/videos/signature-collection-poster.jpg"
             className="absolute inset-0 w-full h-full object-cover object-center"
           >
-            <source src="/videos/signature-collection.webm" type="video/webm" />
+            {/* preload="metadata" fetches only the header (duration/dimensions),
+                not the full body, so autoplay still starts promptly on mobile
+                Safari and desktop Chrome without eagerly downloading the whole
+                file at page load. MP4/H.264 only — it's the one format every
+                mobile and desktop browser plays natively. */}
             <source src="/videos/signature-collection.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-black/75" />
@@ -498,9 +487,9 @@ export default function HomePage() {
       <section className="bg-[#fbf8f1] py-8 px-4 border-t border-[rgba(184,137,58,0.18)]">
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-6 md:gap-10 text-center">
           {[
-            { icon: FaInstagram, label: 'Instagram', href: 'https://instagram.com' },
-            { icon: FaFacebook, label: 'Facebook', href: 'https://facebook.com' },
-            { icon: FaYoutube, label: 'YouTube', href: 'https://youtube.com' },
+            { icon: FaInstagram, label: 'Instagram', href: SOCIAL_URLS.instagram },
+            { icon: FaFacebook, label: 'Facebook', href: SOCIAL_URLS.facebook },
+            { icon: FaYoutube, label: 'YouTube', href: SOCIAL_URLS.youtube },
             { icon: MessageCircle, label: 'WhatsApp', href: whatsappLink() },
           ].map((s, i) => (
             <a

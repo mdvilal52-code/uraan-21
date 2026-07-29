@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
@@ -10,13 +11,16 @@ import { useCart } from '@/context/CartContext';
 import { ShoppingBag, ChevronRight, Tag, Truck, ShieldCheck, Plus, Minus, Trash2 } from 'lucide-react';
 
 export default function CartPage() {
-  const { items, totalItems, totalPrice, clearCart, updateQuantity, removeFromCart } = useCart();
+  const {
+    items, totalItems, clearCart, updateQuantity, removeFromCart,
+    toggleSelected, selectedCount, selectedPrice,
+  } = useCart();
   const [coupon, setCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
 
-  const discount = couponApplied ? Math.round(totalPrice * 0.1) : 0;
-  const shipping = totalPrice >= 1999 ? 0 : 99;
-  const finalTotal = totalPrice - discount + shipping;
+  const discount = couponApplied ? Math.round(selectedPrice * 0.1) : 0;
+  const shipping = selectedPrice >= 1999 ? 0 : 99;
+  const finalTotal = selectedPrice - discount + shipping;
 
   const handleApplyCoupon = () => {
     if (coupon.trim().toUpperCase() === 'WELCOME10') {
@@ -27,7 +31,7 @@ export default function CartPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#C4E7F5]">
       <Navbar />
       <CartDrawer />
 
@@ -67,10 +71,18 @@ export default function CartPage() {
             <div className="lg:col-span-2 space-y-3">
               {items.map((item) => (
                 <div key={item.id} className="flex gap-4 md:gap-5 bg-white border border-[rgba(184,137,58,0.18)] p-4 items-center rounded">
-                  <div
-                    className="w-24 h-24 md:w-28 md:h-28 bg-[#f8f2e6] bg-cover bg-center flex-shrink-0 rounded"
-                    style={{ backgroundImage: `url(${item.image})` }}
+                  <input
+                    type="checkbox"
+                    checked={item.selected !== false}
+                    onChange={() => toggleSelected(item.id)}
+                    aria-label={`${item.selected !== false ? 'Deselect' : 'Select'} ${item.name} for checkout`}
+                    className="w-[18px] h-[18px] shrink-0 accent-[#b8893a] cursor-pointer"
                   />
+                  <div className="relative w-24 h-24 md:w-28 md:h-28 bg-[#f8f2e6] flex-shrink-0 rounded overflow-hidden">
+                    {item.image && (
+                      <Image src={item.image} alt={item.name} fill sizes="112px" className="object-cover" />
+                    )}
+                  </div>
                   <div className="flex-1 min-w-0 flex flex-col gap-2">
                     <div className="t-product-title-sm">
                       {item.name}
@@ -160,8 +172,8 @@ export default function CartPage() {
 
                 <div className="space-y-2 mb-4 pb-4 border-b border-[rgba(184,137,58,0.18)]">
                   <div className="flex justify-between text-sm text-[#6b5d4c]">
-                    <span>Subtotal ({totalItems})</span>
-                    <span className="text-[#1a1410] font-medium">₹{totalPrice.toLocaleString('en-IN')}</span>
+                    <span>Subtotal ({selectedCount} of {totalItems} selected)</span>
+                    <span className="text-[#1a1410] font-medium">₹{selectedPrice.toLocaleString('en-IN')}</span>
                   </div>
                   {couponApplied && (
                     <div className="flex justify-between text-sm text-[#3d6b5a]">
@@ -175,7 +187,12 @@ export default function CartPage() {
                   </div>
                   {shipping > 0 && (
                     <p className="text-[10px] text-[#b8893a] italic">
-                      Add ₹{(1999 - totalPrice).toLocaleString('en-IN')} more for free shipping
+                      Add ₹{(1999 - selectedPrice).toLocaleString('en-IN')} more for free shipping
+                    </p>
+                  )}
+                  {selectedCount === 0 && (
+                    <p className="text-[10px] text-[#7a2e2e] italic">
+                      Select at least one item to check out.
                     </p>
                   )}
                 </div>
@@ -189,12 +206,21 @@ export default function CartPage() {
                   />
                 </div>
 
-                <Link
-                  href="/checkout"
-                  className="w-full bg-[#1a1410] text-[#e8d49b] py-3 text-[11px] tracking-[3px] uppercase font-semibold hover:bg-[#b8893a] hover:text-[#1a1410] flex items-center justify-center gap-2 transition-all"
-                >
-                  Proceed to Checkout <ChevronRight size={14} />
-                </Link>
+                {selectedCount === 0 ? (
+                  <span
+                    aria-disabled="true"
+                    className="w-full bg-[#1a1410]/40 text-[#e8d49b]/60 py-3 text-[11px] tracking-[3px] uppercase font-semibold flex items-center justify-center gap-2 cursor-not-allowed"
+                  >
+                    Proceed to Checkout <ChevronRight size={14} />
+                  </span>
+                ) : (
+                  <Link
+                    href="/checkout"
+                    className="w-full bg-[#1a1410] text-[#e8d49b] py-3 text-[11px] tracking-[3px] uppercase font-semibold hover:bg-[#b8893a] hover:text-[#1a1410] flex items-center justify-center gap-2 transition-all"
+                  >
+                    Proceed to Checkout <ChevronRight size={14} />
+                  </Link>
+                )}
 
                 <div className="mt-4 pt-4 border-t border-[rgba(184,137,58,0.18)] flex items-center justify-center gap-2 text-[10px] text-[#6b5d4c]">
                   <ShieldCheck size={12} className="text-[#3d6b5a]" />

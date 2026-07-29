@@ -36,6 +36,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     Barcode: { value: body.barcode ?? '', max: MAX_LEN.short },
     'SEO title': { value: body.seoTitle ?? '', max: MAX_LEN.short },
     'SEO description': { value: body.seoDescription ?? '', max: MAX_LEN.text },
+    'Product video URL': { value: body.videoUrl ?? '', max: MAX_LEN.url },
   });
   if (lengthError) return NextResponse.json({ ok: false, error: lengthError }, { status: 400 });
 

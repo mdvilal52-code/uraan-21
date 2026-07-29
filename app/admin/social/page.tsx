@@ -1,12 +1,15 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import {
   Youtube, Facebook, Instagram, Upload, Send, Clock,
   CheckCircle, XCircle, AlertCircle, RefreshCw, Trash2,
   ChevronDown, ChevronUp, Eye, EyeOff, Hash, Image as ImageIcon,
   Film, BarChart2, Library, Wifi, WifiOff, Link as LinkIcon, Unlink,
+  ExternalLink,
 } from 'lucide-react';
+import { SOCIAL_URLS } from '@/lib/business';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -56,6 +59,13 @@ const PLATFORM_ICONS = {
   facebook:  { Icon: Facebook,  color: '#1877F2', bg: '#1877F2/10', label: 'Facebook'  },
   instagram: { Icon: Instagram, color: '#E1306C', bg: '#E1306C/10', label: 'Instagram' },
 };
+
+// Live profile links — same URLs used in the site footer (lib/business.ts)
+const SOCIAL_PROFILE_LINKS = [
+  { platform: 'facebook',  label: 'Facebook',  subtitle: 'Visit Page',    href: SOCIAL_URLS.facebook,  Icon: Facebook,  color: '#1877F2' },
+  { platform: 'instagram', label: 'Instagram', subtitle: 'Visit Profile', href: SOCIAL_URLS.instagram, Icon: Instagram, color: '#E1306C' },
+  { platform: 'youtube',   label: 'YouTube',   subtitle: 'View Channel',  href: SOCIAL_URLS.youtube,   Icon: Youtube,   color: '#FF0000' },
+] as const;
 
 const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle; color: string; label: string }> = {
   published: { icon: CheckCircle,  color: 'text-emerald-400', label: 'Published'  },
@@ -480,6 +490,46 @@ export default function SocialPage() {
       <div className="border-b border-[#b8893a]/20 px-6 py-5">
         <h1 className="text-xl font-bold tracking-wide text-white">Social Media</h1>
         <p className="text-xs text-[#e8d49b]/50 mt-0.5">Publish videos to YouTube, Facebook & Instagram</p>
+      </div>
+
+      {/* Live profile quick links — diamond-sparkle backdrop */}
+      <div className="relative overflow-hidden">
+        <Image
+          src="/images/admin/social-diamonds-bg.jpg"
+          alt=""
+          fill
+          className="object-cover opacity-60"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f0d09]/45 via-[#0f0d09]/65 to-[#0f0d09]" />
+        <div className="relative px-6 pt-6 pb-5">
+          <h2 className="text-sm font-semibold text-[#e8d49b] mb-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">Your Social Profiles</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {SOCIAL_PROFILE_LINKS.map(({ platform, label, subtitle, href, Icon, color }) => (
+              <a
+                key={platform}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative flex flex-col items-center gap-3 rounded-2xl border-2 bg-[#1e1a14]/60 backdrop-blur-sm px-6 py-7 text-center transition hover:-translate-y-0.5 hover:shadow-xl"
+                style={{ borderColor: color }}
+              >
+                <ExternalLink size={14} className="absolute top-4 right-4 text-[#e8d49b]/30 group-hover:text-[#e8d49b]/60 transition" />
+                <span
+                  className="flex items-center justify-center w-14 h-14 rounded-full shadow-md"
+                  style={{ backgroundColor: color }}
+                >
+                  <Icon size={26} className="text-white" />
+                </span>
+                <Icon size={44} style={{ color }} strokeWidth={1.5} className="opacity-90" />
+                <div>
+                  <div className="text-base font-bold text-white">{label}</div>
+                  <div className="text-xs font-semibold" style={{ color }}>{subtitle}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Tabs */}

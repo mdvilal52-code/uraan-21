@@ -37,7 +37,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#C4E7F5]">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-[#9a8c75]">
@@ -127,7 +127,7 @@ export default function LoginPage() {
               <div className="w-full border-t border-[rgba(184,137,58,0.18)]" />
             </div>
             <div className="relative flex justify-center">
-              <span className="px-3 bg-white text-[10px] tracking-[2px] uppercase text-[#9a8c75]">Or</span>
+              <span className="px-3 bg-[#C4E7F5] text-[10px] tracking-[2px] uppercase text-[#9a8c75]">Or</span>
             </div>
           </div>
 

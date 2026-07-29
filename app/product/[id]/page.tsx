@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/navbar';
@@ -21,10 +21,12 @@ import { useReviews, verifiedOnly } from '@/hooks/useReviews';
 import { voteHelpful, reportReviewAction } from '@/lib/reviewsActions';
 import { reviewAccent, initialsOf } from '@/lib/reviewStyle';
 import WriteReviewModal from '@/components/WriteReviewModal';
+import { toYouTubeEmbedUrl } from '@/lib/youtube';
 import {
   Heart, Truck, ShieldCheck, RotateCw,
   Star, Plus, Minus, ChevronRight, Award,
   ThumbsUp, Flag, CheckCircle2, Pencil, ArrowUpLeft,
+  Play, X,
 } from 'lucide-react';
 
 export default function ProductDetailPage({
@@ -39,12 +41,20 @@ export default function ProductDetailPage({
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'shipping'>('desc');
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [reviewSort, setReviewSort] = useState<'newest' | 'helpful'>('newest');
   const [votedReview, setVotedReview] = useState<string | null>(null);
 
   const { addToCart, openCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { reviews: allReviews } = useReviews();
+
+  useEffect(() => {
+    if (!videoModalOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setVideoModalOpen(false); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [videoModalOpen]);
 
   if (!product) {
     // Still fetching the live catalogue — don't 404 a DB-only product yet.
@@ -63,6 +73,7 @@ export default function ProductDetailPage({
 
   const inWishlist = isInWishlist(product.id);
   const related = getRelatedProducts(product.id, 4, list);
+  const videoEmbedUrl = product.videoUrl ? toYouTubeEmbedUrl(product.videoUrl) : null;
 
   const productReviews = verifiedOnly(allReviews).filter(
     (r) => r.productId === product.id || r.product === product.name
@@ -131,6 +142,18 @@ export default function ProductDetailPage({
     };
   }
 
+  const videoObjectSchema = videoEmbedUrl
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'VideoObject',
+        name: `${product.name} — Product Video`,
+        description: product.seoDescription || product.description,
+        thumbnailUrl: absoluteImage ? [absoluteImage] : undefined,
+        embedUrl: videoEmbedUrl,
+        uploadDate: new Date().toISOString().split('T')[0],
+      }
+    : null;
+
   return (
     <main className="min-h-screen bg-white">
       <script
@@ -138,6 +161,13 @@ export default function ProductDetailPage({
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
+      {videoObjectSchema && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(videoObjectSchema) }}
+        />
+      )}
       <Navbar />
       <CartDrawer />
 
@@ -215,12 +245,26 @@ export default function ProductDetailPage({
               </span>
             </div>
 
-            <PriceDisplay
-              currentPrice={product.price}
-              originalPrice={product.oldPrice}
-              size="lg"
-              className="mb-5 pb-5 border-b border-[rgba(184,137,58,0.18)]"
-            />
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-5 pb-5 border-b border-[rgba(184,137,58,0.18)]">
+              <PriceDisplay
+                currentPrice={product.price}
+                originalPrice={product.oldPrice}
+                size="lg"
+              />
+              {videoEmbedUrl && (
+                <button
+                  type="button"
+                  onClick={() => setVideoModalOpen(true)}
+                  aria-label={`Watch product video for ${product.name}`}
+                  className="inline-flex items-center justify-center gap-2.5 h-11 px-5 rounded-lg bg-gradient-to-r from-[#0B1E42] to-[#162d66] text-white text-[11px] tracking-[2px] uppercase font-semibold shadow-[0_0_18px_rgba(11,30,66,0.5)] hover:shadow-[0_0_30px_rgba(11,30,66,0.75)] hover:scale-[1.04] active:scale-[0.97] transition-all duration-300 w-full sm:w-auto shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#162d66]"
+                >
+                  <span className="w-6 h-6 rounded-full bg-white grid place-items-center shrink-0">
+                    <Play size={11} className="text-[#0B1E42] fill-[#0B1E42] ml-0.5" />
+                  </span>
+                  Product Video
+                </button>
+              )}
+            </div>
 
             <div className="grid grid-cols-2 gap-3 mb-5">
               <div className="bg-[#f8f2e6] p-3 border border-[rgba(184,137,58,0.18)]">
@@ -467,6 +511,38 @@ export default function ProductDetailPage({
         productId={product.id}
         productName={product.name}
       />
+
+      {videoModalOpen && videoEmbedUrl && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${product.name} product video`}
+          className="fixed inset-0 z-[300] bg-black/85 flex items-center justify-center p-4"
+          onClick={() => setVideoModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-3xl aspect-video"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setVideoModalOpen(false)}
+              aria-label="Close video (Esc)"
+              className="absolute -top-10 right-0 text-white/80 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-white rounded"
+            >
+              <X size={22} />
+            </button>
+            <iframe
+              src={videoEmbedUrl}
+              title={`${product.name} — Product Video`}
+              className="w-full h-full rounded-xl"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+        </div>
+      )}
 
       {related.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 py-12 border-t border-[rgba(184,137,58,0.18)] mt-8">

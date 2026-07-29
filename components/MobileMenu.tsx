@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { categories } from '@/data/jewelleryData';
 import { CATEGORY_ICONS } from '@/lib/categoryStyles';
+import { BUSINESS_PHONE_PRIMARY } from '@/lib/business';
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -41,8 +42,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const linkClass = (active: boolean) =>
     `flex items-center gap-3 px-6 py-3 text-sm transition-colors duration-200 border-l-2 ${
       active
-        ? 'text-[#b8893a] bg-[rgba(184,137,58,0.08)] border-[#b8893a] font-semibold'
-        : 'text-[#3a2f24] border-transparent hover:text-[#b8893a] hover:bg-[rgba(184,137,58,0.06)]'
+        ? 'text-[#C9A24A] bg-white/10 border-[#C9A24A] font-semibold'
+        : 'text-white border-transparent hover:text-[#C9A24A] hover:bg-white/10'
     }`;
 
   return (
@@ -64,30 +65,30 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         }`}
       >
         {/* Header */}
-        <div className="bg-[#f8f2e6] px-6 py-7 border-b border-[rgba(184,137,58,0.18)] text-center relative">
+        <div className="bg-[#0B1E42] px-6 py-7 border-b border-white/10 text-center relative">
           <button
             onClick={onClose}
             aria-label="Close menu"
-            className="absolute top-3 right-3 w-8 h-8 grid place-items-center text-[#6b5d4c]"
+            className="absolute top-3 right-3 w-8 h-8 grid place-items-center text-white/80"
           >
             <X size={18} />
           </button>
           <div className="flex items-center justify-center gap-2">
-            <span className="w-1.5 h-1.5 bg-[#b8893a] rotate-45" />
-            <span className="display text-[10px] font-semibold tracking-[2px] text-[#1a1410] uppercase">
-              Om Gauri Pooja Gems
+            <span className="w-1.5 h-1.5 bg-[#C9A24A] rotate-45" />
+            <span className="display text-[10px] font-semibold tracking-[2px] text-white uppercase">
+              Om Gauri Putra Gems
             </span>
-            <span className="w-1.5 h-1.5 bg-[#b8893a] rotate-45" />
+            <span className="w-1.5 h-1.5 bg-[#C9A24A] rotate-45" />
           </div>
-          <div className="text-[8px] tracking-[3px] text-[#9a8c75] mt-2 uppercase">
-            Gems · Jewellery · Rudraksh
+          <div className="text-[8px] tracking-[3px] text-[#C4E7F5]/80 mt-2 uppercase">
+            Jewellery &amp; Rudraksha
           </div>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto py-2">
+        <div className="flex-1 overflow-y-auto py-2 bg-[#0B1E42]">
           {/* Main Links */}
-          <div className="text-[9px] tracking-[2.5px] uppercase text-[#9a8c75] px-6 pt-4 pb-2 font-semibold">
+          <div className="text-[9px] tracking-[2.5px] uppercase text-white/60 px-6 pt-4 pb-2 font-semibold">
             Browse
           </div>
           <Link href="/" onClick={onClose} className={`${linkClass(isActive('/'))} justify-between`}>
@@ -100,7 +101,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </Link>
 
           {/* Categories */}
-          <div className="text-[9px] tracking-[2.5px] uppercase text-[#9a8c75] px-6 pt-5 pb-2 font-semibold">
+          <div className="text-[9px] tracking-[2.5px] uppercase text-white/60 px-6 pt-5 pb-2 font-semibold">
             Categories
           </div>
           {categories.map((cat) => {
@@ -113,32 +114,32 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 onClick={onClose}
                 className={linkClass(active)}
               >
-                <Icon size={15} className={active ? 'text-[#b8893a]' : 'text-[#b8893a]/70'} />
+                <Icon size={15} className={active ? 'text-[#C9A24A]' : 'text-[#C9A24A]/70'} />
                 <span className="flex-1 tracking-[0.2px]">{cat.name}</span>
-                <span className="text-[10px] text-[#9a8c75]">{cat.count}</span>
+                <span className="text-[10px] text-white/50">{cat.count}</span>
               </Link>
             );
           })}
 
           {/* Account */}
-          <div className="text-[9px] tracking-[2.5px] uppercase text-[#9a8c75] px-6 pt-5 pb-2 font-semibold">
+          <div className="text-[9px] tracking-[2.5px] uppercase text-white/60 px-6 pt-5 pb-2 font-semibold">
             Account
           </div>
           <Link href="/login" onClick={onClose} className={linkClass(isActive('/login'))}>
-            <User size={15} className="text-[#b8893a]/70" /> Login / Register
+            <User size={15} className="text-[#C9A24A]/70" /> Login / Register
           </Link>
           <Link href="/profile" onClick={onClose} className={linkClass(isActive('/profile'))}>
-            <User size={15} className="text-[#b8893a]/70" /> My Profile
+            <User size={15} className="text-[#C9A24A]/70" /> My Profile
           </Link>
           <Link href="/wishlist" onClick={onClose} className={linkClass(isActive('/wishlist'))}>
-            <Heart size={15} className="text-[#b8893a]/70" /> Wishlist
+            <Heart size={15} className="text-[#C9A24A]/70" /> Wishlist
           </Link>
           <Link href="/cart" onClick={onClose} className={linkClass(isActive('/cart'))}>
-            <ShoppingBag size={15} className="text-[#b8893a]/70" /> Cart
+            <ShoppingBag size={15} className="text-[#C9A24A]/70" /> Cart
           </Link>
 
           {/* Other */}
-          <div className="text-[9px] tracking-[2.5px] uppercase text-[#9a8c75] px-6 pt-5 pb-2 font-semibold">
+          <div className="text-[9px] tracking-[2.5px] uppercase text-white/60 px-6 pt-5 pb-2 font-semibold">
             More
           </div>
           <Link href="/about" onClick={onClose} className={`${linkClass(isActive('/about'))} justify-between`}>
@@ -152,10 +153,10 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-[rgba(184,137,58,0.18)] text-center">
-          <div className="text-[10px] tracking-[1.5px] text-[#6b5d4c]">Need Help?</div>
-          <a href="tel:+919876543210" className="text-sm font-semibold text-[#b8893a] mt-1 inline-flex items-center gap-2">
-            <Phone size={12} /> +91 98765 43210
+        <div className="px-6 py-4 border-t border-white/20 text-center">
+          <div className="text-[10px] tracking-[1.5px] text-white/60">Need Help?</div>
+          <a href={`tel:${BUSINESS_PHONE_PRIMARY}`} className="text-sm font-semibold text-[#b8893a] mt-1 inline-flex items-center gap-2">
+            <Phone size={12} /> +91 88519 11653
           </a>
         </div>
       </aside>

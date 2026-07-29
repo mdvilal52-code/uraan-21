@@ -161,6 +161,23 @@ textarea {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* HeroCarousel's translateX slide is a single discrete transform per swipe/
+     autoplay tick, not a continuously-running layer, so it doesn't cause the
+     smear/ghosting the blanket rule above guards against — restore its
+     required ~500ms transition on mobile. */
+  .hero-slide-track {
+    transition-duration: 500ms !important;
+  }
+
+  /* The announcement ticker is a single small compositor layer (one line of
+     text), not a full-bleed animated surface, so it doesn't trigger the
+     smear/ghosting the blanket rule above guards against — restore its
+     scroll animation on mobile. */
+  .animate-scroll-x {
+    animation-duration: 25s !important;
+    animation-iteration-count: infinite !important;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────

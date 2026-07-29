@@ -10,8 +10,9 @@ const cspReportOnly = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "connect-src 'self' https://*.supabase.co https://*.razorpay.com https://api.razorpay.com",
-  // Razorpay checkout iframes + Google Maps embed on the Contact page.
-  "frame-src 'self' https://*.razorpay.com https://api.razorpay.com https://www.google.com https://maps.google.com",
+  // Razorpay checkout iframes, Google Maps embed on the Contact page, and the
+  // YouTube "Product Video" embed on the PDP.
+  "frame-src 'self' https://*.razorpay.com https://api.razorpay.com https://www.google.com https://maps.google.com https://www.youtube-nocookie.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -73,6 +74,12 @@ const nextConfig = {
     // Serve modern formats when the browser advertises support.
     formats: ['image/avif', 'image/webp'],
     remotePatterns: imageRemotePatterns,
+    // Default is 60s, so every optimized variant (each size/format combo) was
+    // being thrown away and re-encoded from scratch after a minute even though
+    // banners/product photos barely change. Cache each variant for a year —
+    // admins already get a fresh image whenever they upload a new one because
+    // that's a new URL, not a mutation of the old one.
+    minimumCacheTTL: 31536000,
   },
 
   async headers() {

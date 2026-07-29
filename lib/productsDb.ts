@@ -34,6 +34,7 @@ type Row = {
   featured: boolean | null;
   trending: boolean | null;
   deleted_at: string | null;
+  video_url: string | null;
 };
 
 function toProduct(r: Row): Product {
@@ -68,6 +69,7 @@ function toProduct(r: Row): Product {
     featured: r.featured ?? false,
     trending: r.trending ?? false,
     deletedAt: r.deleted_at || undefined,
+    videoUrl: r.video_url || undefined,
   };
 }
 
@@ -102,6 +104,7 @@ function fullRow(p: Product) {
     status: p.status || 'published',
     featured: p.featured ?? false,
     trending: p.trending ?? false,
+    video_url: p.videoUrl || null,
   };
 }
 
@@ -230,6 +233,7 @@ export async function dbUpdateProduct(id: string, p: Partial<Product>): Promise<
   if (p.status !== undefined) patch.status = p.status || 'published';
   if (p.featured !== undefined) patch.featured = p.featured;
   if (p.trending !== undefined) patch.trending = p.trending;
+  if (p.videoUrl !== undefined) patch.video_url = p.videoUrl || null;
 
   const { error } = await sb.from('products').update(patch).eq('id', id);
   if (error) {

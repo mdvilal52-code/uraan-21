@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import { useCart } from '@/context/CartContext';
@@ -32,7 +33,12 @@ declare global {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, totalItems, totalPrice, clearCart } = useCart();
+  // Checkout only ever acts on the items the shopper selected in the cart —
+  // anything they left unchecked stays in the cart untouched.
+  const {
+    items: allItems, selectedItems: items, selectedCount: totalItems,
+    selectedPrice: totalPrice, removeSelected,
+  } = useCart();
   const [step, setStep] = useState<'address' | 'payment' | 'success'>('address');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
   const [orderId, setOrderId] = useState('');
@@ -240,7 +246,7 @@ export default function CheckoutPage() {
     recoverAbandonedCart(form.phone);
     setOrderId(id);
     setStep('success');
-    clearCart();
+    removeSelected();
   };
 
   // Server recomputes the authoritative price from the real product
@@ -321,7 +327,7 @@ export default function CheckoutPage() {
         key: data.keyId,
         amount: data.amount,
         currency: data.currency || 'INR',
-        name: 'Om Gauri Pooja Gems Jewellery & Rudraksh',
+        name: 'Om Gauri Putra Gems Jewellery & Rudraksh',
         description: 'Jewellery order',
         order_id: data.orderId,
         prefill: { name: form.name, email: form.email, contact: form.phone },
@@ -356,7 +362,7 @@ export default function CheckoutPage() {
 
   if (!authChecked && step !== 'success') {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-[#C4E7F5]">
         <Navbar />
         <div className="py-32 text-center text-sm text-[#9a8c75] tracking-[2px] uppercase">
           Loading checkout…
@@ -366,14 +372,24 @@ export default function CheckoutPage() {
   }
 
   if (items.length === 0 && step !== 'success') {
+    const cartHasUnselectedItems = allItems.length > 0;
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-[#C4E7F5]">
         <Navbar />
         <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-          <h1 className="serif text-3xl text-[#1a1410] mb-3">Your cart is empty</h1>
-          <p className="text-sm text-[#6b5d4c] mb-6">Add some products before checking out.</p>
-          <Link href="/collections" className="inline-flex items-center gap-2 px-8 py-3 bg-[#1a1410] text-[#e8d49b] text-[11px] tracking-[3px] uppercase font-semibold">
-            Browse Products <ChevronRight size={14} />
+          <h1 className="serif text-3xl text-[#1a1410] mb-3">
+            {cartHasUnselectedItems ? 'No items selected' : 'Your cart is empty'}
+          </h1>
+          <p className="text-sm text-[#6b5d4c] mb-6">
+            {cartHasUnselectedItems
+              ? 'Go back to your cart and select at least one item to check out.'
+              : 'Add some products before checking out.'}
+          </p>
+          <Link
+            href={cartHasUnselectedItems ? '/cart' : '/collections'}
+            className="inline-flex items-center gap-2 px-8 py-3 bg-[#1a1410] text-[#e8d49b] text-[11px] tracking-[3px] uppercase font-semibold"
+          >
+            {cartHasUnselectedItems ? 'Back to Cart' : 'Browse Products'} <ChevronRight size={14} />
           </Link>
         </div>
         <Footer />
@@ -383,7 +399,7 @@ export default function CheckoutPage() {
 
   if (step === 'success') {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-[#C4E7F5]">
         <Navbar />
         <div className="max-w-2xl mx-auto px-4 py-16 text-center">
           <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-[#3d6b5a]/10 grid place-items-center">
@@ -451,7 +467,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[#C4E7F5]">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 py-3 text-[11px] text-[#9a8c75]">
@@ -718,7 +734,11 @@ export default function CheckoutPage() {
               <div className="space-y-4 mb-4 max-h-64 overflow-y-auto pr-1">
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-4 items-center">
-                    <div className="w-16 h-16 bg-white bg-cover bg-center flex-shrink-0 rounded" style={{ backgroundImage: `url(${item.image})` }} />
+                    <div className="relative w-16 h-16 bg-white flex-shrink-0 rounded overflow-hidden">
+                      {item.image && (
+                        <Image src={item.image} alt={item.name} fill sizes="64px" className="object-cover" />
+                      )}
+                    </div>
                     <div className="flex-1 min-w-0 flex flex-col gap-1">
                       <div className="t-product-title-sm">{item.name}</div>
                       <div className="t-caption">Qty: {item.quantity}</div>
