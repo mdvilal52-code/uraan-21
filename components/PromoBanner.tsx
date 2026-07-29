@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 // Auto-rotating hero carousel — five slides that cross-fade every 5s, with
 // clickable progress-bar indicators. Mirrors the omgpgems.com hero: same
@@ -101,8 +102,13 @@ export default function PromoBanner() {
               src={s.image}
               alt=""
               fill
-              priority={i === 0}
+              // HeroCarousel above this section is the page's single LCP
+              // hero — this carousel is secondary, so every slide (including
+              // the first) lazy-loads rather than competing for priority
+              // bandwidth with the real hero image.
               sizes="100vw"
+              placeholder="blur"
+              blurDataURL={blurDataURL()}
               className={`object-cover ${s.objectPosition ?? 'object-right md:object-center'}`}
             />
           )}

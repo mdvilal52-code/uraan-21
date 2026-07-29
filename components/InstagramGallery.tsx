@@ -1,8 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { FaInstagram } from 'react-icons/fa';
 import { instagramImages } from '@/data/jewelleryData';
+import { isOptimizableImageSrc } from '@/lib/safeImage';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 const PROFILE_URL =
   process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/omgpgems1975?igsh=dWNpa29wc3JmcHR6';
@@ -52,10 +55,26 @@ export default function InstagramGallery() {
             aria-label={post.caption || 'View on Instagram'}
             className="aspect-square bg-[#f8f2e6] relative group overflow-hidden rounded-md"
           >
-            <div
-              className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
-              style={{ backgroundImage: `url(${post.image})` }}
-            />
+            {isOptimizableImageSrc(post.image) ? (
+              <Image
+                src={post.image}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 33vw, 16vw"
+                placeholder="blur"
+                blurDataURL={blurDataURL()}
+                className="object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            ) : (
+              // Live Instagram CDN URLs (scontent-*.cdninstagram.com, rotating
+              // hosts) — not a stable next/image remotePatterns target.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={post.image}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            )}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
               <FaInstagram
                 className="text-white opacity-0 group-hover:opacity-100 transition-opacity"

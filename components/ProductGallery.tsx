@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { ZoomIn, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 type ProductGalleryProps = {
   images: string[];
@@ -65,6 +66,8 @@ export default function ProductGallery({ images, name, tag }: ProductGalleryProp
               fill
               priority={i === 0}
               sizes="(max-width: 768px) 100vw, 50vw"
+              placeholder="blur"
+              blurDataURL={blurDataURL()}
               className="object-cover transition-transform duration-500 group-hover/gallery:scale-[1.03]"
             />
           </button>
@@ -145,6 +148,8 @@ export default function ProductGallery({ images, name, tag }: ProductGalleryProp
                 alt={`${name} thumbnail ${i + 1}`}
                 fill
                 sizes="120px"
+                placeholder="blur"
+                blurDataURL={blurDataURL()}
                 className="object-cover"
               />
             </button>
@@ -178,6 +183,8 @@ export default function ProductGallery({ images, name, tag }: ProductGalleryProp
               alt={`${name} zoomed view ${active + 1}`}
               fill
               sizes="100vw"
+              placeholder="blur"
+              blurDataURL={blurDataURL()}
               className="object-contain select-none"
             />
           </div>

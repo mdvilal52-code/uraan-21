@@ -1,8 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Sparkles } from 'lucide-react';
 import { useBanners } from '@/hooks/useBanners';
+import { isOptimizableImageSrc } from '@/lib/safeImage';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 // Renders the active banners managed in Admin → Banners. Returns nothing when
 // no banner is active, so the homepage stays clean until the store adds one.
@@ -26,10 +29,26 @@ export default function PromoBanners() {
             href={b.ctaLink || '/collections'}
             className="group block relative overflow-hidden rounded-2xl aspect-[16/7] md:aspect-[16/5] bg-[#f8f2e6] border border-[rgba(184,137,58,0.18)]"
           >
-            <div
-              className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-              style={{ backgroundImage: `url(${b.image})` }}
-            />
+            {isOptimizableImageSrc(b.image) ? (
+              <Image
+                src={b.image}
+                alt=""
+                fill
+                sizes="100vw"
+                placeholder="blur"
+                blurDataURL={blurDataURL()}
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            ) : (
+              // Admin-pasted external URL outside images.remotePatterns —
+              // see lib/safeImage.ts.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={b.image}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />
             <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-12 max-w-lg">
               <span className="block h-px w-10 bg-[#e8d49b]/70 mb-3" aria-hidden="true" />
