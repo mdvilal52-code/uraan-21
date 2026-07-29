@@ -79,10 +79,11 @@ export default function Footer() {
             <li><Link href="/contact" className="hover:text-[#C9A24A]">Contact</Link></li>
             <li><Link href="/profile" className="hover:text-[#C9A24A]">My Account</Link></li>
             <li><Link href="/wishlist" className="hover:text-[#C9A24A]">Wishlist</Link></li>
-            <li><a href="#" className="hover:text-[#C9A24A]">Shipping Policy</a></li>
-            <li><a href="#" className="hover:text-[#C9A24A]">Return & Refund</a></li>
-            <li><a href="#" className="hover:text-[#C9A24A]">Privacy Policy</a></li>
-            <li><a href="#" className="hover:text-[#C9A24A]">Terms of Service</a></li>
+            <li><Link href="/terms#shipping" className="hover:text-[#C9A24A]">Shipping Policy</Link></li>
+            <li><Link href="/terms#returns" className="hover:text-[#C9A24A]">Return &amp; Refund</Link></li>
+            <li><Link href="/privacy-policy" className="hover:text-[#C9A24A]">Privacy Policy</Link></li>
+            <li><Link href="/terms" className="hover:text-[#C9A24A]">Terms of Service</Link></li>
+            <li><Link href="/data-deletion" className="hover:text-[#C9A24A]">Data Deletion</Link></li>
           </ul>
         </div>
 
@@ -171,9 +172,17 @@ export default function Footer() {
       </div>
 
       {/* Bottom */}
-      <div className="bg-black/20 border-t border-[#C9A24A]/20 py-4 px-4 text-center text-[10px] tracking-[1px] text-[#e8d49b]/50">
-        © {new Date().getFullYear()} {BUSINESS_NAME}. All rights reserved. ·
-        Crafted with care in India 🇮🇳
+      <div className="bg-black/20 border-t border-[#C9A24A]/20 py-4 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center text-[10px] tracking-[1px] text-[#e8d49b]/50">
+        <span>
+          © {new Date().getFullYear()} {BUSINESS_NAME}. All rights reserved. · Crafted with care in India 🇮🇳
+        </span>
+        <span className="flex items-center gap-3">
+          <Link href="/privacy-policy" className="hover:text-[#C9A24A]">Privacy Policy</Link>
+          <span className="opacity-40">·</span>
+          <Link href="/terms" className="hover:text-[#C9A24A]">Terms</Link>
+          <span className="opacity-40">·</span>
+          <Link href="/data-deletion" className="hover:text-[#C9A24A]">Data Deletion</Link>
+        </span>
       </div>
     </footer>
   );
