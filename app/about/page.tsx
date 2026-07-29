@@ -1,5 +1,9 @@
-'use client';
-
+// No 'use client' — this page is 100% static markup; the only interactive
+// bit (clipboard copy) already lives in its own client component
+// (CopyAddressButton) below. Rendering it as a Server Component means it
+// fully static-prerenders at build time (no client JS needed to paint the
+// hero, story, values, or stats sections) instead of shipping the whole
+// page's JS to hydrate content that never changes.
 import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/navbar';
@@ -8,6 +12,7 @@ import CartDrawer from '@/components/CartDrawer';
 import { Gem, Award, Heart, ShieldCheck, Users, Sparkles, ChevronRight, MapPin, Navigation } from 'lucide-react';
 import { BUSINESS_NAME, BUSINESS_ADDRESS_LINES, MAPS_DIRECTIONS_URL } from '@/lib/business';
 import CopyAddressButton from '@/components/CopyAddressButton';
+import { blurDataURL } from '@/lib/imagePlaceholder';
 
 export default function AboutPage() {
   return (
@@ -22,7 +27,16 @@ export default function AboutPage() {
       </div>
 
       <section className="relative h-[300px] md:h-[420px] flex items-center justify-center overflow-hidden">
-        <Image src="/images/banner.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
+        <Image
+          src="/images/banner.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          placeholder="blur"
+          blurDataURL={blurDataURL()}
+          className="object-cover"
+        />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white px-4">
           <p className="serif italic text-[#e8d49b] tracking-[3px] uppercase text-sm mb-3">
@@ -37,7 +51,15 @@ export default function AboutPage() {
       <section className="py-16 px-4 max-w-5xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div className="relative aspect-[4/5] bg-[#f8f2e6] overflow-hidden">
-            <Image src="/images/model.jpg" alt="Artisan crafting fine jewellery" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+            <Image
+              src="/images/model.jpg"
+              alt="Artisan crafting fine jewellery"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              placeholder="blur"
+              blurDataURL={blurDataURL()}
+              className="object-cover"
+            />
           </div>
           <div>
             <p className="text-[#b8893a] serif italic text-sm tracking-[2px] mb-2">
