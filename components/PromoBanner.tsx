@@ -102,8 +102,8 @@ export default function PromoBanner() {
                 src={s.image}
                 alt=""
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-contain object-right"
+                sizes="100vw"
+                className="object-contain object-center md:object-cover md:object-[center_40%]"
               />
             ) : (
               <Image
