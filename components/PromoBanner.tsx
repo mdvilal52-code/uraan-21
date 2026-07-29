@@ -46,14 +46,14 @@ const SLIDES = [
     href: '/collections?type=gems',
   },
   {
-    image: '/images/gallery/blue-diamond.jpg',
+    image: '/images/gallery/diamond-showcase.jpg',
     eyebrow: 'Rare Brilliance',
     titleTop: 'Diamonds Beyond',
     titleEm: 'Compare',
     text: 'Certified diamonds, cut to perfection — brilliance engineered to last a lifetime.',
     cta: 'Shop Diamonds',
     href: '/collections?type=diamond',
-    fitHeight: true,
+    objectPosition: 'object-center',
   },
 ];
 
@@ -97,24 +97,14 @@ export default function PromoBanner() {
           }`}
         >
           {primed.has(i) && (
-            s.fitHeight ? (
-              <Image
-                src={s.image}
-                alt=""
-                fill
-                sizes="100vw"
-                className="object-contain object-center md:object-cover md:object-[center_40%]"
-              />
-            ) : (
-              <Image
-                src={s.image}
-                alt=""
-                fill
-                priority={i === 0}
-                sizes="100vw"
-                className="object-cover object-right md:object-center"
-              />
-            )
+            <Image
+              src={s.image}
+              alt=""
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className={`object-cover ${s.objectPosition ?? 'object-right md:object-center'}`}
+            />
           )}
           <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent md:from-black/45 md:via-black/15" />
           <div className="absolute inset-0 flex items-center px-6 md:px-16 lg:px-24">
