@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Search, User, Menu, X, Loader2 } from 'lucide-react';
+import { Search, User, Menu, X, Loader2, Command } from 'lucide-react';
 import NotificationBell from './NotificationBell';
 
 type TopbarProps = {
@@ -162,6 +162,15 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       </div>
 
       <div className="flex items-center gap-3 flex-shrink-0">
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent('admin:open-palette'))}
+          aria-label="Open command palette"
+          title="Command palette (Ctrl/⌘ K)"
+          className="hidden sm:flex items-center gap-1 text-[10px] text-[#9a8c75] border border-[rgba(184,137,58,0.25)] rounded px-2 py-1.5 hover:bg-[#fbf8f1] hover:text-[#1a1410]"
+        >
+          <Command size={12} /> K
+        </button>
         <NotificationBell />
         <div className="flex items-center gap-2 pl-3 border-l border-[rgba(184,137,58,0.18)]">
           <div className="w-9 h-9 rounded-full bg-[#b8893a]/10 grid place-items-center text-[#b8893a]">
