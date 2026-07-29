@@ -53,7 +53,7 @@ const SLIDES = [
     text: 'Certified diamonds, cut to perfection — brilliance engineered to last a lifetime.',
     cta: 'Shop Diamonds',
     href: '/collections?type=diamond',
-    objectPosition: 'object-center md:object-[center_39%]',
+    objectPosition: 'object-center',
   },
 ];
 
