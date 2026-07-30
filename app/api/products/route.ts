@@ -87,6 +87,8 @@ export async function POST(request: Request) {
     tag: body.tag || undefined,
     material: body.material || '',
     weight: body.weight || undefined,
+    goldWeight: body.goldWeight || undefined,
+    totalWeight: body.totalWeight || undefined,
     purity: body.purity || undefined,
     inStock: body.inStock ?? true,
     rating: body.rating ?? 5,

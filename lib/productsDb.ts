@@ -15,6 +15,8 @@ type Row = {
   description: string | null;
   material: string | null;
   weight: string | null;
+  gold_weight: string | null;
+  total_weight: string | null;
   purity: string | null;
   tag: string | null;
   in_stock: boolean;
@@ -51,6 +53,8 @@ function toProduct(r: Row): Product {
     tag: (r.tag as Product['tag']) || undefined,
     material: r.material || '',
     weight: r.weight || undefined,
+    goldWeight: r.gold_weight || undefined,
+    totalWeight: r.total_weight || undefined,
     purity: r.purity || undefined,
     inStock: r.in_stock,
     rating: r.rating ?? 5,
@@ -86,6 +90,8 @@ function fullRow(p: Product) {
     description: p.description || null,
     material: p.material || null,
     weight: p.weight || null,
+    gold_weight: p.goldWeight || null,
+    total_weight: p.totalWeight || null,
     purity: p.purity || null,
     tag: p.tag || null,
     in_stock: p.inStock,
@@ -117,8 +123,12 @@ function parseGrams(weight: string | undefined): number {
   return Number.isFinite(n) ? n : 0;
 }
 
+// Pricing must use only the gold weight (goldWeight), never the total/gross
+// weight — diamonds, gems and other stones don't move with the gold rate.
+// Falls back to the legacy `weight` field for products saved before
+// goldWeight existed.
 export function computeDynamicPrice(p: Product, goldRatePerGram: number): number {
-  const grams = parseGrams(p.weight);
+  const grams = parseGrams(p.goldWeight || p.weight);
   return Math.round(grams * goldRatePerGram + (p.makingCharge || 0));
 }
 
@@ -215,6 +225,8 @@ export async function dbUpdateProduct(id: string, p: Partial<Product>): Promise<
   if (p.description !== undefined) patch.description = p.description;
   if (p.material !== undefined) patch.material = p.material;
   if (p.weight !== undefined) patch.weight = p.weight || null;
+  if (p.goldWeight !== undefined) patch.gold_weight = p.goldWeight || null;
+  if (p.totalWeight !== undefined) patch.total_weight = p.totalWeight || null;
   if (p.purity !== undefined) patch.purity = p.purity || null;
   if (p.tag !== undefined) patch.tag = p.tag || null;
   if (p.inStock !== undefined) patch.in_stock = p.inStock;

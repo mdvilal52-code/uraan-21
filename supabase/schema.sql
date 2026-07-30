@@ -50,6 +50,8 @@ create table if not exists public.products (
   description         text,
   material            text,
   weight              text,
+  gold_weight         text, -- gold-only weight, used for gold-rate pricing (excludes diamond/gems)
+  total_weight        text, -- full gross weight incl. diamond/gems/stones
   purity              text,
   tag                 text,
   in_stock            boolean not null default true,
@@ -348,6 +350,8 @@ alter table public.products add column if not exists alt_texts jsonb not null de
 alter table public.products add column if not exists variants jsonb not null default '[]'::jsonb;
 alter table public.products add column if not exists seo_title text;
 alter table public.products add column if not exists seo_description text;
+alter table public.products add column if not exists gold_weight text;
+alter table public.products add column if not exists total_weight text;
 alter table public.products add column if not exists making_charge numeric;
 alter table public.products add column if not exists use_dynamic_pricing boolean not null default false;
 alter table public.products add column if not exists sku text;
