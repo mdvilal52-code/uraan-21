@@ -25,6 +25,8 @@ export type Product = {
   tag?: 'new' | 'bestseller' | 'sale' | 'soldout';
   material: string;
   weight?: string;
+  goldWeight?: string; // gold-only weight used for gold-rate pricing, e.g. '18g'
+  totalWeight?: string; // full gross weight incl. diamond/gems/stones, e.g. '22g'
   purity?: string;
   inStock: boolean;
   rating: number;

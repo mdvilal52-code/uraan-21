@@ -46,6 +46,8 @@ export default function ProductForm({ initialProduct, mode = 'add' }: ProductFor
     tag: initialProduct?.tag || '',
     material: initialProduct?.material || '',
     weight: initialProduct?.weight || '',
+    goldWeight: initialProduct?.goldWeight || initialProduct?.weight || '',
+    totalWeight: initialProduct?.totalWeight || '',
     purity: initialProduct?.purity || '',
     inStock: initialProduct?.inStock ?? true,
     sku: initialProduct?.sku || '',
@@ -257,6 +259,28 @@ export default function ProductForm({ initialProduct, mode = 'add' }: ProductFor
             onChange={(e) => setForm({ ...form, weight: e.target.value })}
             className="luxury-input"
             placeholder="e.g., 24g"
+          />
+        </div>
+
+        <div>
+          <label className="luxury-label">Gold Weight</label>
+          <input
+            type="text"
+            value={form.goldWeight}
+            onChange={(e) => setForm({ ...form, goldWeight: e.target.value })}
+            className="luxury-input"
+            placeholder="e.g., 18g (gold only, excl. diamond/gems)"
+          />
+        </div>
+
+        <div>
+          <label className="luxury-label">Total Weight</label>
+          <input
+            type="text"
+            value={form.totalWeight}
+            onChange={(e) => setForm({ ...form, totalWeight: e.target.value })}
+            className="luxury-input"
+            placeholder="e.g., 22g (gross, incl. diamond/gems)"
           />
         </div>
 
@@ -661,8 +685,9 @@ export default function ProductForm({ initialProduct, mode = 'add' }: ProductFor
             />
             <p className="text-[10px] text-[#9a8c75] mt-2 flex items-start gap-1.5">
               <Info size={12} className="mt-0.5 flex-shrink-0" />
-              Price = weight (parsed from the Weight field) × today&apos;s gold rate + making charge. Set today&apos;s
-              rate in Settings → Gold Rate. The Price field above is kept as a fallback base price.
+              Price = Gold Weight (falls back to Weight if left blank) × today&apos;s gold rate + making charge. Total
+              Weight is not used in this calculation — it&apos;s only shown to customers. Set today&apos;s rate in
+              Settings → Gold Rate. The Price field above is kept as a fallback base price.
             </p>
           </div>
         )}

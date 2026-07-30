@@ -271,7 +271,19 @@ export default function ProductDetailPage({
                 <div className="text-[9px] tracking-[1.5px] uppercase text-[#9a8c75] mb-1">Material</div>
                 <div className="text-sm text-[#1a1410] font-semibold">{product.material}</div>
               </div>
-              {product.weight && (
+              {product.totalWeight && (
+                <div className="bg-[#f8f2e6] p-3 border border-[rgba(184,137,58,0.18)]">
+                  <div className="text-[9px] tracking-[1.5px] uppercase text-[#9a8c75] mb-1">Total Weight</div>
+                  <div className="text-sm text-[#1a1410] font-semibold">{product.totalWeight}</div>
+                </div>
+              )}
+              {product.goldWeight && (
+                <div className="bg-[#f8f2e6] p-3 border border-[rgba(184,137,58,0.18)]">
+                  <div className="text-[9px] tracking-[1.5px] uppercase text-[#9a8c75] mb-1">Gold Weight</div>
+                  <div className="text-sm text-[#1a1410] font-semibold">{product.goldWeight}</div>
+                </div>
+              )}
+              {!product.totalWeight && !product.goldWeight && product.weight && (
                 <div className="bg-[#f8f2e6] p-3 border border-[rgba(184,137,58,0.18)]">
                   <div className="text-[9px] tracking-[1.5px] uppercase text-[#9a8c75] mb-1">Weight</div>
                   <div className="text-sm text-[#1a1410] font-semibold">{product.weight}</div>
@@ -390,7 +402,9 @@ export default function ProductDetailPage({
                 {activeTab === 'specs' && (
                   <ul className="space-y-1.5">
                     <li><strong className="text-[#1a1410]">Material:</strong> {product.material}</li>
-                    {product.weight && <li><strong className="text-[#1a1410]">Weight:</strong> {product.weight}</li>}
+                    {product.totalWeight && <li><strong className="text-[#1a1410]">Total Weight:</strong> {product.totalWeight}</li>}
+                    {product.goldWeight && <li><strong className="text-[#1a1410]">Gold Weight:</strong> {product.goldWeight}</li>}
+                    {!product.totalWeight && !product.goldWeight && product.weight && <li><strong className="text-[#1a1410]">Weight:</strong> {product.weight}</li>}
                     {product.purity && <li><strong className="text-[#1a1410]">Purity:</strong> {product.purity}</li>}
                     <li><strong className="text-[#1a1410]">Category:</strong> <span className="capitalize">{product.category}</span></li>
                     <li><strong className="text-[#1a1410]">Certification:</strong> BIS Hallmarked</li>
