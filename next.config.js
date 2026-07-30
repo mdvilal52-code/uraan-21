@@ -63,6 +63,19 @@ try {
 }
 
 const nextConfig = {
+  // @supabase/supabase-js references process.version at module scope for
+  // runtime feature-detection. That branch never executes in the Edge
+  // Runtime (middleware.ts), but Next.js still flags the reference at build
+  // time. Known upstream false-positive (supabase/ssr + supabase-js), not
+  // fixable from our code short of dropping Supabase from middleware.
+  webpack: (config) => {
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      { module: /node_modules\/@supabase\/supabase-js/ },
+    ];
+    return config;
+  },
+
   // Self-contained build: bundles a minimal server + traced node_modules into
   // .next/standalone so the app runs anywhere (Ubuntu VPS, Docker, PM2, behind
   // Nginx/Apache) with plain `node server.js` — no platform adapter required.
@@ -92,6 +105,16 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: securityHeaders,
+      },
+      {
+        // Video filenames are content-hashed (see components/LazyHeroVideo.tsx
+        // usages) — a changed video always ships under a new URL, so it is
+        // safe to cache the bytes at this URL forever instead of
+        // revalidating on every request.
+        source: '/videos/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
       },
     ];
   },

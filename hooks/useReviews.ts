@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { type Review } from '@/data/jewelleryData';
+import { reviews as seedReviews, type Review } from '@/data/jewelleryData';
 import { getReviews as getStoredReviews } from '@/lib/reviewsStore';
 
 // Module-level cache shared across the testimonials block and the reviews page.
@@ -72,7 +72,14 @@ export function markCachedReported(id: string): void {
 // (which itself falls back to the bundled seed). Public views should show
 // only verified reviews (see `verifiedOnly`).
 export function useReviews(): { reviews: Review[]; loaded: boolean } {
-  const [reviews, setReviews] = useState<Review[]>(() => cached || getStoredReviews());
+  // Must match the server-rendered value exactly on first client render — the
+  // stored (localStorage) reviews can differ from the bundled seed (verified
+  // flags, submitted reviews, helpful counts), which server-side rendering can
+  // never see. Reading getStoredReviews() here caused a hydration mismatch
+  // (React error #425) for any returning visitor whose local review store had
+  // already diverged from the seed. The effect below syncs in the real
+  // stored/live value immediately after mount instead.
+  const [reviews, setReviews] = useState<Review[]>(() => cached || seedReviews);
   const [loaded, setLoaded] = useState(Boolean(cached));
 
   useEffect(() => {

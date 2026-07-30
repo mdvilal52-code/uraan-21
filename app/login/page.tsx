@@ -5,9 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
-import { Mail, Lock, Eye, EyeOff, ChevronRight, AlertCircle, ShieldCheck } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ChevronRight, AlertCircle, ShieldCheck, UserPlus } from 'lucide-react';
 import { loginUser, getCurrentUser } from '@/lib/auth';
-import { createClient } from '@/lib/supabase/browser';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,7 +14,6 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [socialNotice, setSocialNotice] = useState('');
 
   const nextUrl = () =>
     (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('next')) || '/profile';
@@ -23,16 +21,6 @@ export default function LoginPage() {
   useEffect(() => {
     if (getCurrentUser()) router.replace(nextUrl());
   }, [router]);
-
-  const handleOAuth = async (provider: 'google' | 'facebook') => {
-    setSocialNotice('');
-    const supabase = createClient();
-    const redirectTo = `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(nextUrl())}`;
-    const { error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo } });
-    if (error) {
-      setSocialNotice(`${provider === 'google' ? 'Google' : 'Facebook'} sign-in failed: ${error.message}`);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,40 +126,17 @@ export default function LoginPage() {
               <div className="w-full border-t border-[rgba(184,137,58,0.18)]" />
             </div>
             <div className="relative flex justify-center">
-              <span className="px-3 bg-[#C4E7F5] text-[10px] tracking-[2px] uppercase text-[#9a8c75]">Or</span>
+              <span className="px-3 bg-[#C4E7F5] text-[10px] tracking-[2px] uppercase text-[#9a8c75]">New here?</span>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <button
-              type="button"
-              onClick={() => handleOAuth('google')}
-              className="w-full py-3 rounded-xl bg-white border border-[#dadce0] text-[#3c4043] text-[11px] tracking-[1.5px] uppercase font-semibold hover:bg-[#f8f9fa] shadow-sm flex items-center justify-center gap-2"
-            >
-              <svg viewBox="0 0 24 24" className="w-4 h-4" aria-hidden="true">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z" />
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z" />
-                <path fill="#FBBC05" d="M5.84 14.1A6.6 6.6 0 0 1 5.49 12c0-.73.13-1.44.35-2.1V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z" />
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15A11 11 0 0 0 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-              </svg>
-              Continue with Google
-            </button>
-            <button
-              type="button"
-              onClick={() => handleOAuth('facebook')}
-              className="w-full py-3 rounded-xl bg-[#1877F2] text-white text-[11px] tracking-[1.5px] uppercase font-semibold hover:bg-[#0d65d9] shadow-sm flex items-center justify-center gap-2"
-            >
-              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="#FFFFFF" aria-hidden="true">
-                <path d="M24 12a12 12 0 1 0-13.88 11.85v-8.38H7.08V12h3.04V9.36c0-3 1.79-4.67 4.53-4.67 1.31 0 2.68.24 2.68.24v2.95h-1.51c-1.49 0-1.95.92-1.95 1.87V12h3.32l-.53 3.47h-2.79v8.38A12 12 0 0 0 24 12z" />
-              </svg>
-              Continue with Facebook
-            </button>
-            {socialNotice && (
-              <div className="bg-[#f8f2e6] border border-[#b8893a]/30 text-[#6b5d4c] text-xs p-3 rounded text-center">
-                {socialNotice}
-              </div>
-            )}
-          </div>
+          <Link
+            href="/register"
+            className="w-full py-3 rounded-xl border-2 border-[#b8893a] text-[#b8893a] text-[12px] tracking-[2px] uppercase font-bold hover:bg-[#b8893a] hover:text-white transition-all flex items-center justify-center gap-2"
+          >
+            <UserPlus size={16} />
+            Create an Account
+          </Link>
         </form>
 
         <p className="text-center mt-6 text-sm text-[#6b5d4c]">

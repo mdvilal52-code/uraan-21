@@ -242,8 +242,9 @@ export default function HomePage() {
       <section className="relative">
         <div className="relative h-[480px] md:h-[700px] overflow-hidden bg-[#1a1410]">
           <LazyHeroVideo
-            src="/videos/signature-collection.mp4"
-            poster="/videos/signature-collection-poster.jpg"
+            src="/videos/signature-collection.9ceb035210.mp4"
+            webmSrc="/videos/signature-collection.770bb1799f.webm"
+            poster="/videos/signature-collection-poster.a2bc47df90.jpg"
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-black/75" />

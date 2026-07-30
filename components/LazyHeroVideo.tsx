@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 type LazyHeroVideoProps = {
   src: string;
+  webmSrc?: string;
   poster: string;
   className?: string;
 };
@@ -13,7 +14,7 @@ type LazyHeroVideoProps = {
 // by the time it's actually visible) — not on initial page load. preload
 // stays "none" until then, so a visitor who never scrolls this far never
 // downloads a single byte of video. The poster paints instantly either way.
-export default function LazyHeroVideo({ src, poster, className }: LazyHeroVideoProps) {
+export default function LazyHeroVideo({ src, webmSrc, poster, className }: LazyHeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
 
@@ -31,7 +32,7 @@ export default function LazyHeroVideo({ src, poster, className }: LazyHeroVideoP
           observer.disconnect();
         }
       },
-      { rootMargin: '200px 0px' }
+      { rootMargin: '600px 0px' }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -62,6 +63,7 @@ export default function LazyHeroVideo({ src, poster, className }: LazyHeroVideoP
       tabIndex={-1}
       className={className}
     >
+      {shouldLoad && webmSrc && <source src={webmSrc} type="video/webm" />}
       {shouldLoad && <source src={src} type="video/mp4" />}
     </video>
   );
