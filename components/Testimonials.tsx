@@ -9,7 +9,7 @@ export default function Testimonials() {
   const { reviews } = useReviews();
   const shown = newestFirst(verifiedOnly(reviews)).slice(0, 3);
   return (
-    <section className="py-16 px-4 max-w-7xl mx-auto">
+    <section className="py-8 md:py-16 px-4 max-w-7xl mx-auto">
       <p className="section-tag-italic">Words of Love</p>
       <h2 className="section-heading">Happy Customers</h2>
       <div className="luxury-divider">
