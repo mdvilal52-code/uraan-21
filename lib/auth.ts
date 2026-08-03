@@ -24,11 +24,47 @@ async function hashPassword(password: string): Promise<string> {
     .join('');
 }
 
+// Every touch point below is wrapped in try/catch. Safari Private Browsing,
+// storage-blocking in-app browsers (WhatsApp/Instagram), and a full quota
+// can all make localStorage throw on read *or* write — previously only
+// readUsers() guarded against that, so a blocked/full store crashed the
+// register/login/profile pages with an uncaught exception instead of
+// degrading gracefully. See lib/usePersistentStorage.ts for the same class
+// of fix applied to the cart/wishlist.
+const STORAGE_BLOCKED_ERROR =
+  'Your browser is blocking saved data (common in Private Browsing or in-app browsers like WhatsApp/Instagram). Please open this site in your regular browser and try again.';
+
 function readUsers(): StoredUser[] {
   try {
     return JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
   } catch {
     return [];
+  }
+}
+
+function writeUsers(users: StoredUser[]): boolean {
+  try {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function writeSession(email: string): boolean {
+  try {
+    localStorage.setItem(SESSION_KEY, email);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function readSession(): string | null {
+  try {
+    return localStorage.getItem(SESSION_KEY);
+  } catch {
+    return null;
   }
 }
 
@@ -50,8 +86,9 @@ export async function registerUser(input: {
     joinedOn: new Date().toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }),
     passwordHash: await hashPassword(input.password),
   };
-  localStorage.setItem(USERS_KEY, JSON.stringify([...users, user]));
-  localStorage.setItem(SESSION_KEY, email);
+  if (!writeUsers([...users, user]) || !writeSession(email)) {
+    return { ok: false, error: STORAGE_BLOCKED_ERROR };
+  }
   return { ok: true };
 }
 
@@ -67,7 +104,9 @@ export async function loginUser(
   if (user.passwordHash !== (await hashPassword(password))) {
     return { ok: false, error: 'Incorrect password. Please try again.' };
   }
-  localStorage.setItem(SESSION_KEY, email);
+  if (!writeSession(email)) {
+    return { ok: false, error: STORAGE_BLOCKED_ERROR };
+  }
   return { ok: true };
 }
 
@@ -90,18 +129,22 @@ export async function loginFromSupabaseUser(input: {
       // loginUser() correctly rejects password attempts against this account.
       passwordHash: 'oauth',
     };
-    localStorage.setItem(USERS_KEY, JSON.stringify([...users, user]));
+    writeUsers([...users, user]);
   }
-  localStorage.setItem(SESSION_KEY, email);
+  writeSession(email);
 }
 
 export function logoutUser(): void {
-  localStorage.removeItem(SESSION_KEY);
+  try {
+    localStorage.removeItem(SESSION_KEY);
+  } catch {
+    /* nothing to clean up if storage is inaccessible */
+  }
 }
 
 export function getCurrentUser(): AuthUser | null {
   if (typeof window === 'undefined') return null;
-  const email = localStorage.getItem(SESSION_KEY);
+  const email = readSession();
   if (!email) return null;
   const user = readUsers().find((u) => u.email === email);
   if (!user) return null;

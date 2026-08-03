@@ -38,8 +38,12 @@ export function saveOrder(order: StoredOrder): boolean {
   const user = getCurrentUser();
   if (!user) return false;
   const existing = getUserOrders();
-  localStorage.setItem(keyFor(user.email), JSON.stringify([order, ...existing]));
-  return true;
+  try {
+    localStorage.setItem(keyFor(user.email), JSON.stringify([order, ...existing]));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function userOrderStats(): { count: number; spent: number } {
