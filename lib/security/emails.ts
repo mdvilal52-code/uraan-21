@@ -25,13 +25,15 @@ export function loginAlertEmail(d: { device: string; location: string; ip: strin
   };
 }
 
-export function passwordResetEmail(d: { link: string }) {
+export function passwordResetEmail(d: { link: string; scope?: 'admin' | 'account' }) {
+  const label = d.scope === 'account' ? 'account' : 'admin';
+  const noun = d.scope === 'account' ? 'your account' : 'your admin account';
   return {
-    subject: `Reset your admin password — ${BUSINESS_NAME}`,
+    subject: `Reset your ${label} password — ${BUSINESS_NAME}`,
     html: `<div style="font-family:system-ui,-apple-system,sans-serif;max-width:480px;margin:0 auto;color:#1a1410;line-height:1.6">
-      <p style="color:#b8893a;letter-spacing:2px;text-transform:uppercase;font-size:12px;font-weight:700">${BUSINESS_NAME} · Security</p>
-      <h2 style="margin:8px 0 16px">Reset your admin password</h2>
-      <p>We received a request to reset the password for your admin account. Click the button below to choose a new one:</p>
+      <p style="color:#b8893a;letter-spacing:2px;text-transform:uppercase;font-size:12px;font-weight:700">${BUSINESS_NAME}</p>
+      <h2 style="margin:8px 0 16px">Reset your ${label} password</h2>
+      <p>We received a request to reset the password for ${noun}. Click the button below to choose a new one:</p>
       <p style="margin:24px 0">
         <a href="${d.link}" style="display:inline-block;background:#1a1410;color:#e8d49b;text-decoration:none;padding:14px 28px;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700">Reset password</a>
       </p>

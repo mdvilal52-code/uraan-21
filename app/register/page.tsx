@@ -19,6 +19,7 @@ export default function RegisterPage() {
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [confirmSent, setConfirmSent] = useState(false);
 
   const nextUrl = () =>
     (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('next')) || '/profile';
@@ -54,6 +55,10 @@ export default function RegisterPage() {
     const res = await registerUser({ ...form, phone: normalizedPhone });
     setLoading(false);
     if (res.ok) {
+      if (res.needsConfirmation) {
+        setConfirmSent(true);
+        return;
+      }
       router.push(nextUrl());
     } else {
       setError(res.error);
@@ -79,6 +84,21 @@ export default function RegisterPage() {
           </p>
         </div>
 
+        {confirmSent ? (
+          <div className="bg-white border border-[rgba(184,137,58,0.18)] p-6 md:p-8 text-center space-y-4">
+            <CheckCircle2 size={40} className="text-[#3d6b5a] mx-auto" />
+            <h2 className="serif text-2xl text-[#1a1410]">Confirm your email</h2>
+            <p className="text-sm text-[#6b5d4c]">
+              We&apos;ve sent a confirmation link to <strong>{form.email}</strong>. Click it to activate your account, then sign in.
+            </p>
+            <Link
+              href="/login"
+              className="inline-flex w-full items-center justify-center gap-2 py-3 rounded-xl border-2 border-[#b8893a] text-[#b8893a] text-[12px] tracking-[2px] uppercase font-bold hover:bg-[#b8893a] hover:text-white transition-all"
+            >
+              Go to sign in
+            </Link>
+          </div>
+        ) : (
         <form onSubmit={handleSubmit} className="bg-white border border-[rgba(184,137,58,0.18)] p-6 md:p-8 space-y-4">
           <div>
             <label className="luxury-label">Full Name</label>
@@ -179,6 +199,7 @@ export default function RegisterPage() {
             Get 10% off your first order!
           </div>
         </form>
+        )}
 
         <p className="text-center mt-6 text-sm text-[#6b5d4c]">
           Already have an account?{' '}
