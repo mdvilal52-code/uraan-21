@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { submitLead } from '@/lib/crm';
-import { isBodyTooLarge, MAX_LEN, tooLong } from '@/lib/security/validate';
+import { isBodyTooLarge } from '@/lib/security/validate';
 
 // Meta signs each webhook delivery with X-Hub-Signature-256 (HMAC-SHA256 of
 // the raw body, keyed by the app secret). Verifying it stops attackers from
-// posting forged "inbound messages" that would otherwise become CRM leads.
+// posting forged "inbound messages" to the endpoint.
 function isValidSignature(rawBody: string, signatureHeader: string | null): boolean {
   const secret = process.env.WHATSAPP_APP_SECRET;
   if (!secret) return true; // not configured yet — degrade like the rest of this integration
@@ -32,8 +31,10 @@ export async function GET(request: Request) {
   return new Response('Forbidden', { status: 403 });
 }
 
-// Inbound WhatsApp messages POST here. We turn the sender into a CRM lead so
-// every chat lands in the pipeline alongside website enquiries.
+// Inbound WhatsApp deliveries POST here. The CRM / Leads feature has been
+// removed, so inbound messages are simply acknowledged (the signature is still
+// verified to reject forged payloads). Add handling here if inbound chats need
+// to be processed again in the future.
 export async function POST(request: Request) {
   if (isBodyTooLarge(request)) {
     return NextResponse.json({ received: false }, { status: 413 });
@@ -43,31 +44,6 @@ export async function POST(request: Request) {
     if (!isValidSignature(rawBody, request.headers.get('x-hub-signature-256'))) {
       console.warn('[WhatsApp] webhook signature mismatch — rejecting payload.');
       return NextResponse.json({ received: false }, { status: 401 });
-    }
-
-    const body = JSON.parse(rawBody);
-    const value = body?.entry?.[0]?.changes?.[0]?.value;
-    const message = value?.messages?.[0];
-    const contact = value?.contacts?.[0];
-
-    if (message) {
-      const from = String(message.from || '').replace(/[^0-9]/g, '');
-      const name = String(contact?.profile?.name || (from ? `WhatsApp ${from}` : 'WhatsApp Lead')).slice(
-        0,
-        MAX_LEN.short
-      );
-      let text = String(message.text?.body || message.button?.text || `[${message.type || 'message'}]`);
-      if (tooLong(text, MAX_LEN.text)) text = text.slice(0, MAX_LEN.text);
-
-      await submitLead({
-        name,
-        // Placeholder address keyed by number so the CRM de-dupes by sender;
-        // map to the real contact email once you collect it.
-        email: from ? `wa-${from}@whatsapp.lead` : 'unknown@whatsapp.lead',
-        phone: from,
-        message: text,
-        source: 'WhatsApp',
-      });
     }
   } catch (err) {
     console.error('[WhatsApp] webhook error:', err);

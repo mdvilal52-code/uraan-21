@@ -1,10 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MessageCircle, Mail, Send, Users, Contact, Loader2 } from 'lucide-react';
+import { MessageCircle, Mail, Send, Users, Loader2 } from 'lucide-react';
 import type { CampaignLog, CampaignChannel } from '@/lib/campaigns';
 
-type Lead = { id: string; name: string; email: string; phone?: string };
 type Customer = { id: string; name: string; email: string; phone: string };
 
 type RecipientSource = { key: string; name: string; email?: string; phone?: string };
@@ -14,7 +13,6 @@ export default function AdminCampaignsPage() {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
 
-  const [leads, setLeads] = useState<Lead[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
 
@@ -26,13 +24,6 @@ export default function AdminCampaignsPage() {
 
   useEffect(() => {
     (async () => {
-      try {
-        const res = await fetch('/api/leads');
-        const data = await res.json();
-        if (res.ok && Array.isArray(data.leads)) setLeads(data.leads as Lead[]);
-      } catch {
-        /* ignore */
-      }
       try {
         const res = await fetch('/api/customers');
         const data = await res.json();
@@ -60,10 +51,6 @@ export default function AdminCampaignsPage() {
     loadLogs();
   }, [loadLogs]);
 
-  const leadSources: RecipientSource[] = useMemo(
-    () => leads.map((l) => ({ key: `lead:${l.id}`, name: l.name, email: l.email, phone: l.phone })),
-    [leads]
-  );
   const customerSources: RecipientSource[] = useMemo(
     () => customers.map((c) => ({ key: `customer:${c.id}`, name: c.name, email: c.email, phone: c.phone })),
     [customers]
@@ -92,7 +79,7 @@ export default function AdminCampaignsPage() {
 
   const clearAll = () => setSelectedKeys(new Set());
 
-  const allSources = [...leadSources, ...customerSources];
+  const allSources = [...customerSources];
   const selectedRecipients = allSources.filter((s) => selectedKeys.has(s.key) && usable(s));
 
   const handleSend = async () => {
@@ -143,7 +130,7 @@ export default function AdminCampaignsPage() {
     <div>
       <div className="mb-6">
         <h1 className="serif text-3xl text-[#1a1410] mb-1">Campaigns</h1>
-        <p className="text-sm text-[#6b5d4c]">Send bulk WhatsApp or email messages to leads and customers.</p>
+        <p className="text-sm text-[#6b5d4c]">Send bulk WhatsApp or email messages to your customers.</p>
       </div>
 
       <div className="bg-white border border-[rgba(184,137,58,0.18)] p-5 mb-5">
@@ -212,16 +199,7 @@ export default function AdminCampaignsPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <RecipientList
-              title="Leads"
-              icon={Contact}
-              sources={leadSources}
-              usable={usable}
-              selectedKeys={selectedKeys}
-              onToggle={toggle}
-              onSelectAll={() => selectAll(leadSources)}
-            />
+          <div className="grid grid-cols-1 gap-4">
             <RecipientList
               title="Customers"
               icon={Users}

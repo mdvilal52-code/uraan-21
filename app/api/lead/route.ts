@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
-import { submitLead } from '@/lib/crm';
-import { dbInsertLead } from '@/lib/leadsDb';
 import { notifyAdminNewLead } from '@/lib/whatsappServer';
 import { checkLengths, isBodyTooLarge, MAX_LEN } from '@/lib/security/validate';
 import { normalizePhone } from '@/lib/phone';
 import { notify } from '@/lib/notify';
 
+// Public enquiry endpoint for the contact page and newsletter form. The CRM /
+// Leads feature has been removed, so nothing is stored: an enquiry simply
+// notifies the admin (in-app bell + best-effort WhatsApp) so the team can
+// follow up. Every notify path is best-effort and never blocks the visitor.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
@@ -46,49 +48,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: lengthError }, { status: 400 });
   }
 
-  // Save to our own database first (primary store, so nothing is ever lost).
-  try {
-    await dbInsertLead({ name, email, phone, message, source });
-  } catch (err) {
-    console.error('[lead] db insert failed:', err);
-  }
-
   if (source === 'Newsletter Signup') {
-    notify('newsletter_subscriber', `${email} subscribed to the newsletter.`, {
-      link: '/admin/leads',
-    }).catch(() => {});
+    notify('newsletter_subscriber', `${email} subscribed to the newsletter.`).catch(() => {});
   } else {
-    notify('contact_form', `${name} (${email}) sent an enquiry via ${source}.`, {
-      link: '/admin/leads',
-    }).catch(() => {});
+    notify('contact_form', `${name} (${email}) sent an enquiry via ${source}.`).catch(() => {});
   }
 
-  // Push to HubSpot (best-effort): a CRM hiccup must not fail the visitor's
-  // form — the lead is already saved above and any error is logged server-side.
-  const result = await submitLead({ name, email, phone, message, source });
-  if (!result.ok) {
-    console.error('[lead] HubSpot push failed:', result.error);
-  }
-
-  // Notify the admin on WhatsApp (best-effort): a new lead just came in. This
-  // must never block or fail the visitor's submission — the lead is already
-  // saved above. Requires WHATSAPP_TOKEN + WHATSAPP_PHONE_NUMBER_ID to actually
-  // deliver; otherwise it is logged and skipped.
+  // Notify the admin on WhatsApp (best-effort): a new enquiry just came in. This
+  // must never block or fail the visitor's submission. Requires WHATSAPP_TOKEN +
+  // WHATSAPP_PHONE_NUMBER_ID to actually deliver; otherwise it is logged and
+  // skipped.
   try {
     const waResult = await notifyAdminNewLead({ name, email, phone, message, source });
     if (!waResult.ok) {
-      console.error('[lead] WhatsApp admin notify failed:', waResult.error);
+      console.error('[enquiry] WhatsApp admin notify failed:', waResult.error);
     } else if (!waResult.configured) {
       console.warn(
-        '[lead] WhatsApp admin notify skipped — Cloud API not configured ' +
+        '[enquiry] WhatsApp admin notify skipped — Cloud API not configured ' +
           '(set WHATSAPP_TOKEN and WHATSAPP_PHONE_NUMBER_ID in your environment).'
       );
-    } else {
-      console.log('[lead] WhatsApp admin notify sent OK');
     }
   } catch (err) {
-    console.error('[lead] WhatsApp admin notify error:', err);
+    console.error('[enquiry] WhatsApp admin notify error:', err);
   }
 
-  return NextResponse.json({ ok: true, configured: result.configured });
+  return NextResponse.json({ ok: true });
 }

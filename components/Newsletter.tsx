@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
-import { addLead } from '@/lib/leads';
 
 export default function Newsletter() {
   const [email, setEmail] = useState('');
@@ -28,15 +27,6 @@ export default function Newsletter() {
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-        // Also record in the in-app CRM so it shows in the admin pipeline.
-        try {
-          addLead({
-            name: 'Newsletter Subscriber',
-            email,
-            message: 'Newsletter signup from homepage',
-            source: 'Newsletter Signup',
-          });
-        } catch { /* CRM is best-effort; never block the user */ }
         setSubmitted(true);
         setEmail('');
       } else {

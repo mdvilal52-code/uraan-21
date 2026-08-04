@@ -11,7 +11,6 @@ import {
   Send, CheckCircle2, AlertCircle,
 } from 'lucide-react';
 import { FaFacebook, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
-import { addLead } from '@/lib/leads';
 import { whatsappLink } from '@/lib/whatsapp';
 import {
   BUSINESS_NAME,
@@ -48,16 +47,6 @@ export default function ContactPage() {
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-        // Also record in the in-app CRM so it shows in the admin pipeline.
-        try {
-          addLead({
-            name: form.name,
-            email: form.email,
-            phone: form.phone,
-            message: `${form.subject ? `[${form.subject}] ` : ''}${form.message}`,
-            source: 'Contact Page',
-          });
-        } catch { /* CRM is best-effort; never block the user */ }
         setSubmitted(true);
         setForm({ name: '', email: '', phone: '', subject: '', message: '' });
       } else {

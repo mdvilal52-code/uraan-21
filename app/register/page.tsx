@@ -54,18 +54,6 @@ export default function RegisterPage() {
     const res = await registerUser({ ...form, phone: normalizedPhone });
     setLoading(false);
     if (res.ok) {
-      // Capture the new account as a CRM lead (HubSpot + database). Non-blocking.
-      fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: normalizedPhone,
-          message: 'New account registration',
-          source: 'Registration',
-        }),
-      }).catch(() => {});
       router.push(nextUrl());
     } else {
       setError(res.error);

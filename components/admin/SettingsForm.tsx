@@ -217,10 +217,10 @@ export default function SettingsForm() {
         </div>
       </div>
 
-      {/* Integrations: WhatsApp & CRM */}
+      {/* Integrations: WhatsApp */}
       <div className="bg-white border border-[rgba(184,137,58,0.18)] p-5 md:p-6">
         <h3 className="display text-sm tracking-[3px] uppercase text-[#1a1410] mb-5 pb-3 border-b border-[rgba(184,137,58,0.18)] flex items-center gap-2">
-          <MessageCircle size={14} className="text-[#b8893a]" /> Integrations · WhatsApp & CRM
+          <MessageCircle size={14} className="text-[#b8893a]" /> Integrations · WhatsApp
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -237,19 +237,6 @@ export default function SettingsForm() {
               />
             </div>
           </div>
-
-          <div>
-            <label className="luxury-label">CRM Provider</label>
-            <select
-              value={settings.crmProvider}
-              onChange={(e) => setSettings({ ...settings, crmProvider: e.target.value })}
-              className="luxury-input"
-            >
-              <option value="HubSpot">HubSpot</option>
-              <option value="Zoho">Zoho CRM</option>
-              <option value="None">None (in-app only)</option>
-            </select>
-          </div>
         </div>
 
         <label className="flex items-center justify-between p-3 bg-[#fbf8f1] cursor-pointer hover:bg-[#f8f2e6] mt-4">
@@ -265,11 +252,10 @@ export default function SettingsForm() {
         </label>
 
         <p className="text-[11px] text-[#9a8c75] mt-3 leading-relaxed">
-          Live sending uses the WhatsApp Cloud API and your CRM. Add{' '}
-          <code className="text-[#b8893a]">WHATSAPP_TOKEN</code>,{' '}
-          <code className="text-[#b8893a]">WHATSAPP_PHONE_NUMBER_ID</code> and{' '}
-          <code className="text-[#b8893a]">HUBSPOT_*</code> to your server environment variables.
-          Until then, the panel falls back to wa.me click-to-chat links.
+          Live sending uses the WhatsApp Cloud API. Add{' '}
+          <code className="text-[#b8893a]">WHATSAPP_TOKEN</code> and{' '}
+          <code className="text-[#b8893a]">WHATSAPP_PHONE_NUMBER_ID</code> to your server environment
+          variables. Until then, the panel falls back to wa.me click-to-chat links.
         </p>
       </div>
 

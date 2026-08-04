@@ -1,7 +1,7 @@
 // Server-side WhatsApp Business Cloud API (Meta) sender. Runs only inside API
-// routes, so the access token never reaches the browser. Mirrors lib/crm.ts:
-// it fails gracefully when credentials are not configured, so the site keeps
-// working before the integration is wired up.
+// routes, so the access token never reaches the browser. It fails gracefully
+// when credentials are not configured, so the site keeps working before the
+// integration is wired up.
 //
 // Required env vars (set in your host's environment / .env):
 //   WHATSAPP_TOKEN            — permanent/long-lived access token for the app

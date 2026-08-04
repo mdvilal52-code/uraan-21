@@ -4,7 +4,7 @@
 import {
   LayoutDashboard, Package, ShoppingCart, Users, BarChart3,
   Grid3x3, Image as ImageIcon, Star, Ticket, Settings, UserCog, Gem,
-  Contact, Home, ShieldCheck, RotateCcw, ShoppingBag, Megaphone,
+  Home, ShieldCheck, RotateCcw, ShoppingBag, Megaphone,
   Newspaper, ScrollText, Share2, HardDrive, type LucideIcon,
 } from 'lucide-react';
 import type { Role } from './rbac';
@@ -21,7 +21,6 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: '/admin/products', label: 'Products', icon: Package, minRole: 'admin' },
   { href: '/admin/orders', label: 'Orders', icon: ShoppingCart, minRole: 'staff' },
   { href: '/admin/returns', label: 'Returns / RMA', icon: RotateCcw, minRole: 'staff' },
-  { href: '/admin/leads', label: 'CRM / Leads', icon: Contact, minRole: 'staff' },
   { href: '/admin/customers', label: 'Customers', icon: Users, minRole: 'staff' },
   { href: '/admin/abandoned-carts', label: 'Abandoned Carts', icon: ShoppingBag, minRole: 'staff' },
   { href: '/admin/campaigns', label: 'Campaigns', icon: Megaphone, minRole: 'admin' },

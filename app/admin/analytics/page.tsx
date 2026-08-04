@@ -9,7 +9,6 @@ import type { DashboardAnalytics } from '@/lib/analyticsDb';
 const EMPTY_STATS = {
   totalRevenue: 0, totalOrders: 0, totalCustomers: 0, productsSold: 0,
   revenueChange: 0, ordersChange: 0, customersChange: 0, productsChange: 0,
-  conversionRate: 0,
 };
 
 export default function AdminAnalyticsPage() {
@@ -92,16 +91,8 @@ export default function AdminAnalyticsPage() {
         </div>
       </div>
 
-      {/* Conversion + Traffic */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="bg-white border border-[rgba(184,137,58,0.18)] p-5">
-          <h3 className="display text-sm tracking-[2px] uppercase text-[#1a1410] mb-1">Leads → Orders Conversion</h3>
-          <p className="text-[10px] text-[#9a8c75] mb-4">
-            Approximation (orders ÷ total leads captured) — this store doesn&apos;t track site visitors, so it isn&apos;t a true visitor-conversion rate.
-          </p>
-          <div className="serif text-4xl text-[#b8893a]">{stats.conversionRate}%</div>
-        </div>
-
+      {/* Traffic */}
+      <div className="grid grid-cols-1 gap-5">
         <div className="bg-white border border-[rgba(184,137,58,0.18)] p-5">
           <h3 className="display text-sm tracking-[2px] uppercase text-[#1a1410] mb-1 flex items-center gap-2">
             <BarChart3 size={16} className="text-[#b8893a]" /> Traffic Sources

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Bell, X, Check, Trash2, ShoppingCart, UserPlus, Wallet, XCircle,
   PackageMinus, PackageX, Star, Mail, Send, LogIn, ShieldAlert,
-  RefreshCw, MessageCircle, MailCheck, Database, AlertTriangle, Rocket,
+  MessageCircle, MailCheck, Database, AlertTriangle, Rocket,
   CheckCheck, Loader2,
 } from 'lucide-react';
 import {
@@ -27,7 +27,6 @@ const TYPE_ICON: Record<NotificationType, typeof Bell> = {
   newsletter_subscriber: Send,
   admin_login: LogIn,
   failed_login: ShieldAlert,
-  crm_sync: RefreshCw,
   whatsapp_campaign: MessageCircle,
   email_campaign: MailCheck,
   backup_completed: Database,
@@ -47,7 +46,6 @@ const TYPE_COLOR: Record<NotificationType, string> = {
   newsletter_subscriber: '#2e6b5e',
   admin_login: '#6b5d4c',
   failed_login: '#7a2e2e',
-  crm_sync: '#5b4a8a',
   whatsapp_campaign: '#16796F',
   email_campaign: '#3d6fa8',
   backup_completed: '#6b5d4c',

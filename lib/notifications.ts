@@ -11,7 +11,6 @@ export type NotificationType =
   | 'newsletter_subscriber'
   | 'admin_login'
   | 'failed_login'
-  | 'crm_sync'
   | 'whatsapp_campaign'
   | 'email_campaign'
   | 'backup_completed'
@@ -66,7 +65,6 @@ export const NOTIFICATION_TITLES: Record<NotificationType, string> = {
   newsletter_subscriber: 'Newsletter Subscriber',
   admin_login: 'Admin Login',
   failed_login: 'Failed Login Attempt',
-  crm_sync: 'CRM Sync',
   whatsapp_campaign: 'WhatsApp Campaign',
   email_campaign: 'Email Campaign',
   backup_completed: 'Backup Completed',

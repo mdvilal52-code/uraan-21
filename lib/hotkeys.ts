@@ -31,7 +31,6 @@ const NAV_CHORDS: Record<string, string> = {
   '/admin': 'd',
   '/admin/products': 'p',
   '/admin/orders': 'o',
-  '/admin/leads': 'l',
   '/admin/customers': 'c',
   '/admin/backups': 'b',
   '/admin/security': 's',

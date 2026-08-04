@@ -25,7 +25,6 @@ export type SettingsData = {
   smsNotifications: boolean;
   whatsappNumber: string;
   whatsappOrderUpdates: boolean;
-  crmProvider: string;
 };
 
 export const DEFAULT_SETTINGS: SettingsData = {
@@ -47,7 +46,6 @@ export const DEFAULT_SETTINGS: SettingsData = {
   smsNotifications: true,
   whatsappNumber: WHATSAPP_NUMBER,
   whatsappOrderUpdates: true,
-  crmProvider: 'HubSpot',
 };
 
 const KEY = 'ogp_settings';

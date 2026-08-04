@@ -29,7 +29,6 @@ export type DashboardAnalytics = {
   ordersChange: number;
   customersChange: number;
   productsChange: number;
-  conversionRate: number; // orders / leads, an approximation (no site-traffic tracking wired up)
   monthlyRevenue: RevenuePoint[];
   weeklyOrders: ChartDataPoint[];
   categorySales: ChartDataPoint[];
@@ -184,19 +183,9 @@ export async function dbGetDashboardAnalytics(): Promise<DashboardAnalytics | nu
     pendingTasks.push({ label: 'Pending orders', count: pendingOrders, href: '/admin/orders' });
     pendingTasks.push({ label: 'Low stock products', count: lowStockProducts.length, href: '/admin/products' });
     try {
-      const { count: newLeads } = await sb.from('leads').select('id', { count: 'exact', head: true }).eq('status', 'New');
-      pendingTasks.push({ label: 'New leads', count: newLeads || 0, href: '/admin/leads' });
-    } catch { /* leads table not reachable — skip this task card */ }
-    try {
       const { count: openReturns } = await sb.from('returns').select('id', { count: 'exact', head: true }).eq('status', 'requested');
       pendingTasks.push({ label: 'Open return requests', count: openReturns || 0, href: '/admin/returns' });
     } catch { /* returns table may not exist yet — skip */ }
-
-    let conversionRate = 0;
-    try {
-      const { count: totalLeads } = await sb.from('leads').select('id', { count: 'exact', head: true });
-      conversionRate = totalLeads ? Math.round((totalOrders / totalLeads) * 1000) / 10 : 0;
-    } catch { /* leave at 0 */ }
 
     return {
       totalRevenue,
@@ -207,7 +196,6 @@ export async function dbGetDashboardAnalytics(): Promise<DashboardAnalytics | nu
       ordersChange: pctChange(thisMonthOrders, prevMonthOrders),
       customersChange: pctChange(thisMonthCustomers.size, prevMonthCustomers.size),
       productsChange: pctChange(thisMonthProducts, prevMonthProducts),
-      conversionRate,
       monthlyRevenue,
       weeklyOrders,
       categorySales,
