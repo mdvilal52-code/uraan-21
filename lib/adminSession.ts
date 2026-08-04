@@ -5,6 +5,7 @@ import { createServerSupabase } from './supabase/server';
 import { isSupabaseAuthConfigured } from './supabase/config';
 import { getSupabase } from './supabase';
 import { isRole, type Role } from './rbac';
+import { mfaStepUpRequired } from './security/mfa';
 
 export type CurrentAdmin = { email: string; role: Role };
 
@@ -16,6 +17,11 @@ export async function getCurrentAdmin(): Promise<CurrentAdmin | null> {
       data: { user },
     } = await sb.auth.getUser();
     if (!user?.email) return null;
+
+    // Enforce 2FA server-side: a session that hasn't cleared the TOTP challenge
+    // (AAL1 while a verified factor exists) is not treated as an authorised
+    // admin, so protected APIs stay closed until the second factor is entered.
+    if (await mfaStepUpRequired(sb)) return null;
 
     const service = getSupabase();
     if (!service) return null;

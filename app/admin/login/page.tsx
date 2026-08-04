@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Gem, Mail, Lock, LogIn, AlertCircle, Eye, EyeOff, ShieldCheck, KeyRound, MailCheck, CheckCircle2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
@@ -35,6 +35,30 @@ export default function AdminLoginPage() {
     router.push('/admin');
     router.refresh();
   };
+
+  // If the middleware bounced a password-only (AAL1) session back here because
+  // 2FA hasn't been completed, jump straight to the code prompt instead of
+  // making the admin re-enter their password. Mirrors the server-side
+  // mfaStepUpRequired() check.
+  useEffect(() => {
+    if (!useSupabase) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const supabase = createClient();
+        const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+        if (cancelled || !aal || aal.nextLevel !== 'aal2' || aal.currentLevel === 'aal2') return;
+        const { data: list } = await supabase.auth.mfa.listFactors();
+        const totp = list?.totp?.find((f) => f.status === 'verified') || list?.totp?.[0];
+        if (totp && !cancelled) setMfa({ factorId: totp.id });
+      } catch {
+        /* no existing session to step up — show the normal sign-in form */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [useSupabase]);
 
   // Post-login security processing (records device/location, may require a
   // new-device email code). Falls through to finish() when no approval needed.

@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import { ADMIN_COOKIE, adminSessionToken } from '@/lib/adminAuth';
 import { isSupabaseAuthConfigured, createMiddlewareSupabase } from '@/lib/supabase/middleware';
 import { assertSameOrigin } from '@/lib/security/csrf';
+import { mfaStepUpRequired } from '@/lib/security/mfa';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -52,6 +53,14 @@ export async function middleware(request: NextRequest) {
         .maybeSingle();
 
       if (admin && admin.status === 'active') {
+        // Enforce 2FA server-side: an admin with a verified TOTP factor must
+        // complete the code challenge (reach AAL2) before any /admin surface —
+        // otherwise a password-only (AAL1) session could bypass the second
+        // factor by navigating straight here. The login page handles the
+        // step-up prompt.
+        if (await mfaStepUpRequired(supabase)) {
+          return NextResponse.redirect(new URL('/admin/login', request.url));
+        }
         return response;
       }
     }
