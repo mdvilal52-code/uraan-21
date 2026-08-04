@@ -25,6 +25,26 @@ export function loginAlertEmail(d: { device: string; location: string; ip: strin
   };
 }
 
+export function passwordResetEmail(d: { link: string }) {
+  return {
+    subject: `Reset your admin password — ${BUSINESS_NAME}`,
+    html: `<div style="font-family:system-ui,-apple-system,sans-serif;max-width:480px;margin:0 auto;color:#1a1410;line-height:1.6">
+      <p style="color:#b8893a;letter-spacing:2px;text-transform:uppercase;font-size:12px;font-weight:700">${BUSINESS_NAME} · Security</p>
+      <h2 style="margin:8px 0 16px">Reset your admin password</h2>
+      <p>We received a request to reset the password for your admin account. Click the button below to choose a new one:</p>
+      <p style="margin:24px 0">
+        <a href="${d.link}" style="display:inline-block;background:#1a1410;color:#e8d49b;text-decoration:none;padding:14px 28px;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700">Reset password</a>
+      </p>
+      <p style="color:#9a8c75;font-size:12px">This link expires in 1 hour and can be used once. If the button doesn't work, copy and paste this URL into your browser:</p>
+      <p style="word-break:break-all;font-size:12px;color:#6b5d4c">${d.link}</p>
+      <p style="color:#9a8c75;font-size:12px;margin-top:24px;border-top:1px solid #eee;padding-top:12px">
+        If you didn't request this, you can safely ignore this email — your password won't change.
+      </p>
+      <p style="color:#c4b8a3;font-size:11px;margin-top:12px">${BUSINESS_NAME} · ${BUSINESS_ADDRESS_INLINE}</p>
+    </div>`,
+  };
+}
+
 export function newDeviceEmail(d: { code: string; device: string; location: string }) {
   return {
     subject: `Approve a new device — ${BUSINESS_NAME}`,

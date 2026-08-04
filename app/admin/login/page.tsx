@@ -161,12 +161,14 @@ export default function AdminLoginPage() {
     setError('');
     setLoading(true);
     try {
-      const supabase = createClient();
-      const { error: fErr } = await supabase.auth.resetPasswordForEmail(forgotEmail.trim(), {
-        redirectTo: `${window.location.origin}/admin/reset-password`,
+      // Server route emails the reset link (via our own provider, falling back
+      // to Supabase's built-in email). Always show success regardless of the
+      // outcome so we never reveal whether the address has an admin account.
+      await fetch('/api/admin/password/forgot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: forgotEmail.trim() }),
       });
-      // Always show success (don't reveal whether the email has an account).
-      if (fErr) console.error('[forgot-password]', fErr.message);
       setForgotSent(true);
     } catch {
       setForgotSent(true);

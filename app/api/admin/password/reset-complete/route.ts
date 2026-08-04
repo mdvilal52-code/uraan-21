@@ -18,7 +18,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'Bad origin.' }, { status: 403 });
   }
 
-  const admin = await getCurrentAdmin();
+  // A password-reset recovery session is always AAL1. Skip the 2FA step-up gate
+  // here so an admin who has TOTP enabled but forgot their password can still
+  // reset it — the emailed recovery link is the proof of identity. After the
+  // reset they'll complete TOTP as normal on the next sign-in.
+  const admin = await getCurrentAdmin({ enforceMfa: false });
   if (!admin) {
     return NextResponse.json({ ok: false, error: 'Reset link expired or invalid. Request a new one.' }, { status: 401 });
   }
